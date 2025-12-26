@@ -63,13 +63,21 @@ function getEnvInt(name, fallback, { min = 1, max = Number.MAX_SAFE_INTEGER } = 
 }
 
 // Retry logic avec backoff exponentiel pour résilience
-async function retryWithBackoff(fn, retries = 3, baseDelay = 1000) {
+// Timeout wrapper pour éviter les blocages
+function withTimeout(promise, ms = 5000) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), ms))
+  ]);
+}
+
+async function retryWithBackoff(fn, retries = 2, baseDelay = 500) {
   for (let i = 0; i < retries; i++) {
     try {
-      return await fn();
+      return await withTimeout(fn(), 3000);
     } catch (err) {
       if (i === retries - 1) throw err;
-      const delay = baseDelay * Math.pow(2, i);
+      const delay = baseDelay * Math.pow(1.5, i);
       console.warn(`⚠️  Tentative ${i + 1}/${retries} échouée, retry dans ${delay}ms...`);
       await new Promise(resolve => setTimeout(resolve, delay));
     }
@@ -115,7 +123,8 @@ async function checkQuota(userId) {
     });
   } catch (err) {
     console.error('❌ Erreur checkQuota:', err.message);
-    return { allowed: false, remaining: 0, error: true };
+    // Fallback: allow with default quota on error
+    return { allowed: true, remaining: 10, error: true };
   }
 }
 
@@ -130,15 +139,24 @@ async function getVideoQuota(userId) {
     return { allowed: used < limit, remaining: Math.max(limit - used, 0), limit, used };
   }
 
-  const { data, error } = await supabaseAdmin.rpc('get_video_quota', { p_user_id: userId, p_limit: limit });
-  if (error) throw error;
-  const row = Array.isArray(data) ? data[0] : data;
-  return {
-    allowed: !!row?.allowed,
-    remaining: Number(row?.remaining ?? 0),
-    limit: Number(row?.limit ?? limit),
-    used: Number(row?.used ?? 0)
-  };
+  try {
+    const { data, error } = await withTimeout(
+      supabaseAdmin.rpc('get_video_quota', { p_user_id: userId, p_limit: limit }),
+      2000
+    );
+    if (error) throw error;
+    const row = Array.isArray(data) ? data[0] : data;
+    return {
+      allowed: !!row?.allowed,
+      remaining: Number(row?.remaining ?? 0),
+      limit: Number(row?.limit ?? limit),
+      used: Number(row?.used ?? 0)
+    };
+  } catch (err) {
+    console.error('❌ Erreur getVideoQuota:', err.message);
+    // Fallback to allow videos with default quota
+    return { allowed: true, remaining: limit, limit, used: 0, error: true };
+  }
 }
 
 async function consumeVideoQuota(userId) {
