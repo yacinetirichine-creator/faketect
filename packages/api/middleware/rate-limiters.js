@@ -12,8 +12,8 @@ const globalLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   skip: (req) => {
-    // Ne pas limiter les health checks
-    return req.path === '/api/health';
+    // Ne pas limiter les health checks et quota (endpoints critiques)
+    return req.path === '/api/health' || req.path === '/api/quota';
   },
   keyGenerator: (req) => {
     // Utiliser l'ID utilisateur si authentifié, sinon l'IP
