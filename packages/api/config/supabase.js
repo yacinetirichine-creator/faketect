@@ -2,7 +2,9 @@ const { createClient } = require('@supabase/supabase-js');
 
 // Valider les variables d'environnement (ignorer les valeurs placeholder)
 function isValidEnv(val) {
-  return val && val !== 'xxxxx' && !val.includes('xxxxx') && val.startsWith('http') || val.startsWith('eyJ');
+  if (!val || typeof val !== 'string') return false;
+  if (val === 'xxxxx' || val.includes('xxxxx')) return false;
+  return val.startsWith('http') || val.startsWith('eyJ');
 }
 
 const supabaseUrl = isValidEnv(process.env.SUPABASE_URL) ? process.env.SUPABASE_URL : null;
