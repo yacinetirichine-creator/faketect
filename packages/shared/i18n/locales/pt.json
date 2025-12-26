@@ -19,7 +19,20 @@
     "download": "Baixar",
     "analyze": "Analisar",
     "retry": "Tentar novamente",
-    "learnMore": "Saiba mais"
+    "learnMore": "Saiba mais",
+    "or": "ou",
+    "locale": "pt-BR",
+    "landing": {
+      "title1": "A verdade na era da",
+      "title2": "Inteligência Artificial",
+      "subtitle": "Detecte imagens geradas por IA em segundos. Proteja sua empresa contra deepfakes e falsificações.",
+      "hero": {
+        "title": "Detector de IA profissional para empresas",
+        "subtitle": "Tecnologia de ponta para detectar conteúdo gerado por IA. Certificados verificáveis. Conformidade GDPR.",
+        "cta": "Testar gratuitamente",
+        "cta2": "Ver os preços"
+      }
+    }
   },
   "auth": {
     "login": "Entrar",
@@ -33,7 +46,8 @@
     "createAccount": "Criar conta",
     "loginSuccess": "Login realizado com sucesso!",
     "logoutSuccess": "Logout realizado com sucesso",
-    "signupSuccess": "Conta criada com sucesso!"
+    "signupSuccess": "Conta criada com sucesso!",
+    "continueWithGoogle": "Continuar com Google"
   },
   "navbar": {
     "home": "Início",
@@ -45,6 +59,13 @@
     "account": "Minha conta"
   },
   "home": {
+    "tabs": {
+      "image": "Imagem",
+      "video": "Vídeo",
+      "batch": "Lote",
+      "document": "Documento",
+      "url": "URL"
+    },
     "hero": {
       "title": "Detecte imagens geradas por IA",
       "subtitle": "Analise imagens e documentos em segundos com nossa tecnologia avançada de IA",
@@ -58,7 +79,10 @@
       "selectFile": "Selecionar arquivo",
       "supportedFormats": "Formatos suportados: JPG, PNG, WEBP (máx. 10 MB)",
       "analyzing": "Analisando...",
-      "progress": "Progresso: {{percent}}%"
+      "progress": "Progresso: {{percent}}%",
+      "uploading": "Enviando arquivo...",
+      "processing": "Processamento em andamento...",
+      "validating": "Validação da imagem..."
     },
     "results": {
       "title": "Resultados da análise",
@@ -69,7 +93,28 @@
       "engines": "Motores de análise",
       "exifWarning": "⚠️ Metadados de IA detectados",
       "downloadCertificate": "Baixar certificado",
-      "newAnalysis": "Nova análise"
+      "newAnalysis": "Nova análise",
+      "score": "Pontuação: {{value}}/100",
+      "details": "Detalhes da análise",
+      "timestamp": "Analisado em: {{date}}"
+    },
+    "features": {
+      "multiEngine": {
+        "title": "Múltiplos motores de IA",
+        "description": "Análise cruzada com Sightengine e Illuminarty para máxima precisão"
+      },
+      "certificates": {
+        "title": "Certificados verificáveis",
+        "description": "Certificados PDF com assinatura digital e código QR de verificação"
+      },
+      "history": {
+        "title": "Histórico completo",
+        "description": "Acompanhe todas as suas análises com pesquisa e filtros avançados"
+      },
+      "privacy": {
+        "title": "Privacidade garantida",
+        "description": "Conformidade GDPR. Seus dados são protegidos e nunca compartilhados."
+      }
     }
   },
   "pricing": {
@@ -77,7 +122,105 @@
     "subtitle": "Escolha o plano que se adapta às suas necessidades",
     "monthly": "Mensal",
     "annual": "Anual",
-    "save": "Economize {{percent}}%"
+    "save": "Economize {{percent}}%",
+    "guest": {
+      "name": "Visitante",
+      "price": "0€",
+      "period": "sem cadastro",
+      "quota": "2 análises/dia",
+      "features": [
+        "2 análises gratuitas por dia",
+        "Detecção básica de IA",
+        "Resultados instantâneos",
+        "Sem necessidade de cadastro"
+      ],
+      "cta": "Testar agora"
+    },
+    "free": {
+      "name": "Gratuito",
+      "price": "0€",
+      "period": "/mês",
+      "quota": "10 análises/mês",
+      "features": [
+        "10 análises gratuitas por mês",
+        "Motores de IA múltiplos",
+        "Certificados PDF básicos",
+        "Histórico de 30 dias",
+        "Suporte por e-mail"
+      ],
+      "cta": "Criar conta gratuita"
+    },
+    "starter": {
+      "name": "Iniciante",
+      "price": "9,99€",
+      "period": "/mês",
+      "quota": "100 análises/mês",
+      "features": [
+        "100 análises por mês",
+        "Análise avançada (Sightengine + Illuminarty)",
+        "Certificados profissionais com QR",
+        "Histórico ilimitado",
+        "Análise em lote (até 10 imagens)",
+        "Suporte prioritário"
+      ],
+      "cta": "Começar agora",
+      "popular": "Mais popular"
+    },
+    "professional": {
+      "name": "Profissional",
+      "price": "29,99€",
+      "period": "/mês",
+      "quota": "500 análises/mês",
+      "features": [
+        "500 análises por mês",
+        "Todos os recursos do plano Iniciante",
+        "API de integração (em breve)",
+        "Análise em lote (até 50 imagens)",
+        "White-label (sem logo FakeTect)",
+        "Suporte premium 24/7",
+        "SLA garantido"
+      ],
+      "cta": "Contatar vendas"
+    },
+    "faq": {
+      "title": "Perguntas frequentes",
+      "questions": [
+        {
+          "q": "Posso cancelar minha assinatura a qualquer momento?",
+          "a": "Sim, você pode cancelar sua assinatura a qualquer momento. Você continuará a ter acesso até o final do período pago."
+        },
+        {
+          "q": "Posso fazer upgrade do meu plano?",
+          "a": "Sim, você pode fazer upgrade a qualquer momento. A diferença será calculada proporcionalmente."
+        },
+        {
+          "q": "O que acontece se eu exceder minha cota?",
+          "a": "Você pode comprar créditos adicionais ou fazer upgrade do seu plano. As análises são bloqueadas ao atingir o limite."
+        }
+      ]
+    }
+  },
+  "history": {
+    "title": "Histórico de análises",
+    "empty": "Nenhuma análise ainda",
+    "filters": {
+      "all": "Todas",
+      "batches": "Lotes",
+      "aiGenerated": "IA detectada",
+      "real": "Fotos reais",
+      "uncertain": "Incertos"
+    },
+    "sort": {
+      "recent": "Mais recentes",
+      "oldest": "Mais antigas",
+      "highScore": "Pontuação alta",
+      "lowScore": "Pontuação baixa"
+    },
+    "item": {
+      "viewDetails": "Ver detalhes",
+      "downloadCert": "Baixar certificado",
+      "delete": "Excluir"
+    }
   },
   "chatbot": {
     "title": "Assistente IA",
@@ -85,7 +228,19 @@
     "send": "Enviar",
     "thinking": "Pensando...",
     "error": "Erro de conexão",
-    "welcome": "👋 Olá! Sou o assistente do FakeTect. Como posso ajudá-lo?"
+    "welcome": "👋 Olá! Sou o assistente do FakeTect. Como posso ajudá-lo?",
+    "suggestions": [
+      "Como funciona a detecção de IA?",
+      "Quais formatos são suportados?",
+      "Como baixar um certificado?",
+      "Qual é a precisão da detecção?"
+    ],
+    "defaultResponses": {
+      "howItWorks": "O FakeTect usa vários motores de IA (Sightengine, Illuminarty) para analisar suas imagens. Cada motor examina a imagem em busca de padrões típicos de geradores de IA. Os resultados são combinados para fornecer uma pontuação de confiança.",
+      "formats": "Nós suportamos os formatos de imagem mais comuns: JPG, PNG, WEBP. O tamanho máximo é de 10 MB por imagem. Para análise em lote, você pode enviar até 50 imagens simultaneamente (plano Profissional).",
+      "certificate": "Após cada análise, você pode baixar um certificado PDF. Este documento contém os resultados detalhados, um código QR de verificação e metadados técnicos. Os certificados são assinados digitalmente e verificáveis.",
+      "accuracy": "Nossa taxa de precisão é de mais de 95% em imagens geradas por IA modernas (Midjourney, DALL-E, Stable Diffusion). A análise EXIF complementar detecta metadados de IA com 99% de precisão. Combinamos vários motores para minimizar falsos positivos."
+    }
   },
   "legal": {
     "mentions": "Aviso legal",
@@ -98,7 +253,7 @@
   },
   "errors": {
     "generic": "Ocorreu um erro",
-    "network": "Erro de rede",
+    "network": "Erro de conexão",
     "fileTooBig": "Arquivo muito grande (máx. {{max}} MB)",
     "invalidFormat": "Formato não suportado",
     "quotaExceeded": "Cota excedida. Por favor, aguarde ou faça upgrade.",
@@ -106,9 +261,38 @@
     "notFound": "Não encontrado",
     "serverError": "Erro do servidor"
   },
+  "notifications": {
+    "analysisComplete": "Análise concluída!",
+    "analysisFailed": "Falha na análise",
+    "quotaWarning": "Você atingiu {{percent}}% da sua cota",
+    "subscriptionExpiring": "Sua assinatura expira em {{days}} dias",
+    "certificateDownloaded": "Certificado baixado com sucesso"
+  },
+  "extension": {
+    "name": "FakeTect - Detector de IA",
+    "description": "Detecte imagens geradas por IA diretamente no seu navegador",
+    "popup": {
+      "title": "Analisar esta imagem",
+      "analyze": "Analisar com FakeTect",
+      "viewHistory": "Ver histórico",
+      "settings": "Configurações"
+    }
+  },
   "footer": {
     "tagline": "Este serviço utiliza vários algoritmos de IA. Os resultados são indicativos.",
     "copyright": "© {{year}} JARVIS - FakeTect. Todos os direitos reservados.",
-    "compliance": "Em conformidade: GDPR • Lei de IA • DSA • ISO 27001 • ePrivacy"
+    "compliance": "Em conformidade: GDPR • Lei de IA • DSA • ISO 27001 • ePrivacy",
+    "company": "JARVIS - Inovação em IA",
+    "description": "Plataforma profissional de detecção de conteúdo gerado por IA. Proteja sua empresa contra deepfakes e desinformação.",
+    "hosting": "Render (API) • Vercel (Frontend) • Supabase (Dados)",
+    "certified": "Certificado ISO 27001 • SOC 2 Tipo II",
+    "links": {
+      "about": "Sobre nós",
+      "contact": "Contato",
+      "pricing": "Preços",
+      "api": "API",
+      "status": "Status do serviço",
+      "blog": "Blog"
+    }
   }
 }

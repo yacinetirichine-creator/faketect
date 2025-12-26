@@ -3,7 +3,7 @@
     "appName": "FakeTect",
     "tagline": "KI-Detektor für Bilder und Dokumente",
     "welcome": "Willkommen",
-    "loading": "Lädt...",
+    "loading": "Laden...",
     "error": "Fehler",
     "success": "Erfolg",
     "cancel": "Abbrechen",
@@ -14,12 +14,22 @@
     "edit": "Bearbeiten",
     "back": "Zurück",
     "next": "Weiter",
-    "previous": "Vorherige",
+    "previous": "Zurück",
     "upload": "Hochladen",
     "download": "Herunterladen",
     "analyze": "Analysieren",
     "retry": "Wiederholen",
-    "learnMore": "Mehr erfahren"
+    "learnMore": "Mehr erfahren",
+    "or": "oder",
+    "locale": "de-DE"
+  },
+  "landing": {
+    "newVersion": "Neue Version 2.0 verfügbar",
+    "hero": {
+      "title1": "Die Wahrheit im Zeitalter der",
+      "title2": "Künstlichen Intelligenz",
+      "subtitle": "FakeTect ist die führende Plattform zur Authentifizierung digitaler Inhalte. Erkennen Sie KI-generierte Bilder und Dokumente mit unübertroffener Präzision."
+    }
   },
   "auth": {
     "login": "Anmelden",
@@ -28,12 +38,13 @@
     "email": "E-Mail",
     "password": "Passwort",
     "forgotPassword": "Passwort vergessen?",
-    "noAccount": "Noch kein Konto?",
+    "noAccount": "Kein Konto?",
     "hasAccount": "Bereits ein Konto?",
     "createAccount": "Konto erstellen",
     "loginSuccess": "Erfolgreich angemeldet!",
     "logoutSuccess": "Erfolgreich abgemeldet",
-    "signupSuccess": "Konto erfolgreich erstellt!"
+    "signupSuccess": "Konto erfolgreich erstellt!",
+    "continueWithGoogle": "Mit Google fortfahren"
   },
   "navbar": {
     "home": "Startseite",
@@ -45,19 +56,36 @@
     "account": "Mein Konto"
   },
   "home": {
+    "tabs": {
+      "image": "Bild",
+      "video": "Video",
+      "batch": "Mehrere",
+      "document": "Dokument",
+      "url": "URL"
+    },
     "hero": {
-      "title": "Erkennen Sie KI-generierte Bilder",
-      "subtitle": "Analysieren Sie Bilder und Dokumente in Sekunden mit unserer fortschrittlichen KI-Technologie",
-      "cta": "Kostenlos beginnen",
+      "title": "Erkennen Sie KI-",
+      "titleAI": "generierte Inhalte",
+      "subtitle": "Erweiterte Bild- und Dokumentenanalyse",
+      "cta": "Kostenlos starten",
       "trustBadge": "DSGVO-konform • KI-Gesetz • DSA"
     },
+    "quotaRemaining": "Verbleibende kostenlose Tests",
     "upload": {
       "title": "Analysieren Sie Ihr Bild",
-      "dragDrop": "Ziehen Sie ein Bild hierher",
-      "or": "oder",
+      "dropImage": "Bild ablegen",
+      "dropDocument": "Dokument ablegen",
+      "dropVideo": "Video ablegen",
+      "dropBatch": "Bis zu 20 Bilder ablegen",
+      "orClick": "oder klicken zum Auswählen",
+      "formatImage": "JPG, PNG, GIF, WebP • Max 10 MB",
+      "formatDoc": "PDF, Word, PowerPoint, Excel • Max 20 MB",
+      "formatVideo": "MP4, WebM, MOV • Max 200 MB • Anmeldung erforderlich",
       "selectFile": "Datei auswählen",
-      "supportedFormats": "Unterstützte Formate: JPG, PNG, WEBP (max. 10 MB)",
-      "analyzing": "Analysiere...",
+      "supportedFormats": "Unterstützte Formate: JPG, PNG, WEBP (max 10 MB)",
+      "analyzing": "Analyse läuft...",
+      "uploading": "Hochladen",
+      "files": "Dateien",
       "progress": "Fortschritt: {{percent}}%"
     },
     "results": {
@@ -70,14 +98,131 @@
       "exifWarning": "⚠️ KI-Metadaten erkannt",
       "downloadCertificate": "Zertifikat herunterladen",
       "newAnalysis": "Neue Analyse"
+    },
+    "features": {
+      "title": "Leistungsstarke Funktionen",
+      "subtitle": "Alles, was Sie brauchen, um KI-Inhalte zu erkennen",
+      "multiEngine": {
+        "title": "Multi-Engine KI",
+        "description": "Verwendet Sightengine und Illuminarty für maximale Präzision"
+      },
+      "certificates": {
+        "title": "Authentifizierte Zertifikate",
+        "description": "Generieren Sie PDF-Zertifikate mit digitaler Signatur"
+      },
+      "history": {
+        "title": "Vollständiger Verlauf",
+        "description": "Sehen Sie alle Ihre vergangenen Analysen ein"
+      },
+      "privacy": {
+        "title": "Garantierte Vertraulichkeit",
+        "description": "Ihre Daten sind geschützt (DSGVO, ISO 27001)"
+      }
     }
   },
   "pricing": {
-    "title": "Transparente Preise",
-    "subtitle": "Wählen Sie den Plan, der zu Ihren Bedürfnissen passt",
+    "title": "Wählen Sie Ihren Plan",
+    "subtitle": "Unbegrenzte Analysen zur Erkennung von Deepfakes und zum Schutz Ihrer Inhalte",
+    "currentQuota": "Ihr aktuelles Kontingent",
+    "plan": "Plan",
+    "renewal": "Erneuerung",
     "monthly": "Monatlich",
     "annual": "Jährlich",
-    "save": "{{percent}}% sparen"
+    "save": "Sparen Sie {{percent}}%",
+    "plans": {
+      "guest": {
+        "name": "Gast",
+        "price": "Kostenlos",
+        "description": "Testen ohne Konto",
+        "features": [
+          "3 Analysen/Tag",
+          "Grundlegende Ergebnisse",
+          "Kein Verlauf",
+          "Keine Zertifikate"
+        ]
+      },
+      "free": {
+        "name": "Kostenlos",
+        "price": "0€",
+        "description": "Für den persönlichen Gebrauch",
+        "features": [
+          "10 Analysen/Tag",
+          "30 Tage Verlauf",
+          "Basis-Zertifikate",
+          "E-Mail-Support"
+        ],
+        "cta": "Starten"
+      },
+      "starter": {
+        "name": "Starter",
+        "price": "9,99€",
+        "period": "/Monat",
+        "description": "Für Fachleute",
+        "features": [
+          "100 Analysen/Tag",
+          "Unbegrenzter Verlauf",
+          "Pro-Zertifikate + Signatur",
+          "Prioritäts-Support",
+          "API-Zugang (Beta)"
+        ],
+        "cta": "Abonnieren",
+        "popular": "Beliebt"
+      },
+      "professional": {
+        "name": "Professional",
+        "price": "29,99€",
+        "period": "/Monat",
+        "description": "Für Unternehmen",
+        "features": [
+          "500 Analysen/Tag",
+          "Vollständige API",
+          "24/7 Support",
+          "Individuelle Zertifikate",
+          "Analytics-Dashboard",
+          "Slack/Discord-Integration"
+        ],
+        "cta": "Kontakt"
+      }
+    },
+    "faq": {
+      "title": "Häufig gestellte Fragen",
+      "items": {
+        "refund": {
+          "q": "Kann ich eine Rückerstattung erhalten?",
+          "a": "Ja, Sie haben 14 Tage Zeit, um eine vollständige Rückerstattung zu beantragen."
+        },
+        "upgrade": {
+          "q": "Kann ich meinen Plan ändern?",
+          "a": "Ja, Sie können jederzeit wechseln. Die anteilige Berechnung wird angewendet."
+        },
+        "quota": {
+          "q": "Was passiert, wenn ich mein Kontingent überschreite?",
+          "a": "Sie erhalten eine Benachrichtigung. Sie können upgraden oder auf die Erneuerung warten."
+        }
+      }
+    }
+  },
+  "history": {
+    "title": "Analyse-Verlauf",
+    "empty": "Noch keine Analysen",
+    "filter": {
+      "all": "Alle",
+      "batches": "Stapel & Dokumente",
+      "aiGenerated": "KI erkannt",
+      "real": "Echte Fotos",
+      "uncertain": "Unsicher"
+    },
+    "sort": {
+      "recent": "Neueste",
+      "oldest": "Älteste",
+      "highScore": "Hoher Score",
+      "lowScore": "Niedriger Score"
+    },
+    "item": {
+      "analyzedOn": "Analysiert am {{date}}",
+      "viewDetails": "Details anzeigen",
+      "downloadReport": "Bericht herunterladen"
+    }
   },
   "chatbot": {
     "title": "KI-Assistent",
@@ -85,7 +230,19 @@
     "send": "Senden",
     "thinking": "Denkt nach...",
     "error": "Verbindungsfehler",
-    "welcome": "👋 Hallo! Ich bin der FakeTect-Assistent. Wie kann ich Ihnen helfen?"
+    "suggestions": [
+      "Wie funktioniert die Erkennung?",
+      "Welche Formate werden unterstützt?",
+      "Wie erhalte ich ein Zertifikat?",
+      "Wie genau ist es?"
+    ],
+    "welcome": "👋 Hallo! Ich bin der FakeTect-Assistent. Wie kann ich Ihnen helfen?",
+    "defaultResponses": {
+      "howItWorks": "FakeTect verwendet 2 KI-Engines (Sightengine und Illuminarty) zur Bildanalyse. Wir erkennen typische Muster von KI-Generatoren wie Midjourney, DALL-E, Stable Diffusion.",
+      "formats": "Unterstützte Formate: JPG, PNG, WEBP, GIF, BMP. Maximale Größe: 10 MB für Web, 5 MB für Chrome-Erweiterung.",
+      "certificate": "Starter- und Pro-Benutzer können authentifizierte PDF-Zertifikate mit digitaler Signatur generieren. Nach jeder Analyse verfügbar.",
+      "accuracy": "Unsere durchschnittliche Genauigkeit beträgt 92% (Kombination beider Engines). Die Ergebnisse hängen von der Bildqualität ab."
+    }
   },
   "legal": {
     "mentions": "Impressum",
@@ -98,17 +255,37 @@
   },
   "errors": {
     "generic": "Ein Fehler ist aufgetreten",
-    "network": "Netzwerkfehler",
-    "fileTooBig": "Datei zu groß (max. {{max}} MB)",
+    "network": "Verbindungsfehler",
+    "fileTooBig": "Datei zu groß (max {{max}} MB)",
     "invalidFormat": "Nicht unterstütztes Format",
-    "quotaExceeded": "Kontingent überschritten. Bitte warten Sie oder upgraden Sie.",
+    "quotaExceeded": "Kontingent überschritten. Bitte warten oder upgraden.",
     "unauthorized": "Nicht autorisiert",
     "notFound": "Nicht gefunden",
     "serverError": "Serverfehler"
   },
+  "notifications": {
+    "analyzeSuccess": "Analyse erfolgreich abgeschlossen!",
+    "analyzeFailed": "Analyse fehlgeschlagen",
+    "certificateDownloaded": "Zertifikat heruntergeladen",
+    "quotaWarning": "{{remaining}} Analysen heute verbleibend"
+  },
+  "extension": {
+    "title": "Chrome-Erweiterung",
+    "subtitle": "Analysieren Sie jedes Bild mit einem Rechtsklick",
+    "contextMenu": "Mit FakeTect analysieren",
+    "popup": {
+      "title": "AI Vision Detector",
+      "version": "v{{version}}",
+      "dropzone": "Bild ablegen",
+      "hint": "💡 Rechtsklick auf Bild → \"Analysieren\"",
+      "analyzing": "Analyse läuft...",
+      "newAnalysis": "Neue Analyse"
+    }
+  },
   "footer": {
     "tagline": "Dieser Dienst verwendet mehrere KI-Algorithmen. Die Ergebnisse sind indikativ.",
     "copyright": "© {{year}} JARVIS - FakeTect. Alle Rechte vorbehalten.",
+    "hosting": "Hosting: Render (API) • Vercel (Frontend) • Supabase (Daten)",
     "compliance": "Konform: DSGVO • KI-Gesetz • DSA • ISO 27001 • ePrivacy"
   }
 }
