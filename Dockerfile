@@ -28,8 +28,8 @@ COPY packages/shared ./node_modules/@shared
 # Copy API source code
 COPY packages/api .
 
-# Expose port
-EXPOSE 3001
+# Expose Render's default port
+EXPOSE 10000
 
 # Start server
 CMD ["node", "server.js"]

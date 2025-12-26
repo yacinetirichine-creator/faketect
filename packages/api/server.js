@@ -31,15 +31,9 @@ const auditLogger = require('./services/audit-logger');
 
 const app = express();
 
-// 🚨 RENDER FIX: Ne PAS utiliser de fallback - Render DOIT fournir le PORT
-// Si PORT n'existe pas, on crash volontairement pour détecter le problème
-const PORT = process.env.PORT;
-if (!PORT) {
-  console.error('❌ FATAL: process.env.PORT is not defined!');
-  console.error('Environment variables:', Object.keys(process.env).filter(k => k.includes('PORT')));
-  process.exit(1);
-}
-console.log(`🔧 PORT détecté: ${PORT} (type: ${typeof PORT})`);
+// 🚨 RENDER: Utilise le PORT fourni par Render (10000) ou fallback
+const PORT = process.env.PORT || 10000;
+console.log(`🔧 PORT configuré: ${PORT} (source: ${process.env.PORT ? 'env var' : 'fallback 10000'})`);
 
 // 🏥 CRITICAL: Health check ULTRA-PRÉCOCE pour Render
 // Doit être le PREMIER middleware, répond immédiatement sans passer par CORS/helmet/etc
