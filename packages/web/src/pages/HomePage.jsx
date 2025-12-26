@@ -19,7 +19,7 @@ export default function HomePage() {
     { id: 'document', label: t('home.tabs.document', 'Document'), icon: FileText },
     { id: 'url', label: t('home.tabs.url', 'URL'), icon: Link2 },
   ]
-  const { isAuthenticated, getAccessToken } = useAuth()
+  const { user, profile, isAuthenticated, getAccessToken, supabase } = useAuth()
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('image')
   const [files, setFiles] = useState([])
@@ -106,7 +106,8 @@ export default function HomePage() {
     setError(null)
 
     // ⛔ NOUVEAU: Bloquer les analyses anonymes - inscription obligatoire
-    if (!isAuthenticated) {
+    // Si Supabase n'est pas configuré (mode simulation), autoriser en mode invité.
+    if (!isAuthenticated && supabase) {
       showToast.info('Inscription gratuite requise pour analyser')
       navigate('/auth?mode=signup', { 
         state: { 
