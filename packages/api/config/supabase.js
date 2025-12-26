@@ -1,8 +1,13 @@
 const { createClient } = require('@supabase/supabase-js');
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
+// Valider les variables d'environnement (ignorer les valeurs placeholder)
+function isValidEnv(val) {
+  return val && val !== 'xxxxx' && !val.includes('xxxxx') && val.startsWith('http') || val.startsWith('eyJ');
+}
+
+const supabaseUrl = isValidEnv(process.env.SUPABASE_URL) ? process.env.SUPABASE_URL : null;
+const supabaseAnonKey = isValidEnv(process.env.SUPABASE_ANON_KEY) ? process.env.SUPABASE_ANON_KEY : null;
+const supabaseServiceKey = isValidEnv(process.env.SUPABASE_SERVICE_KEY) ? process.env.SUPABASE_SERVICE_KEY : null;
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.warn('⚠️  Supabase non configuré - Mode simulation');
