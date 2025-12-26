@@ -1,4 +1,4 @@
-const { getUser, getProfile, checkQuota } = require('../config/supabase');
+const { getUser, getProfile, checkQuota, supabase } = require('../config/supabase');
 const guestQuota = require('../services/guest-quota');
 const metricsService = require('../services/metrics');
 const auditLogger = require('../services/audit-logger');
@@ -107,8 +107,35 @@ async function quotaMiddleware(req, res, next) {
     return next();
   }
 
-  // ⛔ NOUVEAU: Bloquer les analyses anonymes - inscription obligatoire
+  // If Supabase isn't configured, fall back to guest quota instead of blocking.
+  // (Analyze/batch routes will consume guest quota on success.)
   if (!req.user) {
+    if (!supabase) {
+      try {
+        const quota = await guestQuota.getQuota(req.ip, req.fingerprint);
+        if (!quota.allowed) {
+          metricsService.recordQuotaExceeded();
+          return res.status(429).json({
+            error: true,
+            code: 'GUEST_QUOTA_EXCEEDED',
+            message: 'Limite quotidienne invitée atteinte. Réessayez demain ou créez un compte pour plus d\'analyses.',
+            quota,
+            action: 'signup'
+          });
+        }
+        req.quota = { ...quota, guest: true };
+        return next();
+      } catch (err) {
+        console.error('❌ Guest quota check failed:', err?.message || err);
+        return res.status(503).json({
+          error: true,
+          code: 'SERVICE_UNAVAILABLE',
+          message: 'Service quota indisponible, réessayez plus tard.'
+        });
+      }
+    }
+
+    // Supabase configured: keep requiring auth for analyses.
     metricsService.recordQuotaExceeded();
     return res.status(401).json({
       error: true,
