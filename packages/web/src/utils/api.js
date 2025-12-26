@@ -291,7 +291,7 @@ export async function getQuota() {
   try {
     const { data } = await withTimeout(
       api.get('/quota'),
-      30000, // 30 secondes pour Render cold start
+      60000, // 60 secondes pour Render cold start (peut prendre 45s+)
       'Quota timeout'
     )
     return data
