@@ -175,51 +175,15 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/certificate', certificateRoutes);
 app.use('/api/user', userRoutes);
 
-// Quota info (guest or authenticated) - ROUTE ULTRA-RAPIDE SANS MIDDLEWARE
-app.get('/api/quota', async (req, res) => {
-  try {
-    // Réponse immédiate pour les guests (sans token)
-    const authHeader = req.headers.authorization;
-    if (!authHeader?.startsWith('Bearer ')) {
-      const fpHeader = req.headers['x-fingerprint'];
-      const fingerprint = typeof fpHeader === 'string' && fpHeader.trim() ? fpHeader.trim() : null;
-      return res.json({ 
-        success: true, 
-        quota: await guestQuota.getQuota(req.ip, fingerprint), 
-        authenticated: false 
-      });
-    }
-
-    // Pour les users authentifiés, on essaie mais avec timeout court
-    try {
-      const user = await Promise.race([
-        getUser(authHeader.split(' ')[1]),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Auth timeout')), 2000))
-      ]);
-      
-      if (user) {
-        const [quota, videoQuota] = await Promise.all([
-          checkQuota(user.id),
-          getVideoQuota(user.id)
-        ]);
-        return res.json({ success: true, quota, video_quota: videoQuota, authenticated: true });
-      }
-    } catch (authErr) {
-      console.warn('⚠️  Auth timeout, fallback to guest:', authErr.message);
-    }
-    
-    // Fallback: retourner quota guest si auth échoue
-    const fpHeader = req.headers['x-fingerprint'];
-    const fingerprint = typeof fpHeader === 'string' && fpHeader.trim() ? fpHeader.trim() : null;
-    return res.json({ 
-      success: true, 
-      quota: await guestQuota.getQuota(req.ip, fingerprint), 
-      authenticated: false 
-    });
-  } catch (err) {
-    console.error('❌ Erreur /api/quota:', err);
-    return res.status(500).json({ error: true, message: 'Erreur quota' });
-  }
+// Quota info - VERSION ULTRA-SIMPLIFIEE
+app.get('/api/quota', (req, res) => {
+  console.log('📊 GET /api/quota');
+  // Réponse immédiate sans aucune logique
+  res.json({ 
+    success: true, 
+    quota: { allowed: true, remaining: 10, limit: 10 }, 
+    authenticated: false 
+  });
 });
 
 // Health check

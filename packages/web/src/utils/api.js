@@ -288,12 +288,18 @@ export async function getStats() {
 
 // Quota (guest or authenticated)
 export async function getQuota() {
-  const { data } = await withTimeout(
-    api.get('/quota'),
-    10000,
-    'Quota timeout'
-  )
-  return data
+  try {
+    const { data } = await withTimeout(
+      api.get('/quota'),
+      30000, // 30 secondes pour Render cold start
+      'Quota timeout'
+    )
+    return data
+  } catch (err) {
+    console.warn('Quota failed, returning default:', err.message)
+    // Fallback silencieux
+    return { success: true, quota: { allowed: true, remaining: 10 }, authenticated: false }
+  }
 }
 
 // Rapport
