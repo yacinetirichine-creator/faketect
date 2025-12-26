@@ -1,0 +1,114 @@
+{
+  "common": {
+    "appName": "FakeTect",
+    "tagline": "AI图像和文档检测器",
+    "welcome": "欢迎",
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "cancel": "取消",
+    "confirm": "确认",
+    "close": "关闭",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "back": "返回",
+    "next": "下一步",
+    "previous": "上一步",
+    "upload": "上传",
+    "download": "下载",
+    "analyze": "分析",
+    "retry": "重试",
+    "learnMore": "了解更多"
+  },
+  "auth": {
+    "login": "登录",
+    "signup": "注册",
+    "logout": "退出登录",
+    "email": "电子邮箱",
+    "password": "密码",
+    "forgotPassword": "忘记密码？",
+    "noAccount": "还没有账户？",
+    "hasAccount": "已有账户？",
+    "createAccount": "创建账户",
+    "loginSuccess": "登录成功！",
+    "logoutSuccess": "已成功退出登录",
+    "signupSuccess": "账户创建成功！"
+  },
+  "navbar": {
+    "home": "首页",
+    "pricing": "价格",
+    "history": "历史记录",
+    "invoices": "发票",
+    "app": "应用",
+    "legal": "法律信息",
+    "account": "我的账户"
+  },
+  "home": {
+    "hero": {
+      "title": "检测AI生成的图像",
+      "subtitle": "使用我们先进的AI技术在几秒钟内分析图像和文档",
+      "cta": "免费开始",
+      "trustBadge": "符合 GDPR • AI法案 • DSA"
+    },
+    "upload": {
+      "title": "分析您的图像",
+      "dragDrop": "将图像拖放到此处",
+      "or": "或",
+      "selectFile": "选择文件",
+      "supportedFormats": "支持的格式：JPG、PNG、WEBP（最大10 MB）",
+      "analyzing": "分析中...",
+      "progress": "进度：{{percent}}%"
+    },
+    "results": {
+      "title": "分析结果",
+      "aiGenerated": "AI生成",
+      "realPhoto": "真实照片",
+      "uncertain": "不确定",
+      "confidence": "置信度：{{score}}%",
+      "engines": "分析引擎",
+      "exifWarning": "⚠️ 检测到AI元数据",
+      "downloadCertificate": "下载证书",
+      "newAnalysis": "新分析"
+    }
+  },
+  "pricing": {
+    "title": "透明定价",
+    "subtitle": "选择适合您需求的套餐",
+    "monthly": "月付",
+    "annual": "年付",
+    "save": "节省{{percent}}%"
+  },
+  "chatbot": {
+    "title": "AI助手",
+    "placeholder": "提出您的问题...",
+    "send": "发送",
+    "thinking": "思考中...",
+    "error": "连接错误",
+    "welcome": "👋 您好！我是FakeTect助手。我能帮您什么？"
+  },
+  "legal": {
+    "mentions": "法律声明",
+    "privacy": "隐私政策",
+    "terms": "使用条款",
+    "sales": "销售条款",
+    "cookies": "Cookie政策",
+    "contact": "联系我们",
+    "dpo": "DPO: dpo@faketect.com"
+  },
+  "errors": {
+    "generic": "发生错误",
+    "network": "网络错误",
+    "fileTooBig": "文件过大（最大{{max}} MB）",
+    "invalidFormat": "不支持的格式",
+    "quotaExceeded": "配额已超出。请稍候或升级。",
+    "unauthorized": "未授权",
+    "notFound": "未找到",
+    "serverError": "服务器错误"
+  },
+  "footer": {
+    "tagline": "本服务使用多种AI算法。结果仅供参考。",
+    "copyright": "© {{year}} JARVIS - FakeTect。保留所有权利。",
+    "compliance": "符合：GDPR • AI法案 • DSA • ISO 27001 • ePrivacy"
+  }
+}

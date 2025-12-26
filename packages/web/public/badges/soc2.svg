@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="110" height="32" viewBox="0 0 110 32">
+  <rect width="110" height="32" rx="4" fill="#dc2626"/>
+  <g fill="white">
+    <!-- Icône bouclier -->
+    <path d="M14 8 L20 10 L20 18 Q20 22 14 26 Q8 22 8 18 L8 10 Z" 
+          fill="none" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+    
+    <!-- Texte -->
+    <text x="26" y="13" font-family="Arial, sans-serif" font-size="9" font-weight="600">SOC 2</text>
+    <text x="26" y="23" font-family="Arial, sans-serif" font-size="7" fill="white" opacity="0.9">IN PROGRESS</text>
+  </g>
+</svg>

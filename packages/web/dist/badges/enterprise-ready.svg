@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="32" viewBox="0 0 150 32">
+  <rect width="150" height="32" rx="4" fill="#1e40af"/>
+  <g fill="white">
+    <!-- Icône building -->
+    <rect x="9" y="12" width="12" height="12" fill="none" stroke="white" stroke-width="1.5"/>
+    <rect x="11" y="14" width="2" height="2" fill="white"/>
+    <rect x="15" y="14" width="2" height="2" fill="white"/>
+    <rect x="11" y="18" width="2" height="2" fill="white"/>
+    <rect x="15" y="18" width="2" height="2" fill="white"/>
+    
+    <!-- Texte -->
+    <text x="26" y="21" font-family="Arial, sans-serif" font-size="11" font-weight="600">ENTERPRISE READY</text>
+  </g>
+</svg>

@@ -1,0 +1,23 @@
+.git
+.gitignore
+node_modules
+**/node_modules
+npm-debug.log*
+*.log
+.DS_Store
+.vscode
+.idea
+
+# Build outputs
+packages/web/dist
+**/dist
+**/build
+coverage
+
+# Runtime/generated
+packages/api/uploads
+packages/api/uploads/**
+
+# Env files
+.env
+.env.*

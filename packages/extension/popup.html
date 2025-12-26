@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>FakeTect</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 360px; min-height: 420px; font-family: 'Segoe UI', system-ui, sans-serif; background: linear-gradient(135deg, #020617, #0f172a); color: #fff; }
+    .header { padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 12px; }
+    .logo { width: 40px; height: 40px; background: linear-gradient(135deg, #0ea5e9, #8b5cf6); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo svg { width: 24px; height: 24px; }
+    .title { font-size: 16px; font-weight: 600; }
+    .subtitle { font-size: 10px; color: #64748b; }
+    .content { padding: 16px; }
+    .dropzone { border: 2px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 32px 16px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .dropzone:hover, .dropzone.active { border-color: #0ea5e9; background: rgba(14, 165, 233, 0.1); }
+    .dropzone-icon { width: 48px; height: 48px; margin: 0 auto 12px; background: rgba(255,255,255,0.05); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+    .dropzone-text { font-size: 14px; margin-bottom: 4px; }
+    .dropzone-hint { font-size: 12px; color: #64748b; }
+    .preview { display: flex; gap: 12px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 12px; }
+    .preview img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; }
+    .preview-info { flex: 1; }
+    .preview-name { font-size: 14px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .preview-size { font-size: 12px; color: #64748b; }
+    .btn { width: 100%; padding: 12px; border: none; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .btn-primary { background: linear-gradient(135deg, #0ea5e9, #8b5cf6); color: #fff; }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; margin-top: 8px; }
+    .btn-secondary:hover { background: rgba(255,255,255,0.05); color: #fff; }
+    .result { padding: 16px; background: rgba(255,255,255,0.05); border-radius: 12px; text-align: center; }
+    .result-score { font-size: 48px; font-weight: 700; margin-bottom: 8px; }
+    .result-score.high { color: #ef4444; }
+    .result-score.medium { color: #eab308; }
+    .result-score.low { color: #22c55e; }
+    .result-title { font-size: 16px; margin-bottom: 8px; }
+    .result-desc { font-size: 13px; color: #94a3b8; }
+    .result-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; margin-top: 12px; }
+    .result-badge.high { background: rgba(239,68,68,0.2); color: #ef4444; }
+    .result-badge.medium { background: rgba(234,179,8,0.2); color: #eab308; }
+    .result-badge.low { background: rgba(34,197,94,0.2); color: #22c55e; }
+    .engines { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .engine { padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px; }
+    .engine-name { font-size: 10px; color: #64748b; }
+    .engine-score { font-size: 18px; font-weight: 600; }
+    .loading { display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+    .spinner { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top-color: #0ea5e9; border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { margin-top: 16px; color: #94a3b8; }
+    .error { padding: 12px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; color: #ef4444; font-size: 13px; margin-bottom: 12px; }
+    .exif-warning { padding: 8px; background: rgba(239,68,68,0.1); border-radius: 6px; font-size: 11px; color: #ef4444; margin-top: 8px; }
+    .footer { padding: 12px 16px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 10px; color: #475569; }
+    input[type="file"] { display: none; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
+    <div><div class="title" data-i18n="extensionName">FakeTect</div><div class="subtitle">v2.1 • Multilingue</div></div>
+    <div id="language-selector" style="margin-left:auto;"></div>
+  </div>
+  <div class="content" id="content">
+    <div id="dropzone-view">
+      <div class="dropzone" id="dropzone">
+        <div class="dropzone-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+        <div class="dropzone-text" data-i18n="dragDropText">Déposez une image</div>
+        <div class="dropzone-hint" data-i18n="selectImage">ou cliquez pour sélectionner</div>
+      </div>
+      <input type="file" id="file-input" accept="image/*">
+      <p style="text-align:center;font-size:11px;color:#64748b;margin-top:12px;">💡 <span data-i18n="contextMenuHint">Clic droit sur une image → Analyser</span></p>
+    </div>
+    <div id="preview-view" style="display:none;">
+      <div class="preview"><img id="preview-image" src="" alt=""><div class="preview-info"><div class="preview-name" id="preview-name"></div><div class="preview-size" id="preview-size"></div></div></div>
+      <div id="error-message" class="error" style="display:none;"></div>
+      <button class="btn btn-primary" id="analyze-btn">🔍 <span data-i18n="analyzeImage">Analyser</span></button>
+      <button class="btn btn-secondary" id="reset-btn" data-i18n="newAnalysis">Choisir une autre image</button>
+    </div>
+    <div id="loading-view" style="display:none;"><div class="loading"><div class="spinner"></div><div class="loading-text" data-i18n="analyzing">Analyse en cours...</div></div></div>
+    <div id="result-view" style="display:none;">
+      <div class="result">
+        <div class="result-score" id="result-score">85%</div>
+        <div class="result-title" id="result-title">Titre</div>
+        <div class="result-desc" id="result-desc">Description</div>
+        <div class="result-badge" id="result-badge">Confiance</div>
+        <div id="exif-warning" class="exif-warning" style="display:none;">⚠️ <span data-i18n="exifWarning">Métadonnées IA détectées</span></div>
+        <div class="engines">
+          <div class="engine"><div class="engine-name">Sightengine</div><div class="engine-score" id="engine-se">-</div></div>
+          <div class="engine"><div class="engine-name">Illuminarty</div><div class="engine-score" id="engine-il">-</div></div>
+        </div>
+      </div>
+      <button class="btn btn-secondary" id="new-btn" style="margin-top:12px;" data-i18n="newAnalysis">Nouvelle analyse</button>
+    </div>
+  </div>
+  <div class="footer"><span data-i18n="footerDisclaimer">Résultats indicatifs</span> • <a href="https://faketect.com/legal/privacy" target="_blank" data-i18n="privacyPolicy">Confidentialité</a></div>
+  
+  <!-- Scripts i18n -->
+  <script src="../shared/i18n/browser.js"></script>
+  <script src="scripts/i18n.js"></script>
+  <script src="scripts/popup.js"></script>
+</body>
+</html>

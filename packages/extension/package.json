@@ -1,0 +1,6 @@
+{
+  "name": "@faketect/extension",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Extension Chrome/Firefox pour FakeTect"
+}

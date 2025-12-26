@@ -1,0 +1,12 @@
+.ai-detector-badge {
+  position: absolute; top: 4px; right: 4px;
+  background: #0ea5e9; color: white;
+  padding: 2px 8px; border-radius: 4px;
+  font-size: 11px; font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  z-index: 9999; pointer-events: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.ai-detector-badge.high { background: #ef4444; }
+.ai-detector-badge.medium { background: #eab308; }
+.ai-detector-badge.low { background: #22c55e; }

@@ -1,0 +1,64 @@
+{
+  "common": {
+    "appName": "FakeTect",
+    "tagline": "Detector IA de imágenes y documentos",
+    "welcome": "Bienvenido",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "upload": "Subir",
+    "download": "Descargar",
+    "analyze": "Analizar",
+    "retry": "Reintentar",
+    "learnMore": "Saber más",
+    "or": "o",
+    "locale": "es-ES"
+  },
+  "landing": {
+    "newVersion": "Nueva versión 2.0 disponible",
+    "hero": {
+      "title1": "La verdad en la era de",
+      "title2": "la Inteligencia Artificial",
+      "subtitle": "FakeTect es la plataforma de referencia para autenticar contenido digital. Detecta imágenes y documentos generados por IA con precisión sin igual."
+    }
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "signup": "Registrarse",
+    "logout": "Cerrar sesión",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "noAccount": "¿No tienes cuenta?",
+    "hasAccount": "¿Ya tienes cuenta?",
+    "createAccount": "Crear cuenta",
+    "loginSuccess": "¡Inicio de sesión exitoso!",
+    "logoutSuccess": "Sesión cerrada correctamente",
+    "signupSuccess": "¡Cuenta creada exitosamente!",
+    "continueWithGoogle": "Continuar con Google"
+  },
+  "navbar": {
+    "home": "Inicio",
+    "pricing": "Precios",
+    "history": "Historial",
+    "invoices": "Facturas",
+    "app": "Aplicación",
+    "legal": "Legal",
+    "account": "Mi cuenta"
+  },
+  "footer": {
+    "tagline": "Este servicio utiliza múltiples algoritmos de IA. Los resultados son indicativos.",
+    "copyright": "© {{year}} JARVIS - FakeTect. Todos los derechos reservados.",
+    "hosting": "Alojamiento: Render (API) • Vercel (Frontend) • Supabase (Datos)",
+    "compliance": "Cumple: RGPD • AI Act • DSA • ISO 27001 • ePrivacy"
+  }
+}

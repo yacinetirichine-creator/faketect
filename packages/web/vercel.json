@@ -1,0 +1,32 @@
+{
+  "buildCommand": "cd ../.. && npm run build:web",
+  "outputDirectory": "dist",
+  "installCommand": "npm install --prefix ../..",
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "faketect.app"
+        }
+      ],
+      "destination": "/app",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.faketect.app"
+        }
+      ],
+      "destination": "/app",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

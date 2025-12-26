@@ -1,0 +1,291 @@
+{
+  "common": {
+    "appName": "FakeTect",
+    "tagline": "Détecteur IA d'images et documents",
+    "welcome": "Bienvenue",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "close": "Fermer",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "upload": "Téléverser",
+    "download": "Télécharger",
+    "analyze": "Analyser",
+    "retry": "Réessayer",
+    "learnMore": "En savoir plus",
+    "or": "ou",
+    "locale": "fr-FR"
+  },
+  "landing": {
+    "newVersion": "Nouvelle version 2.0 disponible",
+    "hero": {
+      "title1": "La vérité à l'ère de",
+      "title2": "l'Intelligence Artificielle",
+      "subtitle": "FakeTect est la plateforme de référence pour authentifier les contenus numériques. Détectez les images et documents générés par IA avec une précision inégalée."
+    }
+  },
+  "auth": {
+    "login": "Connexion",
+    "signup": "Inscription",
+    "logout": "Déconnexion",
+    "email": "Email",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "noAccount": "Pas de compte ?",
+    "hasAccount": "Déjà un compte ?",
+    "createAccount": "Créer un compte",
+    "loginSuccess": "Connexion réussie !",
+    "logoutSuccess": "Déconnexion réussie",
+    "signupSuccess": "Compte créé avec succès !",
+    "continueWithGoogle": "Continuer avec Google"
+  },
+  "navbar": {
+    "home": "Accueil",
+    "pricing": "Tarifs",
+    "history": "Historique",
+    "invoices": "Factures",
+    "app": "Application",
+    "legal": "Mentions légales",
+    "account": "Mon compte"
+  },
+  "home": {
+    "tabs": {
+      "image": "Image",
+      "video": "Vidéo",
+      "batch": "Multiple",
+      "document": "Document",
+      "url": "URL"
+    },
+    "hero": {
+      "title": "Détectez les contenus",
+      "titleAI": "générés par IA",
+      "subtitle": "Analyse avancée d'images et documents",
+      "cta": "Commencer gratuitement",
+      "trustBadge": "Conforme RGPD • IA Act • DSA"
+    },
+    "quotaRemaining": "Tests gratuits restants",
+    "upload": {
+      "title": "Analysez votre image",
+      "dropImage": "Déposez une image",
+      "dropDocument": "Déposez un document",
+      "dropVideo": "Déposez une vidéo",
+      "dropBatch": "Déposez jusqu'à 20 images",
+      "orClick": "ou cliquez pour sélectionner",
+      "formatImage": "JPG, PNG, GIF, WebP • Max 10 MB",
+      "formatDoc": "PDF, Word, PowerPoint, Excel • Max 20 MB",
+      "formatVideo": "MP4, WebM, MOV • Max 200 MB • Connexion requise",
+      "selectFile": "Sélectionnez un fichier",
+      "supportedFormats": "Formats supportés : JPG, PNG, WEBP (max 10 Mo)",
+      "analyzing": "Analyse en cours...",
+      "uploading": "Upload",
+      "files": "fichiers",
+      "progress": "Progression : {{percent}}%"
+    },
+    "results": {
+      "title": "Résultats de l'analyse",
+      "aiGenerated": "Généré par IA",
+      "realPhoto": "Photo réelle",
+      "uncertain": "Incertain",
+      "confidence": "Confiance : {{score}}%",
+      "engines": "Moteurs d'analyse",
+      "exifWarning": "⚠️ Métadonnées IA détectées",
+      "downloadCertificate": "Télécharger le certificat",
+      "newAnalysis": "Nouvelle analyse"
+    },
+    "features": {
+      "title": "Fonctionnalités puissantes",
+      "subtitle": "Tout ce dont vous avez besoin pour détecter les contenus IA",
+      "multiEngine": {
+        "title": "Multi-moteurs IA",
+        "description": "Utilise Sightengine et Illuminarty pour une précision maximale"
+      },
+      "certificates": {
+        "title": "Certificats authentifiés",
+        "description": "Générez des certificats PDF avec signature numérique"
+      },
+      "history": {
+        "title": "Historique complet",
+        "description": "Consultez toutes vos analyses passées"
+      },
+      "privacy": {
+        "title": "Confidentialité garantie",
+        "description": "Vos données sont protégées (RGPD, ISO 27001)"
+      }
+    }
+  },
+  "pricing": {
+    "title": "Choisissez votre plan",
+    "subtitle": "Des analyses illimitées pour détecter les deepfakes et protéger votre contenu",
+    "currentQuota": "Votre quota actuel",
+    "plan": "Plan",
+    "renewal": "Renouvellement",
+    "monthly": "Mensuel",
+    "annual": "Annuel",
+    "save": "Économisez {{percent}}%",
+    "plans": {
+      "guest": {
+        "name": "Invité",
+        "price": "Gratuit",
+        "description": "Essayez sans compte",
+        "features": [
+          "3 analyses/jour",
+          "Résultats basiques",
+          "Pas d'historique",
+          "Pas de certificats"
+        ]
+      },
+      "free": {
+        "name": "Gratuit",
+        "price": "0€",
+        "description": "Pour un usage personnel",
+        "features": [
+          "10 analyses/jour",
+          "Historique 30 jours",
+          "Certificats basiques",
+          "Support email"
+        ],
+        "cta": "Commencer"
+      },
+      "starter": {
+        "name": "Starter",
+        "price": "9,99€",
+        "period": "/mois",
+        "description": "Pour les professionnels",
+        "features": [
+          "100 analyses/jour",
+          "Historique illimité",
+          "Certificats Pro + signature",
+          "Support prioritaire",
+          "API access (bêta)"
+        ],
+        "cta": "Souscrire",
+        "popular": "Populaire"
+      },
+      "professional": {
+        "name": "Professional",
+        "price": "29,99€",
+        "period": "/mois",
+        "description": "Pour les entreprises",
+        "features": [
+          "500 analyses/jour",
+          "API complète",
+          "Support 24/7",
+          "Certificats personnalisés",
+          "Tableau de bord analytics",
+          "Intégration Slack/Discord"
+        ],
+        "cta": "Contacter"
+      }
+    },
+    "faq": {
+      "title": "Questions fréquentes",
+      "items": {
+        "refund": {
+          "q": "Puis-je me faire rembourser ?",
+          "a": "Oui, vous disposez de 14 jours pour demander un remboursement complet."
+        },
+        "upgrade": {
+          "q": "Puis-je changer de plan ?",
+          "a": "Oui, vous pouvez changer à tout moment. Le prorata est appliqué."
+        },
+        "quota": {
+          "q": "Que se passe-t-il si je dépasse mon quota ?",
+          "a": "Vous recevez une notification. Vous pouvez upgrader ou attendre le renouvellement."
+        }
+      }
+    }
+  },
+  "history": {
+    "title": "Historique des analyses",
+    "empty": "Aucune analyse pour le moment",
+    "filter": {
+      "all": "Toutes",
+      "batches": "Lots & Documents",
+      "aiGenerated": "IA détectée",
+      "real": "Photos réelles",
+      "uncertain": "Incertains"
+    },
+    "sort": {
+      "recent": "Plus récentes",
+      "oldest": "Plus anciennes",
+      "highScore": "Score élevé",
+      "lowScore": "Score faible"
+    },
+    "item": {
+      "analyzedOn": "Analysé le {{date}}",
+      "viewDetails": "Voir détails",
+      "downloadReport": "Télécharger rapport"
+    }
+  },
+  "chatbot": {
+    "title": "Assistant IA",
+    "placeholder": "Posez votre question...",
+    "send": "Envoyer",
+    "thinking": "Réflexion en cours...",
+    "error": "Erreur de connexion",
+    "suggestions": [
+      "Comment fonctionne la détection ?",
+      "Quels formats sont supportés ?",
+      "Comment obtenir un certificat ?",
+      "Quelle est la précision ?"
+    ],
+    "welcome": "👋 Bonjour ! Je suis l'assistant FakeTect. Comment puis-je vous aider ?",
+    "defaultResponses": {
+      "howItWorks": "FakeTect utilise 2 moteurs d'IA (Sightengine et Illuminarty) pour analyser les images. Nous détectons les patterns typiques des générateurs IA comme Midjourney, DALL-E, Stable Diffusion.",
+      "formats": "Formats supportés : JPG, PNG, WEBP, GIF, BMP. Taille max : 10 Mo pour le web, 5 Mo pour l'extension Chrome.",
+      "certificate": "Les utilisateurs Starter et Pro peuvent générer des certificats PDF authentifiés avec signature numérique. Disponible après chaque analyse.",
+      "accuracy": "Notre précision moyenne est de 92% (combinaison des 2 moteurs). Les résultats dépendent de la qualité de l'image."
+    }
+  },
+  "legal": {
+    "mentions": "Mentions légales",
+    "privacy": "Politique de confidentialité",
+    "terms": "CGU",
+    "sales": "CGV",
+    "cookies": "Politique cookies",
+    "contact": "Contact",
+    "dpo": "DPO : dpo@faketect.com"
+  },
+  "errors": {
+    "generic": "Une erreur est survenue",
+    "network": "Erreur de connexion",
+    "fileTooBig": "Fichier trop volumineux (max {{max}} Mo)",
+    "invalidFormat": "Format non supporté",
+    "quotaExceeded": "Quota dépassé. Veuillez patienter ou upgrader.",
+    "unauthorized": "Non autorisé",
+    "notFound": "Non trouvé",
+    "serverError": "Erreur serveur"
+  },
+  "notifications": {
+    "analyzeSuccess": "Analyse terminée avec succès !",
+    "analyzeFailed": "L'analyse a échoué",
+    "certificateDownloaded": "Certificat téléchargé",
+    "quotaWarning": "{{remaining}} analyses restantes aujourd'hui"
+  },
+  "extension": {
+    "title": "Extension Chrome",
+    "subtitle": "Analysez n'importe quelle image en un clic droit",
+    "contextMenu": "Analyser avec FakeTect",
+    "popup": {
+      "title": "AI Vision Detector",
+      "version": "v{{version}}",
+      "dropzone": "Déposez une image",
+      "hint": "💡 Clic droit sur une image → \"Analyser\"",
+      "analyzing": "Analyse en cours...",
+      "newAnalysis": "Nouvelle analyse"
+    }
+  },
+  "footer": {
+    "tagline": "Ce service utilise plusieurs algorithmes d'IA. Les résultats sont indicatifs.",
+    "copyright": "© {{year}} JARVIS - FakeTect. Tous droits réservés.",
+    "hosting": "Hébergement : Render (API) • Vercel (Frontend) • Supabase (Données)",
+    "compliance": "Conforme : RGPD • IA Act • DSA • ISO 27001 • ePrivacy"
+  }
+}

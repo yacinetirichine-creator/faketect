@@ -1,0 +1,128 @@
+{
+  "extensionName": {
+    "message": "FakeTect - كاشف الذكاء الاصطناعي",
+    "description": "اسم الإضافة"
+  },
+  "extensionDescription": {
+    "message": "اكتشف إذا كانت الصورة من صنع الذكاء الاصطناعي بنقرة واحدة. متوافق مع اللائحة العامة لحماية البيانات.",
+    "description": "وصف الإضافة"
+  },
+  "analyzeImage": {
+    "message": "تحليل مع FakeTect",
+    "description": "نص القائمة السياقية"
+  },
+  "analyzing": {
+    "message": "جاري التحليل...",
+    "description": "حالة التحميل"
+  },
+  "dragDropText": {
+    "message": "اسحب وأفلت صورة هنا أو انقر للاختيار",
+    "description": "نص منطقة الإسقاط"
+  },
+  "selectImage": {
+    "message": "اختر صورة",
+    "description": "نص الزر"
+  },
+  "resultAI": {
+    "message": "من صنع الذكاء الاصطناعي",
+    "description": "نتيجة كشف الذكاء الاصطناعي"
+  },
+  "resultReal": {
+    "message": "صورة حقيقية",
+    "description": "نتيجة صورة حقيقية"
+  },
+  "confidence": {
+    "message": "الثقة: $SCORE$٪",
+    "description": "درجة الثقة",
+    "placeholders": {
+      "score": {
+        "content": "$1",
+        "example": "92"
+      }
+    }
+  },
+  "details": {
+    "message": "التفاصيل",
+    "description": "قسم التفاصيل"
+  },
+  "engine": {
+    "message": "المحرك: $ENGINE$",
+    "description": "محرك الكشف",
+    "placeholders": {
+      "engine": {
+        "content": "$1",
+        "example": "Sightengine"
+      }
+    }
+  },
+  "processingTime": {
+    "message": "وقت المعالجة: $TIME$ مللي ثانية",
+    "description": "وقت المعالجة",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "234"
+      }
+    }
+  },
+  "newAnalysis": {
+    "message": "تحليل جديد",
+    "description": "زر إعادة التعيين"
+  },
+  "viewHistory": {
+    "message": "عرض السجل",
+    "description": "زر السجل"
+  },
+  "quotaExceeded": {
+    "message": "تم تجاوز الحصة المجانية. أنشئ حسابًا مجانيًا للمتابعة.",
+    "description": "خطأ الحصة"
+  },
+  "errorAnalysis": {
+    "message": "خطأ في التحليل. يرجى المحاولة مرة أخرى.",
+    "description": "خطأ عام"
+  },
+  "errorNetwork": {
+    "message": "خطأ في الشبكة. تحقق من اتصالك.",
+    "description": "خطأ الشبكة"
+  },
+  "privacyPolicy": {
+    "message": "سياسة الخصوصية",
+    "description": "رابط الخصوصية"
+  },
+  "termsOfService": {
+    "message": "شروط الاستخدام",
+    "description": "رابط الشروط"
+  },
+  "help": {
+    "message": "مساعدة",
+    "description": "زر المساعدة"
+  },
+  "askQuestion": {
+    "message": "اطرح سؤالك...",
+    "description": "نص المساعدة"
+  },
+  "loginPrompt": {
+    "message": "سجل الدخول للوصول إلى الميزات المميزة",
+    "description": "دعوة لتسجيل الدخول"
+  },
+  "login": {
+    "message": "تسجيل الدخول",
+    "description": "زر تسجيل الدخول"
+  },
+  "signup": {
+    "message": "التسجيل",
+    "description": "زر التسجيل"
+  },
+  "freePlan": {
+    "message": "مجاني: 10 تحليلات/شهر",
+    "description": "معلومات الخطة المجانية"
+  },
+  "proPlan": {
+    "message": "احترافي: تحليلات غير محدودة",
+    "description": "معلومات الخطة الاحترافية"
+  },
+  "selectLanguage": {
+    "message": "اللغة",
+    "description": "تسمية محدد اللغة"
+  }
+}

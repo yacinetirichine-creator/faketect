@@ -1,0 +1,140 @@
+{
+  "extensionName": {
+    "message": "FakeTect - AI Detector",
+    "description": "Extension name"
+  },
+  "extensionDescription": {
+    "message": "Detect AI-generated images in one click. GDPR compliant.",
+    "description": "Extension description"
+  },
+  "analyzeImage": {
+    "message": "Analyze with FakeTect",
+    "description": "Context menu text"
+  },
+  "analyzing": {
+    "message": "Analyzing image...",
+    "description": "Loading state"
+  },
+  "dragDropText": {
+    "message": "Drag & drop an image here or click to select",
+    "description": "Dropzone placeholder"
+  },
+  "selectImage": {
+    "message": "Select image",
+    "description": "Button text"
+  },
+  "resultAI": {
+    "message": "AI-Generated",
+    "description": "AI detection result"
+  },
+  "resultReal": {
+    "message": "Real Photo",
+    "description": "Real photo result"
+  },
+  "confidence": {
+    "message": "Confidence: $SCORE$%",
+    "description": "Confidence score",
+    "placeholders": {
+      "score": {
+        "content": "$1",
+        "example": "92"
+      }
+    }
+  },
+  "details": {
+    "message": "Details",
+    "description": "Details section"
+  },
+  "engine": {
+    "message": "Engine: $ENGINE$",
+    "description": "Detection engine",
+    "placeholders": {
+      "engine": {
+        "content": "$1",
+        "example": "Sightengine"
+      }
+    }
+  },
+  "processingTime": {
+    "message": "Processing: $TIME$ms",
+    "description": "Processing time",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "234"
+      }
+    }
+  },
+  "newAnalysis": {
+    "message": "New Analysis",
+    "description": "Reset button"
+  },
+  "viewHistory": {
+    "message": "View History",
+    "description": "History button"
+  },
+  "quotaExceeded": {
+    "message": "Free quota exceeded. Create a free account to continue.",
+    "description": "Quota error"
+  },
+  "errorAnalysis": {
+    "message": "Analysis error. Please try again.",
+    "description": "Generic error"
+  },
+  "errorNetwork": {
+    "message": "Network error. Check your connection.",
+    "description": "Network error"
+  },
+  "privacyPolicy": {
+    "message": "Privacy Policy",
+    "description": "Privacy link"
+  },
+  "termsOfService": {
+    "message": "Terms of Service",
+    "description": "Terms link"
+  },
+  "help": {
+    "message": "Help",
+    "description": "Help button"
+  },
+  "askQuestion": {
+    "message": "Ask a question...",
+    "description": "Help input placeholder"
+  },
+  "loginPrompt": {
+    "message": "Login to access premium features",
+    "description": "Login prompt"
+  },
+  "login": {
+    "message": "Login",
+    "description": "Login button"
+  },
+  "signup": {
+    "message": "Sign Up",
+    "description": "Signup button"
+  },
+  "freePlan": {
+    "message": "Free: 10 analyses/month",
+    "description": "Free plan info"
+  },
+  "proPlan": {
+    "message": "Pro: Unlimited analyses",
+    "description": "Pro plan info"
+  },
+  "selectLanguage": {
+    "message": "Language",
+    "description": "Language selector label"
+  },
+  "contextMenuHint": {
+    "message": "Right-click on an image → Analyze",
+    "description": "Context menu hint"
+  },
+  "exifWarning": {
+    "message": "AI metadata detected",
+    "description": "EXIF warning"
+  },
+  "footerDisclaimer": {
+    "message": "Indicative results",
+    "description": "Footer disclaimer"
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "common": {
+    "appName": "FakeTect",
+    "tagline": "Rilevatore AI per immagini e documenti",
+    "welcome": "Benvenuto",
+    "loading": "Caricamento...",
+    "error": "Errore",
+    "success": "Successo",
+    "cancel": "Annulla",
+    "confirm": "Conferma",
+    "close": "Chiudi",
+    "save": "Salva",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "back": "Indietro",
+    "next": "Avanti",
+    "previous": "Precedente",
+    "upload": "Carica",
+    "download": "Scarica",
+    "analyze": "Analizza",
+    "retry": "Riprova",
+    "learnMore": "Scopri di più"
+  },
+  "auth": {
+    "login": "Accedi",
+    "signup": "Registrati",
+    "logout": "Esci",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Password dimenticata?",
+    "noAccount": "Non hai un account?",
+    "hasAccount": "Hai già un account?",
+    "createAccount": "Crea account",
+    "loginSuccess": "Accesso effettuato con successo!",
+    "logoutSuccess": "Disconnessione effettuata con successo",
+    "signupSuccess": "Account creato con successo!"
+  },
+  "navbar": {
+    "home": "Home",
+    "pricing": "Prezzi",
+    "history": "Cronologia",
+    "invoices": "Fatture",
+    "app": "Applicazione",
+    "legal": "Legale",
+    "account": "Il mio account"
+  },
+  "home": {
+    "hero": {
+      "title": "Rileva immagini generate dall'IA",
+      "subtitle": "Analizza immagini e documenti in pochi secondi con la nostra tecnologia AI avanzata",
+      "cta": "Inizia gratuitamente",
+      "trustBadge": "Conforme a GDPR • AI Act • DSA"
+    },
+    "upload": {
+      "title": "Analizza la tua immagine",
+      "dragDrop": "Trascina un'immagine qui",
+      "or": "oppure",
+      "selectFile": "Seleziona file",
+      "supportedFormats": "Formati supportati: JPG, PNG, WEBP (max 10 MB)",
+      "analyzing": "Analisi in corso...",
+      "progress": "Progresso: {{percent}}%"
+    },
+    "results": {
+      "title": "Risultati dell'analisi",
+      "aiGenerated": "Generato dall'IA",
+      "realPhoto": "Foto reale",
+      "uncertain": "Incerto",
+      "confidence": "Affidabilità: {{score}}%",
+      "engines": "Motori di analisi",
+      "exifWarning": "⚠️ Metadati AI rilevati",
+      "downloadCertificate": "Scarica certificato",
+      "newAnalysis": "Nuova analisi"
+    }
+  },
+  "pricing": {
+    "title": "Prezzi trasparenti",
+    "subtitle": "Scegli il piano adatto alle tue esigenze",
+    "monthly": "Mensile",
+    "annual": "Annuale",
+    "save": "Risparmia {{percent}}%"
+  },
+  "chatbot": {
+    "title": "Assistente IA",
+    "placeholder": "Fai la tua domanda...",
+    "send": "Invia",
+    "thinking": "Sto pensando...",
+    "error": "Errore di connessione",
+    "welcome": "👋 Ciao! Sono l'assistente di FakeTect. Come posso aiutarti?"
+  },
+  "legal": {
+    "mentions": "Note legali",
+    "privacy": "Privacy policy",
+    "terms": "Termini di utilizzo",
+    "sales": "Condizioni di vendita",
+    "cookies": "Cookie policy",
+    "contact": "Contatti",
+    "dpo": "DPO: dpo@faketect.com"
+  },
+  "errors": {
+    "generic": "Si è verificato un errore",
+    "network": "Errore di rete",
+    "fileTooBig": "File troppo grande (max {{max}} MB)",
+    "invalidFormat": "Formato non supportato",
+    "quotaExceeded": "Quota superata. Attendi o effettua l'upgrade.",
+    "unauthorized": "Non autorizzato",
+    "notFound": "Non trovato",
+    "serverError": "Errore del server"
+  },
+  "footer": {
+    "tagline": "Questo servizio utilizza diversi algoritmi AI. I risultati sono indicativi.",
+    "copyright": "© {{year}} JARVIS - FakeTect. Tutti i diritti riservati.",
+    "compliance": "Conforme: GDPR • AI Act • DSA • ISO 27001 • ePrivacy"
+  }
+}

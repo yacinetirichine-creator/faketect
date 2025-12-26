@@ -1,0 +1,140 @@
+{
+  "extensionName": {
+    "message": "FakeTect - Détecteur IA",
+    "description": "Nom de l'extension"
+  },
+  "extensionDescription": {
+    "message": "Détectez si une image a été générée par IA en un clic. Conforme RGPD.",
+    "description": "Description de l'extension"
+  },
+  "analyzeImage": {
+    "message": "Analyser avec FakeTect",
+    "description": "Texte du menu contextuel"
+  },
+  "analyzing": {
+    "message": "Analyse en cours...",
+    "description": "État de chargement"
+  },
+  "dragDropText": {
+    "message": "Glissez-déposez une image ici ou cliquez pour sélectionner",
+    "description": "Texte zone de dépôt"
+  },
+  "selectImage": {
+    "message": "Sélectionner une image",
+    "description": "Texte du bouton"
+  },
+  "resultAI": {
+    "message": "Généré par IA",
+    "description": "Résultat détection IA"
+  },
+  "resultReal": {
+    "message": "Photo réelle",
+    "description": "Résultat photo réelle"
+  },
+  "confidence": {
+    "message": "Confiance : $SCORE$%",
+    "description": "Score de confiance",
+    "placeholders": {
+      "score": {
+        "content": "$1",
+        "example": "92"
+      }
+    }
+  },
+  "details": {
+    "message": "Détails",
+    "description": "Section détails"
+  },
+  "engine": {
+    "message": "Moteur : $ENGINE$",
+    "description": "Moteur de détection",
+    "placeholders": {
+      "engine": {
+        "content": "$1",
+        "example": "Sightengine"
+      }
+    }
+  },
+  "processingTime": {
+    "message": "Traitement : $TIME$ms",
+    "description": "Temps de traitement",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "234"
+      }
+    }
+  },
+  "newAnalysis": {
+    "message": "Nouvelle analyse",
+    "description": "Bouton réinitialiser"
+  },
+  "viewHistory": {
+    "message": "Voir l'historique",
+    "description": "Bouton historique"
+  },
+  "quotaExceeded": {
+    "message": "Quota gratuit dépassé. Créez un compte gratuit pour continuer.",
+    "description": "Erreur quota"
+  },
+  "errorAnalysis": {
+    "message": "Erreur d'analyse. Veuillez réessayer.",
+    "description": "Erreur générique"
+  },
+  "errorNetwork": {
+    "message": "Erreur réseau. Vérifiez votre connexion.",
+    "description": "Erreur réseau"
+  },
+  "privacyPolicy": {
+    "message": "Politique de confidentialité",
+    "description": "Lien confidentialité"
+  },
+  "termsOfService": {
+    "message": "Conditions d'utilisation",
+    "description": "Lien CGU"
+  },
+  "help": {
+    "message": "Aide",
+    "description": "Bouton aide"
+  },
+  "askQuestion": {
+    "message": "Posez votre question...",
+    "description": "Placeholder aide"
+  },
+  "loginPrompt": {
+    "message": "Connectez-vous pour accéder aux fonctionnalités premium",
+    "description": "Invitation connexion"
+  },
+  "login": {
+    "message": "Connexion",
+    "description": "Bouton connexion"
+  },
+  "signup": {
+    "message": "Inscription",
+    "description": "Bouton inscription"
+  },
+  "freePlan": {
+    "message": "Gratuit : 10 analyses/mois",
+    "description": "Info forfait gratuit"
+  },
+  "proPlan": {
+    "message": "Pro : Analyses illimitées",
+    "description": "Info forfait pro"
+  },
+  "selectLanguage": {
+    "message": "Langue",
+    "description": "Label sélecteur langue"
+  },
+  "contextMenuHint": {
+    "message": "Clic droit sur une image → Analyser",
+    "description": "Astuce menu contextuel"
+  },
+  "exifWarning": {
+    "message": "Métadonnées IA détectées",
+    "description": "Avertissement EXIF"
+  },
+  "footerDisclaimer": {
+    "message": "Résultats indicatifs",
+    "description": "Avertissement footer"
+  }
+}

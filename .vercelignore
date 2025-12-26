@@ -1,0 +1,8 @@
+packages/api
+packages/extension
+e2e
+scripts
+docs/*.sql
+*.md
+.git
+node_modules

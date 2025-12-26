@@ -1,0 +1,114 @@
+{
+  "common": {
+    "appName": "FakeTect",
+    "tagline": "KI-Detektor für Bilder und Dokumente",
+    "welcome": "Willkommen",
+    "loading": "Lädt...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "close": "Schließen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "back": "Zurück",
+    "next": "Weiter",
+    "previous": "Vorherige",
+    "upload": "Hochladen",
+    "download": "Herunterladen",
+    "analyze": "Analysieren",
+    "retry": "Wiederholen",
+    "learnMore": "Mehr erfahren"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "signup": "Registrieren",
+    "logout": "Abmelden",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "forgotPassword": "Passwort vergessen?",
+    "noAccount": "Noch kein Konto?",
+    "hasAccount": "Bereits ein Konto?",
+    "createAccount": "Konto erstellen",
+    "loginSuccess": "Erfolgreich angemeldet!",
+    "logoutSuccess": "Erfolgreich abgemeldet",
+    "signupSuccess": "Konto erfolgreich erstellt!"
+  },
+  "navbar": {
+    "home": "Startseite",
+    "pricing": "Preise",
+    "history": "Verlauf",
+    "invoices": "Rechnungen",
+    "app": "Anwendung",
+    "legal": "Rechtliches",
+    "account": "Mein Konto"
+  },
+  "home": {
+    "hero": {
+      "title": "Erkennen Sie KI-generierte Bilder",
+      "subtitle": "Analysieren Sie Bilder und Dokumente in Sekunden mit unserer fortschrittlichen KI-Technologie",
+      "cta": "Kostenlos beginnen",
+      "trustBadge": "DSGVO-konform • KI-Gesetz • DSA"
+    },
+    "upload": {
+      "title": "Analysieren Sie Ihr Bild",
+      "dragDrop": "Ziehen Sie ein Bild hierher",
+      "or": "oder",
+      "selectFile": "Datei auswählen",
+      "supportedFormats": "Unterstützte Formate: JPG, PNG, WEBP (max. 10 MB)",
+      "analyzing": "Analysiere...",
+      "progress": "Fortschritt: {{percent}}%"
+    },
+    "results": {
+      "title": "Analyseergebnisse",
+      "aiGenerated": "KI-generiert",
+      "realPhoto": "Echtes Foto",
+      "uncertain": "Unsicher",
+      "confidence": "Vertrauen: {{score}}%",
+      "engines": "Analyse-Engines",
+      "exifWarning": "⚠️ KI-Metadaten erkannt",
+      "downloadCertificate": "Zertifikat herunterladen",
+      "newAnalysis": "Neue Analyse"
+    }
+  },
+  "pricing": {
+    "title": "Transparente Preise",
+    "subtitle": "Wählen Sie den Plan, der zu Ihren Bedürfnissen passt",
+    "monthly": "Monatlich",
+    "annual": "Jährlich",
+    "save": "{{percent}}% sparen"
+  },
+  "chatbot": {
+    "title": "KI-Assistent",
+    "placeholder": "Stellen Sie Ihre Frage...",
+    "send": "Senden",
+    "thinking": "Denkt nach...",
+    "error": "Verbindungsfehler",
+    "welcome": "👋 Hallo! Ich bin der FakeTect-Assistent. Wie kann ich Ihnen helfen?"
+  },
+  "legal": {
+    "mentions": "Impressum",
+    "privacy": "Datenschutzerklärung",
+    "terms": "Nutzungsbedingungen",
+    "sales": "Verkaufsbedingungen",
+    "cookies": "Cookie-Richtlinie",
+    "contact": "Kontakt",
+    "dpo": "DPO: dpo@faketect.com"
+  },
+  "errors": {
+    "generic": "Ein Fehler ist aufgetreten",
+    "network": "Netzwerkfehler",
+    "fileTooBig": "Datei zu groß (max. {{max}} MB)",
+    "invalidFormat": "Nicht unterstütztes Format",
+    "quotaExceeded": "Kontingent überschritten. Bitte warten Sie oder upgraden Sie.",
+    "unauthorized": "Nicht autorisiert",
+    "notFound": "Nicht gefunden",
+    "serverError": "Serverfehler"
+  },
+  "footer": {
+    "tagline": "Dieser Dienst verwendet mehrere KI-Algorithmen. Die Ergebnisse sind indikativ.",
+    "copyright": "© {{year}} JARVIS - FakeTect. Alle Rechte vorbehalten.",
+    "compliance": "Konform: DSGVO • KI-Gesetz • DSA • ISO 27001 • ePrivacy"
+  }
+}

@@ -1,0 +1,259 @@
+{
+  "common": {
+    "appName": "FakeTect",
+    "tagline": "كاشف الصور بالذكاء الاصطناعي",
+    "welcome": "مرحبا بيك",
+    "loading": "كنحمل...",
+    "error": "غلط",
+    "success": "نجح",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "close": "سد",
+    "save": "سوڤي",
+    "delete": "حذف",
+    "edit": "بدل",
+    "back": "رجع",
+    "next": "اللي جاي",
+    "previous": "اللي فات",
+    "upload": "طلع",
+    "download": "نزل",
+    "analyze": "حلل",
+    "retry": "عاود",
+    "learnMore": "عرف كثر"
+  },
+  "auth": {
+    "login": "دخول",
+    "signup": "إنشاء حساب",
+    "logout": "خروج",
+    "email": "الإيميل",
+    "password": "الباسوورد",
+    "forgotPassword": "نسيتي الباسوورد؟",
+    "noAccount": "ماعندكش حساب؟",
+    "hasAccount": "عندك حساب؟",
+    "createAccount": "دير حساب",
+    "loginSuccess": "دخلتي بنجاح!",
+    "logoutSuccess": "خرجتي بنجاح",
+    "signupSuccess": "تدار الحساب بنجاح!"
+  },
+  "navbar": {
+    "home": "الداخلية",
+    "pricing": "الأسعار",
+    "history": "التاريخ",
+    "invoices": "الفواتير",
+    "app": "التطبيق",
+    "legal": "القوانين",
+    "account": "حسابي"
+  },
+  "home": {
+    "hero": {
+      "title": "كشف الصور ديال الذكاء الاصطناعي",
+      "subtitle": "حلل الصور والوثائق بزربة باستعمال تكنولوجيا الذكاء الاصطناعي",
+    "cta": "ابدا بلاش",
+      "trustBadge": "متوافق مع RGPD • قانون الذكاء الاصطناعي • DSA"
+    },
+    "upload": {
+      "title": "حلل الصورة ديالك",
+      "dragDrop": "طيح صورة هنا",
+      "or": "أولا",
+      "selectFile": "اختار ملف",
+      "supportedFormats": "الفورمات المدعومة: JPG, PNG, WEBP (الحد الأقصى 10 ميغا)",
+      "analyzing": "كنحللو...",
+      "progress": "التقدم: {{percent}}%"
+    },
+    "results": {
+      "title": "نتائج التحليل",
+      "aiGenerated": "مصنوع بالذكاء الاصطناعي",
+      "realPhoto": "تصويرة حقيقية",
+      "uncertain": "مامتأكدش",
+      "confidence": "الثقة: {{score}}%",
+      "engines": "محركات التحليل",
+      "exifWarning": "⚠️ تلقينا معلومات ديال الذكاء الاصطناعي",
+      "downloadCertificate": "نزل الشهادة",
+      "newAnalysis": "تحليل جديد"
+    },
+    "features": {
+      "title": "ميزات قوية",
+      "subtitle": "كلشي اللي خصك باش تكشف المحتوى ديال الذكاء الاصطناعي",
+      "multiEngine": {
+        "title": "متعدد المحركات",
+        "description": "كيستعمل Sightengine و Illuminarty للدقة القصوى"
+      },
+      "certificates": {
+        "title": "شهادات موثقة",
+        "description": "دير شهادات PDF بتوقيع رقمي"
+      },
+      "history": {
+        "title": "تاريخ كامل",
+        "description": "شوف جميع التحليلات ديالك"
+      },
+      "privacy": {
+        "title": "الخصوصية مضمونة",
+        "description": "البيانات ديالك محمية (RGPD, ISO 27001)"
+      }
+    }
+  },
+  "pricing": {
+    "title": "أسعار واضحة",
+    "subtitle": "اختار الخطة اللي ناسبة ليك",
+    "monthly": "شهري",
+    "annual": "سنوي",
+    "save": "وفر {{percent}}%",
+    "plans": {
+      "guest": {
+        "name": "ضيف",
+        "price": "بلاش",
+        "description": "جرب بلا حساب",
+        "features": [
+          "3 تحليلات/يوم",
+          "نتائج أساسية",
+          "بلا تاريخ",
+          "بلا شهادات"
+        ]
+      },
+      "free": {
+        "name": "مجاني",
+        "price": "0€",
+        "description": "للاستعمال الشخصي",
+        "features": [
+          "10 تحليلات/يوم",
+          "تاريخ 30 يوم",
+          "شهادات أساسية",
+          "دعم بالإيميل"
+        ],
+        "cta": "ابدا"
+      },
+      "starter": {
+        "name": "المبتدئ",
+        "price": "9.99€",
+        "period": "/شهر",
+        "description": "للمحترفين",
+        "features": [
+          "100 تحليل/يوم",
+          "تاريخ بلا حدود",
+          "شهادات محترفة + توقيع",
+          "دعم سريع",
+          "وصول API (تجريبي)"
+        ],
+        "cta": "اشترك",
+        "popular": "الأكثر طلبا"
+      },
+      "professional": {
+        "name": "محترف",
+        "price": "29.99€",
+        "period": "/شهر",
+        "description": "للشركات",
+        "features": [
+          "500 تحليل/يوم",
+          "API كامل",
+          "دعم 24/7",
+          "شهادات مخصصة",
+          "لوحة تحليلات",
+          "تكامل Slack/Discord"
+        ],
+        "cta": "اتصل بينا"
+      }
+    },
+    "faq": {
+      "title": "أسئلة متكررة",
+      "items": {
+        "refund": {
+          "q": "واش نقدر نسترجع الفلوس؟",
+          "a": "أيه، عندك 14 يوم باش تطلب استرجاع كامل."
+        },
+        "upgrade": {
+          "q": "واش نقدر نبدل الخطة؟",
+          "a": "أيه، تقدر تبدل فأي وقت. كنطبقو التناسب."
+        },
+        "quota": {
+          "q": "شنو غادي يوقع إلا تجاوزت الحصة؟",
+          "a": "غاتوصلك رسالة. تقدر تزيد الخطة أو تصنى التجديد."
+        }
+      }
+    }
+  },
+  "history": {
+    "title": "تاريخ التحليلات",
+    "empty": "مازال ماعندك تحليلات",
+    "filter": {
+      "all": "الكل",
+      "aiGenerated": "ذكاء اصطناعي متلقى",
+      "real": "صور حقيقية",
+      "uncertain": "مامتأكدش"
+    },
+    "sort": {
+      "recent": "الجدد",
+      "oldest": "القدام",
+      "highScore": "نقطة عالية",
+      "lowScore": "نقطة ضعيفة"
+    },
+    "item": {
+      "analyzedOn": "تحلل في {{date}}",
+      "viewDetails": "شوف التفاصيل",
+      "downloadReport": "نزل التقرير"
+    }
+  },
+  "chatbot": {
+    "title": "المساعد الذكي",
+    "placeholder": "طرح السؤال ديالك...",
+    "send": "صيفط",
+    "thinking": "كنفكر...",
+    "error": "مشكل فالاتصال",
+    "suggestions": [
+      "كيفاش خدام الكشف؟",
+      "شنو الفورمات المدعومة؟",
+      "كيفاش ناخد شهادة؟",
+      "شحال الدقة؟"
+    ],
+    "welcome": "👋 مرحبا! أنا المساعد ديال FakeTect. كيفاش نقدر نعاونك؟",
+    "defaultResponses": {
+      "howItWorks": "FakeTect كيستعمل جوج محركات ديال الذكاء الاصطناعي (Sightengine و Illuminarty) باش يحلل الصور. كنكشفو الأنماط النموذجية من مولدات الذكاء الاصطناعي بحال Midjourney و DALL-E و Stable Diffusion.",
+      "formats": "الفورمات المدعومة: JPG, PNG, WEBP, GIF, BMP. الحجم الأقصى: 10 ميغا للويب، 5 ميغا للإضافة ديال Chrome.",
+      "certificate": "مستخدمي Starter و Pro يقدرو يديرو شهادات PDF موثقة بتوقيع رقمي. متاحة بعد كل تحليل.",
+      "accuracy": "متوسط الدقة ديالنا 92% (بدمج جوج محركات). النتائج كتعتمد على جودة الصورة."
+    }
+  },
+  "legal": {
+    "mentions": "إشعار قانوني",
+    "privacy": "سياسة الخصوصية",
+    "terms": "شروط الاستعمال",
+    "sales": "شروط البيع",
+    "cookies": "سياسة الكوكيز",
+    "contact": "اتصل بينا",
+    "dpo": "DPO: dpo@faketect.com"
+  },
+  "errors": {
+    "generic": "وقع غلط",
+    "network": "غلط فالشبكة",
+    "fileTooBig": "الملف كبير بزاف (الحد الأقصى {{max}} ميغا)",
+    "invalidFormat": "فورمات ماشي مدعوم",
+    "quotaExceeded": "تجاوزتي الحصة. تسنى أو زيد الخطة.",
+    "unauthorized": "ماعندكش الصلاحية",
+    "notFound": "مالقيناهش",
+    "serverError": "غلط فالسيرفر"
+  },
+  "notifications": {
+    "analyzeSuccess": "كمل التحليل بنجاح!",
+    "analyzeFailed": "فشل التحليل",
+    "certificateDownloaded": "تنزلت الشهادة",
+    "quotaWarning": "{{remaining}} تحليلات باقيين اليوم"
+  },
+  "extension": {
+    "title": "إضافة Chrome",
+    "subtitle": "حلل أي صورة بنقرة يمين",
+    "contextMenu": "حلل مع FakeTect",
+    "popup": {
+      "title": "كاشف الرؤية بالذكاء الاصطناعي",
+      "version": "v{{version}}",
+      "dropzone": "طيح صورة",
+      "hint": "💡 كليك يمين على الصورة → \"حلل\"",
+      "analyzing": "كنحللو...",
+      "newAnalysis": "تحليل جديد"
+    }
+  },
+  "footer": {
+    "tagline": "هاد الخدمة كتستعمل بزاف ديال خوارزميات الذكاء الاصطناعي. النتائج إرشادية.",
+    "copyright": "© {{year}} JARVIS - FakeTect. جميع الحقوق محفوظة.",
+    "hosting": "الاستضافة: Render (API) • Vercel (الواجهة) • Supabase (البيانات)",
+    "compliance": "متوافق: RGPD • قانون الذكاء الاصطناعي • DSA • ISO 27001 • ePrivacy"
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "extensionName": {
+    "message": "FakeTect - Detector IA",
+    "description": "Nombre de la extensión"
+  },
+  "extensionDescription": {
+    "message": "Detecta imágenes generadas por IA con un clic. Compatible RGPD.",
+    "description": "Descripción de la extensión"
+  },
+  "analyzeImage": {
+    "message": "Analizar con FakeTect",
+    "description": "Texto del menú contextual"
+  },
+  "analyzing": {
+    "message": "Analizando imagen...",
+    "description": "Estado de carga"
+  },
+  "dragDropText": {
+    "message": "Arrastra y suelta una imagen aquí o haz clic para seleccionar",
+    "description": "Texto de zona de soltar"
+  },
+  "selectImage": {
+    "message": "Seleccionar imagen",
+    "description": "Texto del botón"
+  },
+  "resultAI": {
+    "message": "Generado por IA",
+    "description": "Resultado detección IA"
+  },
+  "resultReal": {
+    "message": "Foto real",
+    "description": "Resultado foto real"
+  },
+  "confidence": {
+    "message": "Confianza: $SCORE$%",
+    "description": "Puntuación de confianza",
+    "placeholders": {
+      "score": {
+        "content": "$1",
+        "example": "92"
+      }
+    }
+  },
+  "details": {
+    "message": "Detalles",
+    "description": "Sección de detalles"
+  },
+  "engine": {
+    "message": "Motor: $ENGINE$",
+    "description": "Motor de detección",
+    "placeholders": {
+      "engine": {
+        "content": "$1",
+        "example": "Sightengine"
+      }
+    }
+  },
+  "processingTime": {
+    "message": "Procesamiento: $TIME$ms",
+    "description": "Tiempo de procesamiento",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "234"
+      }
+    }
+  },
+  "newAnalysis": {
+    "message": "Nuevo análisis",
+    "description": "Botón de reinicio"
+  },
+  "viewHistory": {
+    "message": "Ver historial",
+    "description": "Botón de historial"
+  },
+  "quotaExceeded": {
+    "message": "Cuota gratuita excedida. Crea una cuenta gratuita para continuar.",
+    "description": "Error de cuota"
+  },
+  "errorAnalysis": {
+    "message": "Error de análisis. Por favor, inténtalo de nuevo.",
+    "description": "Error genérico"
+  },
+  "errorNetwork": {
+    "message": "Error de red. Verifica tu conexión.",
+    "description": "Error de red"
+  },
+  "privacyPolicy": {
+    "message": "Política de privacidad",
+    "description": "Enlace de privacidad"
+  },
+  "termsOfService": {
+    "message": "Términos de servicio",
+    "description": "Enlace de términos"
+  },
+  "help": {
+    "message": "Ayuda",
+    "description": "Botón de ayuda"
+  },
+  "askQuestion": {
+    "message": "Haz tu pregunta...",
+    "description": "Marcador de ayuda"
+  },
+  "loginPrompt": {
+    "message": "Inicia sesión para acceder a funciones premium",
+    "description": "Invitación a iniciar sesión"
+  },
+  "login": {
+    "message": "Iniciar sesión",
+    "description": "Botón de inicio de sesión"
+  },
+  "signup": {
+    "message": "Registrarse",
+    "description": "Botón de registro"
+  },
+  "freePlan": {
+    "message": "Gratis: 10 análisis/mes",
+    "description": "Información del plan gratuito"
+  },
+  "proPlan": {
+    "message": "Pro: Análisis ilimitados",
+    "description": "Información del plan pro"
+  },
+  "selectLanguage": {
+    "message": "Idioma",
+    "description": "Etiqueta del selector de idioma"
+  }
+}

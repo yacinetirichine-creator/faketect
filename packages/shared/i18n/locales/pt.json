@@ -1,0 +1,114 @@
+{
+  "common": {
+    "appName": "FakeTect",
+    "tagline": "Detector de IA para imagens e documentos",
+    "welcome": "Bem-vindo",
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "close": "Fechar",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "back": "Voltar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "upload": "Enviar",
+    "download": "Baixar",
+    "analyze": "Analisar",
+    "retry": "Tentar novamente",
+    "learnMore": "Saiba mais"
+  },
+  "auth": {
+    "login": "Entrar",
+    "signup": "Cadastrar",
+    "logout": "Sair",
+    "email": "E-mail",
+    "password": "Senha",
+    "forgotPassword": "Esqueceu sua senha?",
+    "noAccount": "Não tem uma conta?",
+    "hasAccount": "Já tem uma conta?",
+    "createAccount": "Criar conta",
+    "loginSuccess": "Login realizado com sucesso!",
+    "logoutSuccess": "Logout realizado com sucesso",
+    "signupSuccess": "Conta criada com sucesso!"
+  },
+  "navbar": {
+    "home": "Início",
+    "pricing": "Preços",
+    "history": "Histórico",
+    "invoices": "Faturas",
+    "app": "Aplicação",
+    "legal": "Jurídico",
+    "account": "Minha conta"
+  },
+  "home": {
+    "hero": {
+      "title": "Detecte imagens geradas por IA",
+      "subtitle": "Analise imagens e documentos em segundos com nossa tecnologia avançada de IA",
+      "cta": "Começar gratuitamente",
+      "trustBadge": "Em conformidade com GDPR • Lei de IA • DSA"
+    },
+    "upload": {
+      "title": "Analise sua imagem",
+      "dragDrop": "Arraste uma imagem aqui",
+      "or": "ou",
+      "selectFile": "Selecionar arquivo",
+      "supportedFormats": "Formatos suportados: JPG, PNG, WEBP (máx. 10 MB)",
+      "analyzing": "Analisando...",
+      "progress": "Progresso: {{percent}}%"
+    },
+    "results": {
+      "title": "Resultados da análise",
+      "aiGenerated": "Gerado por IA",
+      "realPhoto": "Foto real",
+      "uncertain": "Incerto",
+      "confidence": "Confiança: {{score}}%",
+      "engines": "Motores de análise",
+      "exifWarning": "⚠️ Metadados de IA detectados",
+      "downloadCertificate": "Baixar certificado",
+      "newAnalysis": "Nova análise"
+    }
+  },
+  "pricing": {
+    "title": "Preços transparentes",
+    "subtitle": "Escolha o plano que se adapta às suas necessidades",
+    "monthly": "Mensal",
+    "annual": "Anual",
+    "save": "Economize {{percent}}%"
+  },
+  "chatbot": {
+    "title": "Assistente IA",
+    "placeholder": "Faça sua pergunta...",
+    "send": "Enviar",
+    "thinking": "Pensando...",
+    "error": "Erro de conexão",
+    "welcome": "👋 Olá! Sou o assistente do FakeTect. Como posso ajudá-lo?"
+  },
+  "legal": {
+    "mentions": "Aviso legal",
+    "privacy": "Política de privacidade",
+    "terms": "Termos de uso",
+    "sales": "Termos de venda",
+    "cookies": "Política de cookies",
+    "contact": "Contato",
+    "dpo": "DPO: dpo@faketect.com"
+  },
+  "errors": {
+    "generic": "Ocorreu um erro",
+    "network": "Erro de rede",
+    "fileTooBig": "Arquivo muito grande (máx. {{max}} MB)",
+    "invalidFormat": "Formato não suportado",
+    "quotaExceeded": "Cota excedida. Por favor, aguarde ou faça upgrade.",
+    "unauthorized": "Não autorizado",
+    "notFound": "Não encontrado",
+    "serverError": "Erro do servidor"
+  },
+  "footer": {
+    "tagline": "Este serviço utiliza vários algoritmos de IA. Os resultados são indicativos.",
+    "copyright": "© {{year}} JARVIS - FakeTect. Todos os direitos reservados.",
+    "compliance": "Em conformidade: GDPR • Lei de IA • DSA • ISO 27001 • ePrivacy"
+  }
+}

@@ -1,0 +1,291 @@
+{
+  "common": {
+    "appName": "FakeTect",
+    "tagline": "AI Image & Document Detector",
+    "welcome": "Welcome",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "upload": "Upload",
+    "download": "Download",
+    "analyze": "Analyze",
+    "retry": "Retry",
+    "learnMore": "Learn more",
+    "or": "or",
+    "locale": "en-US"
+  },
+  "landing": {
+    "newVersion": "New version 2.0 available",
+    "hero": {
+      "title1": "Truth in the era of",
+      "title2": "Artificial Intelligence",
+      "subtitle": "FakeTect is the reference platform for authenticating digital content. Detect AI-generated images and documents with unmatched accuracy."
+    }
+  },
+  "auth": {
+    "login": "Login",
+    "signup": "Sign up",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "No account?",
+    "hasAccount": "Already have an account?",
+    "createAccount": "Create account",
+    "loginSuccess": "Login successful!",
+    "logoutSuccess": "Logged out successfully",
+    "signupSuccess": "Account created successfully!",
+    "continueWithGoogle": "Continue with Google"
+  },
+  "navbar": {
+    "home": "Home",
+    "pricing": "Pricing",
+    "history": "History",
+    "invoices": "Invoices",
+    "app": "App",
+    "legal": "Legal",
+    "account": "My account"
+  },
+  "home": {
+    "tabs": {
+      "image": "Image",
+      "video": "Video",
+      "batch": "Multiple",
+      "document": "Document",
+      "url": "URL"
+    },
+    "hero": {
+      "title": "Detect AI-generated content",
+      "titleAI": "powered by AI",
+      "subtitle": "Advanced analysis of images and documents",
+      "cta": "Start for free",
+      "trustBadge": "GDPR Compliant • AI Act • DSA"
+    },
+    "quotaRemaining": "Free tests remaining",
+    "upload": {
+      "title": "Analyze your image",
+      "dropImage": "Drop an image",
+      "dropDocument": "Drop a document",
+      "dropVideo": "Drop a video",
+      "dropBatch": "Drop up to 20 images",
+      "orClick": "or click to select",
+      "formatImage": "JPG, PNG, GIF, WebP • Max 10 MB",
+      "formatDoc": "PDF, Word, PowerPoint, Excel • Max 20 MB",
+      "formatVideo": "MP4, WebM, MOV • Max 200 MB • Login required",
+      "selectFile": "Select a file",
+      "supportedFormats": "Supported formats: JPG, PNG, WEBP (max 10 MB)",
+      "analyzing": "Analyzing...",
+      "uploading": "Upload",
+      "files": "files",
+      "progress": "Progress: {{percent}}%"
+    },
+    "results": {
+      "title": "Analysis results",
+      "aiGenerated": "AI Generated",
+      "realPhoto": "Real Photo",
+      "uncertain": "Uncertain",
+      "confidence": "Confidence: {{score}}%",
+      "engines": "Analysis engines",
+      "exifWarning": "⚠️ AI metadata detected",
+      "downloadCertificate": "Download certificate",
+      "newAnalysis": "New analysis"
+    },
+    "features": {
+      "title": "Powerful features",
+      "subtitle": "Everything you need to detect AI content",
+      "multiEngine": {
+        "title": "Multi-Engine AI",
+        "description": "Uses Sightengine and Illuminarty for maximum accuracy"
+      },
+      "certificates": {
+        "title": "Authenticated certificates",
+        "description": "Generate PDF certificates with digital signature"
+      },
+      "history": {
+        "title": "Complete history",
+        "description": "View all your past analyses"
+      },
+      "privacy": {
+        "title": "Privacy guaranteed",
+        "description": "Your data is protected (GDPR, ISO 27001)"
+      }
+    }
+  },
+  "pricing": {
+    "title": "Choose your plan",
+    "subtitle": "Unlimited analysis to detect deepfakes and protect your content",
+    "currentQuota": "Your current quota",
+    "plan": "Plan",
+    "renewal": "Renewal",
+    "monthly": "Monthly",
+    "annual": "Annual",
+    "save": "Save {{percent}}%",
+    "plans": {
+      "guest": {
+        "name": "Guest",
+        "price": "Free",
+        "description": "Try without account",
+        "features": [
+          "3 analyses/day",
+          "Basic results",
+          "No history",
+          "No certificates"
+        ]
+      },
+      "free": {
+        "name": "Free",
+        "price": "$0",
+        "description": "For personal use",
+        "features": [
+          "10 analyses/day",
+          "30-day history",
+          "Basic certificates",
+          "Email support"
+        ],
+        "cta": "Get started"
+      },
+      "starter": {
+        "name": "Starter",
+        "price": "$9.99",
+        "period": "/month",
+        "description": "For professionals",
+        "features": [
+          "100 analyses/day",
+          "Unlimited history",
+          "Pro certificates + signature",
+          "Priority support",
+          "API access (beta)"
+        ],
+        "cta": "Subscribe",
+        "popular": "Popular"
+      },
+      "professional": {
+        "name": "Professional",
+        "price": "$29.99",
+        "period": "/month",
+        "description": "For businesses",
+        "features": [
+          "500 analyses/day",
+          "Full API",
+          "24/7 support",
+          "Custom certificates",
+          "Analytics dashboard",
+          "Slack/Discord integration"
+        ],
+        "cta": "Contact us"
+      }
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "items": {
+        "refund": {
+          "q": "Can I get a refund?",
+          "a": "Yes, you have 14 days to request a full refund."
+        },
+        "upgrade": {
+          "q": "Can I change plans?",
+          "a": "Yes, you can change anytime. Pro-rata applies."
+        },
+        "quota": {
+          "q": "What happens if I exceed my quota?",
+          "a": "You'll receive a notification. You can upgrade or wait for renewal."
+        }
+      }
+    }
+  },
+  "history": {
+    "title": "Analysis history",
+    "empty": "No analysis yet",
+    "filter": {
+      "all": "All",
+      "batches": "Batches & Documents",
+      "aiGenerated": "AI detected",
+      "real": "Real photos",
+      "uncertain": "Uncertain"
+    },
+    "sort": {
+      "recent": "Most recent",
+      "oldest": "Oldest",
+      "highScore": "High score",
+      "lowScore": "Low score"
+    },
+    "item": {
+      "analyzedOn": "Analyzed on {{date}}",
+      "viewDetails": "View details",
+      "downloadReport": "Download report"
+    }
+  },
+  "chatbot": {
+    "title": "AI Assistant",
+    "placeholder": "Ask your question...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "error": "Connection error",
+    "suggestions": [
+      "How does detection work?",
+      "What formats are supported?",
+      "How to get a certificate?",
+      "What's the accuracy?"
+    ],
+    "welcome": "👋 Hello! I'm the FakeTect assistant. How can I help you?",
+    "defaultResponses": {
+      "howItWorks": "FakeTect uses 2 AI engines (Sightengine and Illuminarty) to analyze images. We detect typical patterns from AI generators like Midjourney, DALL-E, Stable Diffusion.",
+      "formats": "Supported formats: JPG, PNG, WEBP, GIF, BMP. Max size: 10 MB for web, 5 MB for Chrome extension.",
+      "certificate": "Starter and Pro users can generate authenticated PDF certificates with digital signature. Available after each analysis.",
+      "accuracy": "Our average accuracy is 92% (combining 2 engines). Results depend on image quality."
+    }
+  },
+  "legal": {
+    "mentions": "Legal notice",
+    "privacy": "Privacy policy",
+    "terms": "Terms of use",
+    "sales": "Terms of sale",
+    "cookies": "Cookie policy",
+    "contact": "Contact",
+    "dpo": "DPO: dpo@faketect.com"
+  },
+  "errors": {
+    "generic": "An error occurred",
+    "network": "Network error",
+    "fileTooBig": "File too large (max {{max}} MB)",
+    "invalidFormat": "Unsupported format",
+    "quotaExceeded": "Quota exceeded. Please wait or upgrade.",
+    "unauthorized": "Unauthorized",
+    "notFound": "Not found",
+    "serverError": "Server error"
+  },
+  "notifications": {
+    "analyzeSuccess": "Analysis completed successfully!",
+    "analyzeFailed": "Analysis failed",
+    "certificateDownloaded": "Certificate downloaded",
+    "quotaWarning": "{{remaining}} analyses remaining today"
+  },
+  "extension": {
+    "title": "Chrome Extension",
+    "subtitle": "Analyze any image with a right-click",
+    "contextMenu": "Analyze with FakeTect",
+    "popup": {
+      "title": "AI Vision Detector",
+      "version": "v{{version}}",
+      "dropzone": "Drop an image",
+      "hint": "💡 Right-click on image → \"Analyze\"",
+      "analyzing": "Analyzing...",
+      "newAnalysis": "New analysis"
+    }
+  },
+  "footer": {
+    "tagline": "This service uses multiple AI algorithms. Results are indicative.",
+    "copyright": "© {{year}} JARVIS - FakeTect. All rights reserved.",
+    "hosting": "Hosting: Render (API) • Vercel (Frontend) • Supabase (Data)",
+    "compliance": "Compliant: GDPR • AI Act • DSA • ISO 27001 • ePrivacy"
+  }
+}
