@@ -149,6 +149,8 @@ app.use((req, res, next) => {
     // HSTS - Force HTTPS pendant 1 an
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
   }
+
+  next();
 });
 
 // Quota info - VERSION ULTRA-SIMPLIFIEE (AVANT rate limiting global)
