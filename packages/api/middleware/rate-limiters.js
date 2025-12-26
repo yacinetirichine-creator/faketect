@@ -13,7 +13,13 @@ const globalLimiter = rateLimit({
   legacyHeaders: false,
   skip: (req) => {
     // Ne pas limiter les health checks et quota (endpoints critiques)
-    return req.path === '/api/health' || req.path === '/api/quota';
+    // Note: selon le mount Express, req.path peut être '/health'/'/quota'.
+    const p = req.path;
+    const o = req.originalUrl;
+    return (
+      p === '/api/health' || p === '/health' || o === '/api/health' ||
+      p === '/api/quota' || p === '/quota' || o === '/api/quota'
+    );
   },
   keyGenerator: (req) => {
     // Utiliser l'ID utilisateur si authentifié, sinon l'IP

@@ -151,6 +151,18 @@ app.use((req, res, next) => {
   }
 });
 
+// Quota info - VERSION ULTRA-SIMPLIFIEE (AVANT rate limiting global)
+// Important: doit passer après CORS pour inclure les headers cross-origin.
+app.get('/api/quota', (req, res) => {
+  console.log('📊 GET /api/quota');
+  // Réponse immédiate sans aucune logique
+  res.json({
+    success: true,
+    quota: { allowed: true, remaining: 10, limit: 10 },
+    authenticated: false
+  });
+});
+
 // [SECURITY] Rate limiting global
 app.use('/api/', globalLimiter);
 
@@ -177,17 +189,6 @@ app.use('/api/billing', billingRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/certificate', certificateRoutes);
 app.use('/api/user', userRoutes);
-
-// Quota info - VERSION ULTRA-SIMPLIFIEE
-app.get('/api/quota', (req, res) => {
-  console.log('📊 GET /api/quota');
-  // Réponse immédiate sans aucune logique
-  res.json({ 
-    success: true, 
-    quota: { allowed: true, remaining: 10, limit: 10 }, 
-    authenticated: false 
-  });
-});
 
 // Health check
 app.get('/api/health', (req, res) => {
