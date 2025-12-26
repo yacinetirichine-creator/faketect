@@ -1,64 +1,15 @@
 {
-  "common": {
-    "appName": "FakeTect",
-    "tagline": "Detector IA de imágenes y documentos",
-    "welcome": "Bienvenido",
-    "loading": "Cargando...",
-    "error": "Error",
-    "success": "Éxito",
-    "cancel": "Cancelar",
-    "confirm": "Confirmar",
-    "close": "Cerrar",
-    "save": "Guardar",
-    "delete": "Eliminar",
-    "edit": "Editar",
-    "back": "Atrás",
-    "next": "Siguiente",
-    "previous": "Anterior",
-    "upload": "Subir",
-    "download": "Descargar",
-    "analyze": "Analizar",
-    "retry": "Reintentar",
-    "learnMore": "Saber más",
-    "or": "o",
-    "locale": "es-ES"
-  },
-  "landing": {
-    "newVersion": "Nueva versión 2.0 disponible",
-    "hero": {
-      "title1": "La verdad en la era de",
-      "title2": "la Inteligencia Artificial",
-      "subtitle": "FakeTect es la plataforma de referencia para autenticar contenido digital. Detecta imágenes y documentos generados por IA con precisión sin igual."
-    }
-  },
-  "auth": {
-    "login": "Iniciar sesión",
-    "signup": "Registrarse",
-    "logout": "Cerrar sesión",
-    "email": "Correo electrónico",
-    "password": "Contraseña",
-    "forgotPassword": "¿Olvidaste tu contraseña?",
-    "noAccount": "¿No tienes cuenta?",
-    "hasAccount": "¿Ya tienes cuenta?",
-    "createAccount": "Crear cuenta",
-    "loginSuccess": "¡Inicio de sesión exitoso!",
-    "logoutSuccess": "Sesión cerrada correctamente",
-    "signupSuccess": "¡Cuenta creada exitosamente!",
-    "continueWithGoogle": "Continuar con Google"
-  },
-  "navbar": {
-    "home": "Inicio",
-    "pricing": "Precios",
-    "history": "Historial",
-    "invoices": "Facturas",
-    "app": "Aplicación",
-    "legal": "Legal",
-    "account": "Mi cuenta"
-  },
-  "footer": {
-    "tagline": "Este servicio utiliza múltiples algoritmos de IA. Los resultados son indicativos.",
-    "copyright": "© {{year}} JARVIS - FakeTect. Todos los derechos reservados.",
-    "hosting": "Alojamiento: Render (API) • Vercel (Frontend) • Supabase (Datos)",
-    "compliance": "Cumple: RGPD • AI Act • DSA • ISO 27001 • ePrivacy"
-  }
+  "common": {"appName": "FakeTect", "tagline": "Detector IA de imágenes y documentos", "welcome": "Bienvenido", "loading": "Cargando...", "error": "Error", "success": "Éxito", "cancel": "Cancelar", "confirm": "Confirmar", "close": "Cerrar", "save": "Guardar", "delete": "Eliminar", "edit": "Editar", "back": "Atrás", "next": "Siguiente", "previous": "Anterior", "upload": "Subir", "download": "Descargar", "analyze": "Analizar", "retry": "Reintentar", "learnMore": "Saber más", "or": "o", "locale": "es-ES"},
+  "landing": {"newVersion": "Nueva versión 2.0 disponible", "hero": {"title1": "La verdad en la era de", "title2": "la Inteligencia Artificial", "subtitle": "FakeTect es la plataforma de referencia para autenticar contenido digital."}},
+  "auth": {"login": "Iniciar sesión", "signup": "Registrarse", "logout": "Cerrar sesión", "email": "Correo", "password": "Contraseña", "forgotPassword": "¿Olvidaste tu contraseña?", "noAccount": "¿No tienes cuenta?", "hasAccount": "¿Ya tienes cuenta?", "createAccount": "Crear cuenta", "loginSuccess": "¡Inicio exitoso!", "logoutSuccess": "Sesión cerrada", "signupSuccess": "¡Cuenta creada!", "continueWithGoogle": "Continuar con Google"},
+  "navbar": {"home": "Inicio", "pricing": "Precios", "history": "Historial", "invoices": "Facturas", "app": "Aplicación", "legal": "Legal", "account": "Mi cuenta"},
+  "home": {"tabs": {"image": "Imagen", "video": "Vídeo", "batch": "Múltiple", "document": "Documento", "url": "URL"}, "hero": {"title": "Detecta contenido", "titleAI": "generado por IA", "subtitle": "Análisis avanzado", "cta": "Empezar gratis", "trustBadge": "RGPD • AI Act • DSA"}, "quotaRemaining": "Pruebas restantes", "upload": {"title": "Analiza tu imagen", "dropImage": "Suelta una imagen", "dropDocument": "Suelta un documento", "dropVideo": "Suelta un vídeo", "dropBatch": "Hasta 20 imágenes", "orClick": "o haz clic", "formatImage": "JPG, PNG • Máx 10 MB", "formatDoc": "PDF, Word • Máx 20 MB", "formatVideo": "MP4 • Máx 200 MB", "selectFile": "Selecciona", "supportedFormats": "JPG, PNG, WEBP", "analyzing": "Analizando...", "uploading": "Subiendo", "files": "archivos", "progress": "Progreso: {{percent}}%"}, "results": {"title": "Resultados", "aiGenerated": "IA", "realPhoto": "Real", "uncertain": "Incierto", "confidence": "Confianza: {{score}}%", "engines": "Motores", "exifWarning": "⚠️ Metadatos IA", "downloadCertificate": "Certificado", "newAnalysis": "Nuevo"}, "features": {"title": "Funciones", "subtitle": "Detección IA", "multiEngine": {"title": "Multi-motores", "description": "Sightengine + Illuminarty"}, "certificates": {"title": "Certificados", "description": "PDF con firma"}, "history": {"title": "Historial", "description": "Análisis anteriores"}, "privacy": {"title": "Privacidad", "description": "RGPD, ISO 27001"}}},
+  "pricing": {"title": "Planes", "subtitle": "Detecta deepfakes", "currentQuota": "Cuota actual", "plan": "Plan", "renewal": "Renovación", "monthly": "Mensual", "annual": "Anual", "save": "Ahorra {{percent}}%", "plans": {"guest": {"name": "Invitado", "price": "Gratis", "description": "Sin cuenta", "features": ["3/día", "Básico", "Sin historial", "Sin certificados"]}, "free": {"name": "Gratis", "price": "0€", "description": "Personal", "features": ["10/día", "30 días", "Certificados", "Email"], "cta": "Empezar"}, "starter": {"name": "Starter", "price": "9,99€", "period": "/mes", "description": "Profesional", "features": ["100/día", "Ilimitado", "Pro + firma", "Prioritario", "API beta"], "cta": "Suscribirse", "popular": "Popular"}, "professional": {"name": "Pro", "price": "29,99€", "period": "/mes", "description": "Empresas", "features": ["500/día", "API", "24/7", "Personalizado", "Analytics", "Slack"], "cta": "Contactar"}}, "faq": {"title": "FAQ", "items": {"refund": {"q": "¿Reembolso?", "a": "Sí, 14 días."}, "upgrade": {"q": "¿Cambiar plan?", "a": "Sí, prorrateo."}, "quota": {"q": "¿Supero cuota?", "a": "Notificación."}}}},
+  "history": {"title": "Historial", "empty": "Sin análisis", "filter": {"all": "Todos", "batches": "Lotes", "aiGenerated": "IA", "real": "Reales", "uncertain": "Inciertos"}, "sort": {"recent": "Recientes", "oldest": "Antiguos", "highScore": "Alto", "lowScore": "Bajo"}, "item": {"analyzedOn": "{{date}}", "viewDetails": "Detalles", "downloadReport": "Informe"}},
+  "chatbot": {"title": "Asistente", "placeholder": "Pregunta...", "send": "Enviar", "thinking": "Pensando...", "error": "Error", "suggestions": ["¿Cómo funciona?", "¿Formatos?", "¿Certificado?", "¿Precisión?"], "welcome": "👋 ¡Hola!", "defaultResponses": {"howItWorks": "2 motores IA", "formats": "JPG, PNG, WEBP", "certificate": "PDF autenticado", "accuracy": "92% precisión"}},
+  "legal": {"mentions": "Legal", "privacy": "Privacidad", "terms": "Términos", "sales": "Venta", "cookies": "Cookies", "contact": "Contacto", "dpo": "DPO: dpo@faketect.com"},
+  "errors": {"generic": "Error", "network": "Conexión", "fileTooBig": "Muy grande", "invalidFormat": "No soportado", "quotaExceeded": "Cuota superada", "unauthorized": "No autorizado", "notFound": "No encontrado", "serverError": "Error servidor"},
+  "notifications": {"analyzeSuccess": "¡Éxito!", "analyzeFailed": "Fallo", "certificateDownloaded": "Descargado", "quotaWarning": "{{remaining}} restantes"},
+  "extension": {"title": "Chrome", "subtitle": "Clic derecho", "contextMenu": "Analizar", "popup": {"title": "AI Detector", "version": "v{{version}}", "dropzone": "Imagen", "hint": "💡 Clic derecho", "analyzing": "Analizando...", "newAnalysis": "Nuevo"}},
+  "footer": {"tagline": "Algoritmos IA. Resultados indicativos.", "copyright": "© {{year}} JARVIS - FakeTect", "hosting": "Render • Vercel • Supabase", "compliance": "RGPD • AI Act • DSA • ISO 27001"}
 }
