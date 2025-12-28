@@ -20,11 +20,17 @@ function initEmail() {
   }
 
   try {
+    // Configuration pour Google Workspace
     transporter = nodemailer.createTransport({
-      service: 'gmail', // Utilise Gmail/Google Workspace automatiquement
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // true pour 465, false pour autres ports
       auth: {
         user: emailUser,
-        pass: emailPass // Mot de passe d'application Google
+        pass: emailPass // Mot de passe du compte Google Workspace
+      },
+      tls: {
+        rejectUnauthorized: false // Pour éviter les erreurs de certificat
       }
     });
 
