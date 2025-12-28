@@ -259,6 +259,20 @@ export default function Dashboard() {
                           📊 Voir les détails techniques
                         </summary>
                         
+                        {/* Info vidéo partielle si applicable */}
+                        {result.videoMetadata?.isPartialAnalysis && (
+                          <div className="mb-4 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 text-sm">
+                            <div className="flex items-center gap-2 text-blue-400 mb-1">
+                              <Clock size={16} />
+                              <span className="font-semibold">Analyse partielle de vidéo</span>
+                            </div>
+                            <p className="text-white/70 text-xs">
+                              Votre vidéo dure {result.videoMetadata.totalDuration}s. Pour optimiser les coûts, 
+                              nous avons analysé les {result.videoMetadata.analyzedDuration} premières secondes.
+                            </p>
+                          </div>
+                        )}
+                        
                         <div className="grid grid-cols-2 gap-4 mb-4">
                           <div className="p-4 rounded-xl bg-white/5 border border-white/10">
                             <div className="text-xs text-gray-400 mb-1">Score IA brut</div>

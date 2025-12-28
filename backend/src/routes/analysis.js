@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const { v4: uuid } = require('uuid');
 const prisma = require('../config/db');
 const { auth, checkLimit } = require('../middleware/auth');
+const { validateVideoDuration } = require('../middleware/videoValidation');
 const detection = require('../services/detection');
 const cache = require('../services/cache');
 const { sendLimitReachedEmail } = require('../services/email');
@@ -51,7 +52,7 @@ async function getFileHash(filePath) {
   });
 }
 
-router.post('/file', auth, checkLimit, upload.single('file'), async (req, res) => {
+router.post('/file', auth, checkLimit, upload.single('file'), validateVideoDuration, async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'Fichier requis' });
     
@@ -150,7 +151,15 @@ router.post('/file', auth, checkLimit, upload.single('file'), async (req, res) =
         sources: result.sources,
         consensus: result.consensus,
         framesAnalyzed: result.framesAnalyzed,
-        fromCache // Indiquer si le résultat vient du cache
+        fromCache, // Indiquer si le résultat vient du cache
+        // Ajouter metadata vidéo si disponible
+        ...(req.videoMetadata && {
+          videoMetadata: {
+            totalDuration: req.videoMetadata.totalDuration,
+            analyzedDuration: req.videoMetadata.analyzedDuration,
+            isPartialAnalysis: req.videoMetadata.isPartialAnalysis
+          }
+        })
       } 
     });
   } catch (e) { 

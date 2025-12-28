@@ -151,7 +151,7 @@ class DetectionService {
     throw new Error('Sightengine API returned error');
   }
 
-  async analyzeVideoWithSightengine(input, mimeType, filename = 'video.mp4') {
+  async analyzeVideoWithSightengine(input, mimeType, filename = 'video.mp4', maxDuration = 60) {
     const FormData = require('form-data');
     const formData = new FormData();
     
@@ -162,6 +162,11 @@ class DetectionService {
     formData.append('models', 'genai');
     formData.append('api_user', process.env.SIGHTENGINE_API_USER);
     formData.append('api_secret', process.env.SIGHTENGINE_API_SECRET);
+    
+    // Limiter l'analyse aux N premières secondes (économie de coûts)
+    if (maxDuration && maxDuration > 0) {
+      formData.append('max_duration', maxDuration);
+    }
 
     const res = await this.fetchWithTimeout('https://api.sightengine.com/1.0/video/check.json', { 
       method: 'POST', 
