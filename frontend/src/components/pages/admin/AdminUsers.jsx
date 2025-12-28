@@ -50,40 +50,42 @@ export default function AdminUsers() {
       ) : (
         <>
           <div className="card overflow-hidden">
-            <table className="w-full">
-              <thead className="bg-surface-50 border-b">
-                <tr>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.usersTable.email')}</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.usersTable.name')}</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.usersTable.plan')}</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.usersTable.role')}</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.usersTable.createdAt')}</th>
-                  <th className="px-6 py-3 text-right text-sm font-semibold">{t('admin.usersTable.actions')}</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {users.map(u => (
-                  <tr key={u.id} className="hover:bg-surface-50">
-                    <td className="px-6 py-4 font-medium">{u.email}</td>
-                    <td className="px-6 py-4">{u.name || '-'}</td>
-                    <td className="px-6 py-4">
-                      <select value={u.plan} onChange={(e) => handlePlanChange(u.id, e.target.value)} className="input py-1 px-2 text-sm">
-                        <option value="FREE">FREE</option>
-                        <option value="STARTER">STARTER</option>
-                        <option value="PRO">PRO</option>
-                        <option value="BUSINESS">BUSINESS</option>
-                        <option value="ENTERPRISE">ENTERPRISE</option>
-                      </select>
-                    </td>
-                    <td className="px-6 py-4"><span className={u.role === 'ADMIN' ? 'badge-danger' : 'badge-primary'}>{u.role}</span></td>
-                    <td className="px-6 py-4 text-surface-500">{new Date(u.createdAt).toLocaleDateString()}</td>
-                    <td className="px-6 py-4 text-right">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[800px]">
+                <thead className="bg-surface-50 border-b">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.usersTable.email')}</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.usersTable.name')}</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.usersTable.plan')}</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.usersTable.role')}</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.usersTable.createdAt')}</th>
+                    <th className="px-6 py-3 text-right text-sm font-semibold">{t('admin.usersTable.actions')}</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y">
+                  {users.map(u => (
+                    <tr key={u.id} className="hover:bg-surface-50">
+                      <td className="px-6 py-4 font-medium">{u.email}</td>
+                      <td className="px-6 py-4">{u.name || '-'}</td>
+                      <td className="px-6 py-4">
+                        <select value={u.plan} onChange={(e) => handlePlanChange(u.id, e.target.value)} className="input py-1 px-2 text-sm">
+                          <option value="FREE">FREE</option>
+                          <option value="STARTER">STARTER</option>
+                          <option value="PRO">PRO</option>
+                          <option value="BUSINESS">BUSINESS</option>
+                          <option value="ENTERPRISE">ENTERPRISE</option>
+                        </select>
+                      </td>
+                      <td className="px-6 py-4"><span className={u.role === 'ADMIN' ? 'badge-danger' : 'badge-primary'}>{u.role}</span></td>
+                      <td className="px-6 py-4 text-surface-500">{new Date(u.createdAt).toLocaleDateString()}</td>
+                      <td className="px-6 py-4 text-right">
                       <button onClick={() => handleDelete(u.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg"><Trash2 size={18} /></button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
 
           {pagination?.pages > 1 && (
