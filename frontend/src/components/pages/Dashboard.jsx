@@ -2,10 +2,11 @@ import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDropzone } from 'react-dropzone';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload, FileImage, AlertCircle, CheckCircle2, TrendingUp, Shield, Clock, Loader2, Zap, History } from 'lucide-react';
+import { Upload, FileImage, AlertCircle, CheckCircle2, TrendingUp, Shield, Clock, Loader2, Zap, History, Download } from 'lucide-react';
 import { userApi, analysisApi } from '../../services/api';
 import useAuthStore from '../../stores/authStore';
 import toast from 'react-hot-toast';
+import { downloadCertificatePdf } from '../../utils/certificatePdf';
 
 export default function Dashboard() {
   const { t } = useTranslation();
@@ -63,6 +64,16 @@ export default function Dashboard() {
       likely_real: 'text-green-400 bg-green-500/10 border-green-500/20' 
     };
     return c[verdictKey] || 'text-gray-400 bg-gray-500/10 border-gray-500/20';
+  };
+
+  const onDownloadCertificate = () => {
+    try {
+      downloadCertificatePdf({ t, analysis: result, user });
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error('Certificate PDF generation failed:', e);
+      toast.error(t('certificate.downloadError'));
+    }
   };
 
   if (loading) return <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-primary" size={32} /></div>;
@@ -138,6 +149,11 @@ export default function Dashboard() {
                     <div>
                       <h3 className="text-lg font-bold text-white mb-1">{t('dashboard.result')}</h3>
                       <p className="text-sm text-gray-400">{t('common.id')}: {result.id}</p>
+                      <div className="mt-3">
+                        <button type="button" className="btn-secondary text-sm px-4 py-2 inline-flex items-center gap-2" onClick={onDownloadCertificate}>
+                          <Download size={16} /> {t('certificate.download')}
+                        </button>
+                      </div>
                     </div>
                     <div className={`px-4 py-2 rounded-full border text-sm font-bold flex items-center gap-2 ${verdictColor(result.verdict)}`}>
                       {(result.verdict?.key || result.verdict) === 'likely_real' ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
