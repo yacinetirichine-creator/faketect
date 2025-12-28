@@ -5,13 +5,29 @@ import { useState } from 'react';
 import useAuthStore from '../../stores/authStore';
 import { languages } from '../../i18n';
 import { motion, AnimatePresence } from 'framer-motion';
+import api from '../../services/api';
+import i18n from '../../i18n';
 
 export default function MainLayout() {
-  const { t, i18n } = useTranslation();
-  const { isAuthenticated, user, logout } = useAuthStore();
+  const { t } = useTranslation();
+  const { isAuthenticated, user, logout, updateUser } = useAuthStore();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+
+  const changeLang = async (code) => {
+    i18n.changeLanguage(code);
+    setLangOpen(false);
+    // Sauvegarder en base si connecté
+    if (isAuthenticated) {
+      try {
+        await api.put('/auth/profile', { language: code });
+        updateUser({ language: code });
+      } catch (error) {
+        console.error('Error saving language:', error);
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background text-white selection:bg-primary/30">
@@ -50,7 +66,7 @@ export default function MainLayout() {
                     {languages.map(l => (
                       <button 
                         key={l.code} 
-                        onClick={() => { i18n.changeLanguage(l.code); setLangOpen(false); }}
+                        onClick={() => changeLang(l.code)}
                         className={`w-full px-4 py-2 text-left hover:bg-white/5 flex items-center gap-2 text-sm ${i18n.language === l.code ? 'text-primary font-medium' : 'text-gray-400'}`}
                       >
                         <span>{l.flag}</span> {l.name}
@@ -93,10 +109,27 @@ export default function MainLayout() {
               <div className="px-4 py-6 space-y-4">
                 <Link to="/" onClick={() => setMenuOpen(false)} className="block text-gray-400 hover:text-white">{t('nav.home')}</Link>
                 <Link to="/pricing" onClick={() => setMenuOpen(false)} className="block text-gray-400 hover:text-white">{t('nav.pricing')}</Link>
+                
+                {/* Language selector mobile */}
+                <div className="border-t border-white/10 pt-4">
+                  <p className="text-xs text-gray-500 mb-2">{t('settings.language', 'Langue')}</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {languages.map(l => (
+                      <button 
+                        key={l.code} 
+                        onClick={() => { changeLang(l.code); setMenuOpen(false); }}
+                        className={`px-3 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors ${i18n.language === l.code ? 'bg-primary/20 text-primary border border-primary/50' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
+                      >
+                        <span>{l.flag}</span> {l.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
                 {isAuthenticated ? (
                   <>
                     <Link to="/dashboard" onClick={() => setMenuOpen(false)} className="block text-gray-400 hover:text-white">{t('nav.dashboard')}</Link>
-                    <button onClick={() => { logout(); navigate('/'); }} className="block w-full text-left text-gray-400 hover:text-white">{t('nav.logout')}</button>
+                    <button onClick={() => { logout(); navigate('/'); setMenuOpen(false); }} className="block w-full text-left text-gray-400 hover:text-white">{t('nav.logout')}</button>
                   </>
                 ) : (
                   <>
