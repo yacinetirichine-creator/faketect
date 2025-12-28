@@ -13,6 +13,57 @@
   "historyPage": { "url": "URL", "table": { "file": "File", "type": "Tipo", "score": "Punteggio", "date": "Data", "actions": "Azioni" } },
   "settings": { "sections": { "admin": "Admin", "profile": "Profilo", "language": "Lingua", "subscription": "Abbonamento" }, "admin": { "accessTitle": "Accesso admin", "accessDesc": "Apri la dashboard admin e gestisci gli utenti", "open": "Apri" }, "freeQuotaHint": "10 test gratuiti (valido 30 giorni)", "activeSubscription": "Abbonamento attivo", "subscription": { "plan": "Piano {{plan}}", "manage": "Gestisci abbonamento", "upgrade": "Upgrade", "change": "Cambia" } },
   "footer": { "description": "Rilevamento IA avanzato per i tuoi contenuti.", "product": "Prodotto", "company": "Azienda", "links": { "pricing": "Prezzi", "features": "Funzionalità", "api": "API", "about": "Chi siamo", "blog": "Blog", "contact": "Contatto" }, "rights": "© 2025 FakeTect. Tutti i diritti riservati." },
+  "newsletter": {
+    "title": "Newsletter",
+    "subtitle": "Ricevi gli ultimi aggiornamenti e casi d'uso",
+    "placeholder": "La tua email",
+    "button": "Iscriviti",
+    "success": "✓ Iscrizione riuscita!",
+    "error": "Errore di iscrizione",
+    "benefits": {
+      "updates": "✨ Aggiornamenti del prodotto",
+      "cases": "📰 Casi d'uso esclusivi",
+      "stats": "📊 Statistiche mensili"
+    }
+  },
+  "adminNewsletter": {
+    "title": "Gestione Newsletter",
+    "subtitle": "Gestisci i tuoi iscritti e le campagne email",
+    "tabs": {
+      "subscribers": "Iscritti",
+      "campaigns": "Campagne"
+    },
+    "stats": {
+      "total": "Totale iscritti",
+      "active": "Attivi",
+      "inactive": "Inattivi",
+      "engagement": "Tasso di coinvolgimento"
+    },
+    "table": {
+      "email": "Email",
+      "name": "Nome",
+      "language": "Lingua",
+      "source": "Fonte",
+      "status": "Stato",
+      "date": "Data"
+    },
+    "campaign": {
+      "create": "Crea campagna",
+      "subject": "Oggetto",
+      "content": "Contenuto HTML",
+      "language": "Lingua",
+      "type": "Tipo",
+      "send": "Invia ora",
+      "sending": "Invio...",
+      "sentTo": "Inviato a {{count}} persone"
+    },
+    "types": {
+      "product_update": "Aggiornamento prodotto",
+      "case_study": "Caso d'uso",
+      "monthly_stats": "Statistiche mensili",
+      "promotional": "Promozione"
+    }
+  },
   "landing": {
     "badge": "v2.0 disponibile",
     "hero": {

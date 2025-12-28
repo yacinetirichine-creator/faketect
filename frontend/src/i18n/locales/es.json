@@ -13,6 +13,57 @@
   "historyPage": { "url": "URL", "table": { "file": "Archivo", "type": "Tipo", "score": "Puntuación", "date": "Fecha", "actions": "Acciones" } },
   "settings": { "sections": { "admin": "Admin", "profile": "Perfil", "language": "Idioma", "subscription": "Suscripción" }, "admin": { "accessTitle": "Acceso de admin", "accessDesc": "Abrir el panel de admin y gestionar usuarios", "open": "Abrir" }, "freeQuotaHint": "10 pruebas gratuitas (válido 30 días)", "activeSubscription": "Suscripción activa", "subscription": { "plan": "Plan {{plan}}", "manage": "Gestionar suscripción", "upgrade": "Mejorar", "change": "Cambiar" } },
   "footer": { "description": "Detección avanzada por IA para tu contenido.", "product": "Producto", "company": "Empresa", "links": { "pricing": "Precios", "features": "Características", "api": "API", "about": "Acerca de", "blog": "Blog", "contact": "Contacto" }, "rights": "© 2025 FakeTect. Todos los derechos reservados." },
+  "newsletter": {
+    "title": "Newsletter",
+    "subtitle": "Recibe las últimas novedades y casos de uso",
+    "placeholder": "Tu email",
+    "button": "Suscribirse",
+    "success": "✓ ¡Suscripción exitosa!",
+    "error": "Error de suscripción",
+    "benefits": {
+      "updates": "✨ Novedades del producto",
+      "cases": "📰 Casos de uso exclusivos",
+      "stats": "📊 Estadísticas mensuales"
+    }
+  },
+  "adminNewsletter": {
+    "title": "Gestión de Newsletter",
+    "subtitle": "Gestiona tus suscriptores y campañas de email",
+    "tabs": {
+      "subscribers": "Suscriptores",
+      "campaigns": "Campañas"
+    },
+    "stats": {
+      "total": "Total suscriptores",
+      "active": "Activos",
+      "inactive": "Inactivos",
+      "engagement": "Tasa de interacción"
+    },
+    "table": {
+      "email": "Email",
+      "name": "Nombre",
+      "language": "Idioma",
+      "source": "Fuente",
+      "status": "Estado",
+      "date": "Fecha"
+    },
+    "campaign": {
+      "create": "Crear campaña",
+      "subject": "Asunto",
+      "content": "Contenido HTML",
+      "language": "Idioma",
+      "type": "Tipo",
+      "send": "Enviar ahora",
+      "sending": "Enviando...",
+      "sentTo": "Enviado a {{count}} personas"
+    },
+    "types": {
+      "product_update": "Actualización de producto",
+      "case_study": "Caso de uso",
+      "monthly_stats": "Estadísticas mensuales",
+      "promotional": "Promoción"
+    }
+  },
   "landing": {
     "badge": "v2.0 disponible",
     "hero": {

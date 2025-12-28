@@ -13,6 +13,57 @@
   "historyPage": { "url": "URL", "table": { "file": "File", "type": "Type", "score": "Score", "date": "Date", "actions": "Actions" } },
   "settings": { "sections": { "admin": "Admin", "profile": "Profile", "language": "Language", "subscription": "Subscription" }, "admin": { "accessTitle": "Admin access", "accessDesc": "Open the admin dashboard and manage users", "open": "Open" }, "freeQuotaHint": "10 free tests (valid 30 days)", "activeSubscription": "Active subscription", "subscription": { "plan": "Plan {{plan}}", "manage": "Manage subscription", "upgrade": "Upgrade", "change": "Change" } },
   "footer": { "description": "Advanced AI detection for your content.", "product": "Product", "company": "Company", "links": { "pricing": "Pricing", "features": "Features", "api": "API", "about": "About", "blog": "Blog", "contact": "Contact" }, "rights": "© 2025 FakeTect. All rights reserved." },
+  "newsletter": {
+    "title": "Newsletter",
+    "subtitle": "Get the latest updates and use cases",
+    "placeholder": "Your email",
+    "button": "Subscribe",
+    "success": "✓ Successfully subscribed!",
+    "error": "Subscription error",
+    "benefits": {
+      "updates": "✨ Product updates",
+      "cases": "📰 Exclusive use cases",
+      "stats": "📊 Monthly statistics"
+    }
+  },
+  "adminNewsletter": {
+    "title": "Newsletter Management",
+    "subtitle": "Manage your subscribers and email campaigns",
+    "tabs": {
+      "subscribers": "Subscribers",
+      "campaigns": "Campaigns"
+    },
+    "stats": {
+      "total": "Total subscribers",
+      "active": "Active",
+      "inactive": "Inactive",
+      "engagement": "Engagement rate"
+    },
+    "table": {
+      "email": "Email",
+      "name": "Name",
+      "language": "Language",
+      "source": "Source",
+      "status": "Status",
+      "date": "Date"
+    },
+    "campaign": {
+      "create": "Create campaign",
+      "subject": "Subject",
+      "content": "HTML content",
+      "language": "Language",
+      "type": "Type",
+      "send": "Send now",
+      "sending": "Sending...",
+      "sentTo": "Sent to {{count}} people"
+    },
+    "types": {
+      "product_update": "Product update",
+      "case_study": "Use case",
+      "monthly_stats": "Monthly statistics",
+      "promotional": "Promotion"
+    }
+  },
   "landing": {
     "badge": "v2.0 now available",
     "hero": {
