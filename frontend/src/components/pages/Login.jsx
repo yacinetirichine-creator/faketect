@@ -18,7 +18,7 @@ export default function Login() {
     e.preventDefault();
     const res = await login(email, password);
     if (res.success) {
-      toast.success('Connexion réussie !');
+      toast.success(t('auth.loginSuccess'));
       const role = res.user?.role;
       navigate(role === 'ADMIN' ? '/admin' : '/dashboard');
     }
@@ -42,7 +42,7 @@ export default function Login() {
               <label className="label">{t('auth.email')}</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input pl-10" placeholder="email@example.com" autoComplete="email" required />
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input pl-10" placeholder={t('auth.placeholders.email')} autoComplete="email" required />
               </div>
             </div>
 

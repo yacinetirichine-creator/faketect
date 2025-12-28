@@ -137,7 +137,7 @@ export default function Dashboard() {
                   <div className="flex items-start justify-between mb-6">
                     <div>
                       <h3 className="text-lg font-bold text-white mb-1">{t('dashboard.result')}</h3>
-                      <p className="text-sm text-gray-400">ID: {result.id}</p>
+                      <p className="text-sm text-gray-400">{t('common.id')}: {result.id}</p>
                     </div>
                     <div className={`px-4 py-2 rounded-full border text-sm font-bold flex items-center gap-2 ${verdictColor(result.verdict)}`}>
                       {(result.verdict?.key || result.verdict) === 'likely_real' ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}

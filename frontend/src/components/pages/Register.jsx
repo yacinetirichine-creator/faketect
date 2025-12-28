@@ -19,7 +19,7 @@ export default function Register() {
     e.preventDefault();
     const lang = (i18n.resolvedLanguage || i18n.language || 'fr').split('-')[0];
     const res = await register(email, password, name, lang);
-    if (res.success) { toast.success('Compte créé !'); navigate('/dashboard'); }
+    if (res.success) { toast.success(t('auth.registerSuccess')); navigate('/dashboard'); }
     else toast.error(res.error);
   };
 
@@ -40,7 +40,7 @@ export default function Register() {
               <label className="label">{t('auth.name')}</label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="input pl-10" placeholder="John Doe" autoComplete="name" required />
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="input pl-10" placeholder={t('auth.placeholders.name')} autoComplete="name" required />
               </div>
             </div>
 
@@ -48,7 +48,7 @@ export default function Register() {
               <label className="label">{t('auth.email')}</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input pl-10" placeholder="email@example.com" autoComplete="email" required />
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input pl-10" placeholder={t('auth.placeholders.email')} autoComplete="email" required />
               </div>
             </div>
 
