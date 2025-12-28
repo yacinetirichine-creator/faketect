@@ -4,9 +4,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Modern Fintech Palette
-        background: '#030712', // Very dark blue/black
-        surface: '#111827',    // Slightly lighter
+        // Modern Fintech Palette  
+        background: '#0f172a', // Dark slate blue (plus clair)
+        surface: '#1e293b',    // Slate 800
         primary: {
           DEFAULT: '#3b82f6',
           foreground: '#ffffff',

@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import api from '../services/api';
-import i18n from '../i18n';
 
 const useAuthStore = create(persist((set, get) => ({
   user: null,
@@ -14,10 +13,6 @@ const useAuthStore = create(persist((set, get) => ({
     try {
       const { data } = await api.post('/auth/login', { email, password });
       set({ user: data.user, token: data.token, isAuthenticated: true, isLoading: false });
-      // Synchroniser la langue
-      if (data.user.language) {
-        i18n.changeLanguage(data.user.language);
-      }
       return { success: true };
     } catch (e) {
       set({ isLoading: false });
@@ -30,10 +25,6 @@ const useAuthStore = create(persist((set, get) => ({
     try {
       const { data } = await api.post('/auth/register', { email, password, name, language });
       set({ user: data.user, token: data.token, isAuthenticated: true, isLoading: false });
-      // Synchroniser la langue
-      if (data.user.language) {
-        i18n.changeLanguage(data.user.language);
-      }
       return { success: true };
     } catch (e) {
       set({ isLoading: false });
@@ -49,10 +40,6 @@ const useAuthStore = create(persist((set, get) => ({
     try {
       const { data } = await api.get('/auth/me');
       set({ user: data.user, isAuthenticated: true });
-      // Synchroniser la langue
-      if (data.user.language) {
-        i18n.changeLanguage(data.user.language);
-      }
     } catch { get().logout(); }
   }
 }), { name: 'faketect-auth', partialize: (s) => ({ token: s.token, user: s.user, isAuthenticated: s.isAuthenticated }) }));

@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import useAuthStore from './stores/authStore';
+import { useLanguageSync } from './hooks/useLanguageSync';
 import MainLayout from './components/layout/MainLayout';
 import DashboardLayout from './components/layout/DashboardLayout';
 import Landing from './components/pages/Landing';
@@ -27,6 +28,8 @@ const Admin = ({ children }) => {
 
 export default function App() {
   const { fetchUser, token } = useAuthStore();
+  useLanguageSync();
+  
   useEffect(() => { if (token) fetchUser(); }, [token]);
 
   return (
