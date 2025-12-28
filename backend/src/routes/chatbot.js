@@ -1,7 +1,7 @@
 const express = require('express');
 const prisma = require('../config/db');
 const { auth, admin } = require('../middleware/auth');
-const { getChatResponse } = require('../services/openai');
+const openaiService = require('../services/openai');
 const logger = require('../config/logger');
 
 const router = express.Router();
@@ -57,7 +57,7 @@ router.post('/message', async (req, res) => {
     conversationHistory.push({ role: 'user', content: message });
 
     // Obtenir la réponse IA
-    const aiResponse = await getChatResponse(conversationHistory, language);
+    const aiResponse = await openaiService.chatWithUser(conversationHistory, language);
 
     // Sauvegarder la réponse IA
     const botMessage = await prisma.chatMessage.create({
