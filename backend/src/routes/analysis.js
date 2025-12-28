@@ -18,13 +18,28 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => cb(null, `${uuid()}-${file.originalname}`)
 });
 
-const upload = multer({ storage, limits: { fileSize: 50 * 1024 * 1024 } });
+const upload = multer({ 
+  storage, 
+  limits: { fileSize: 100 * 1024 * 1024 }, // 100MB pour vidéos
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = [
+      'image/jpeg', 'image/png', 'image/webp', 'image/gif',
+      'video/mp4', 'video/mpeg', 'video/quicktime', 'video/x-msvideo'
+    ];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Type de fichier non supporté'));
+    }
+  }
+});
 
 router.post('/file', auth, checkLimit, upload.single('file'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'Fichier requis' });
     
-    const type = req.file.mimetype.startsWith('image/') ? 'IMAGE' : req.file.mimetype.startsWith('video/') ? 'VIDEO' : 'DOCUMENT';
+    const type = req.file.mimetype.startsWith('image/') ? 'IMAGE' : 
+                 req.file.mimetype.startsWith('video/') ? 'VIDEO' : 'DOCUMENT';
     
     const analysis = await prisma.analysis.create({
       data: { id: uuid(), userId: req.user.id, type, fileName: req.file.originalname, fileUrl: `/uploads/${req.file.filename}` }
@@ -40,8 +55,22 @@ router.post('/file', auth, checkLimit, upload.single('file'), async (req, res) =
     
     await prisma.user.update({ where: { id: req.user.id }, data: { usedToday: { increment: 1 }, usedMonth: { increment: 1 } } });
     
-    res.json({ success: true, analysis: { ...updated, verdict: result.verdict, demo: result.demo } });
-  } catch (e) { console.error(e); res.status(500).json({ error: 'Erreur analyse' }); }
+    res.json({ 
+      success: true, 
+      analysis: { 
+        ...updated, 
+        verdict: result.verdict, 
+        demo: result.demo,
+        provider: result.provider,
+        sources: result.sources,
+        consensus: result.consensus,
+        framesAnalyzed: result.framesAnalyzed
+      } 
+    });
+  } catch (e) { 
+    console.error(e); 
+    res.status(500).json({ error: 'Erreur analyse', details: e.message }); 
+  }
 });
 
 router.get('/history', auth, async (req, res) => {
