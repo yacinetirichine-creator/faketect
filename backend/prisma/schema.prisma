@@ -8,24 +8,26 @@ datasource db {
 }
 
 model User {
-  id                    String     @id @default(uuid())
-  email                 String     @unique
+  id                    String              @id @default(uuid())
+  email                 String              @unique
   password              String
   name                  String?
   phone                 String?
-  acceptMarketing       Boolean    @default(false)
-  role                  String     @default("USER")
-  plan                  String     @default("FREE")
-  language              String     @default("fr")
+  acceptMarketing       Boolean             @default(false)
+  role                  String              @default("USER")
+  plan                  String              @default("FREE")
+  language              String              @default("fr")
   stripeCustomerId      String?
   stripeSubscriptionId  String?
-  usedToday             Int        @default(0)
-  usedMonth             Int        @default(0)
-  usedTotal             Int        @default(0)
-  lastReset             DateTime   @default(now())
-  createdAt             DateTime   @default(now())
-  updatedAt             DateTime   @updatedAt
+  usedToday             Int                 @default(0)
+  usedMonth             Int                 @default(0)
+  usedTotal             Int                 @default(0)
+  lastReset             DateTime            @default(now())
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
   analyses              Analysis[]
+  chatConversations     ChatConversation[]
+  adminMessages         ChatMessage[]       @relation("AdminMessages")
 }
 
 model Analysis {
@@ -40,4 +42,27 @@ model Analysis {
   confidence  Float?
   details     String?
   createdAt   DateTime @default(now())
+}
+
+model ChatConversation {
+  id        String        @id @default(uuid())
+  userId    String?
+  user      User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  language  String        @default("fr")
+  status    String        @default("active") // active, pending, resolved, archived
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  messages  ChatMessage[]
+}
+
+model ChatMessage {
+  id             String           @id @default(uuid())
+  conversationId String
+  conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           String           // user, assistant, admin
+  content        String           @db.Text
+  language       String           @default("fr")
+  adminId        String?
+  admin          User?            @relation("AdminMessages", fields: [adminId], references: [id], onDelete: SetNull)
+  createdAt      DateTime         @default(now())
 }

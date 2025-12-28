@@ -1,6 +1,6 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LayoutDashboard, History, Settings, LogOut, Users, BarChart3, ChevronLeft, Menu, ShieldCheck, Shield } from 'lucide-react';
+import { LayoutDashboard, History, Settings, LogOut, Users, BarChart3, ChevronLeft, Menu, ShieldCheck, Shield, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import useAuthStore from '../../stores/authStore';
 
@@ -20,7 +20,8 @@ export default function DashboardLayout({ isAdmin = false }) {
   const adminLinks = [
     { to: '/dashboard', icon: LayoutDashboard, label: t('nav.dashboard') },
     { to: '/admin', icon: BarChart3, label: t('admin.metrics') },
-    { to: '/admin/users', icon: Users, label: t('admin.users') }
+    { to: '/admin/users', icon: Users, label: t('admin.users') },
+    { to: '/admin/chat', icon: MessageCircle, label: 'Chat Support' }
   ];
   const links = isAdmin ? adminLinks : userLinks;
 

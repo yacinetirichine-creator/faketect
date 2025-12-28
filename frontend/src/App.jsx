@@ -13,11 +13,13 @@ import History from './components/pages/History';
 import Settings from './components/pages/Settings';
 import AdminDashboard from './components/pages/admin/AdminDashboard';
 import AdminUsers from './components/pages/admin/AdminUsers';
+import AdminChat from './components/pages/admin/AdminChat';
 import PrivacyPolicy from './components/pages/PrivacyPolicy';
 import TermsOfService from './components/pages/TermsOfService';
 import LegalPage from './components/pages/LegalPage';
 import CookiesPage from './components/pages/CookiesPage';
 import CookieConsent from './components/CookieConsent';
+import Chatbot from './components/Chatbot';
 import { Loader2 } from 'lucide-react';
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -70,9 +72,12 @@ export default function App() {
         <Route path="/admin" element={<Admin><DashboardLayout isAdmin /></Admin>}>
           <Route index element={<AdminDashboard />} />
           <Route path="users" element={<AdminUsers />} />
+          <Route path="chat" element={<AdminChat />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <CookieConsent />
+      <Chatbot />
     </ErrorBoundary>
   );
 }

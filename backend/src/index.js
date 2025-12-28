@@ -83,6 +83,7 @@ app.use('/api/user', require('./routes/user'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/plans', require('./routes/plans'));
 app.use('/api/stripe', require('./routes/stripe'));
+app.use('/api/chatbot', require('./routes/chatbot'));
 
 // Error handling amélioré
 app.use((err, req, res, next) => {
