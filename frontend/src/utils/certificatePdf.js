@@ -70,6 +70,30 @@ export async function downloadCertificatePdf({ t, analysis, user, file }) {
   const fileName = safeText(analysis?.fileName || analysis?.file_name || file?.name);
   const provider = safeText(analysis?.provider);
 
+  const detailsObj = (() => {
+    const d = analysis?.details;
+    if (!d) return null;
+    if (typeof d === 'string') {
+      try { return JSON.parse(d); } catch { return { details: d }; }
+    }
+    return d;
+  })();
+
+  const confidenceValue = (() => {
+    const v = analysis?.confidence ?? detailsObj?.confidence;
+    const n = typeof v === 'number' ? v : Number(v);
+    if (!Number.isFinite(n)) return null;
+    return Math.max(0, Math.min(100, n));
+  })();
+
+  const consensus = safeText(detailsObj?.consensus);
+  const sources = Array.isArray(detailsObj?.sources) ? detailsObj.sources : [];
+  const signals = (() => {
+    const a = Array.isArray(detailsObj?.anomalies) ? detailsObj.anomalies : [];
+    const i = Array.isArray(detailsObj?.indicators) ? detailsObj.indicators : [];
+    return [...a, ...i].map((x) => String(x)).filter(Boolean).slice(0, 5);
+  })();
+
   const verdictKey = safeText(analysis?.verdict?.key || analysis?.verdict);
   const verdictLabel = verdictKey
     ? t(`verdicts.${verdictKey}`, verdictKey.replaceAll('_', ' '))
@@ -118,10 +142,30 @@ export async function downloadCertificatePdf({ t, analysis, user, file }) {
     [t('certificate.fields.fileHash'), fileHash || '—'],
     [t('certificate.fields.score'), aiScore],
     [t('certificate.fields.verdict'), verdictLabel],
+    [t('certificate.fields.confidence'), confidenceValue !== null ? `${confidenceValue.toFixed(0)}%` : '—'],
     [t('certificate.fields.fingerprint'), fingerprint]
   ];
 
   if (provider) rows.push([t('certificate.fields.provider'), provider]);
+  if (consensus) rows.push([t('certificate.fields.consensus'), consensus]);
+  if (sources.length) {
+    const src = sources
+      .map((s) => {
+        const name = s?.provider || s?.name || s?.source;
+        const score = typeof s?.score === 'number' ? `${Math.round(s.score)}%` : '';
+        const conf = typeof s?.confidence === 'number' ? `${Math.round(s.confidence)}%` : '';
+        return [name, score && `${t('certificate.fields.scoreShort')} ${score}`, conf && `${t('certificate.fields.confidenceShort')} ${conf}`]
+          .filter(Boolean)
+          .join(' • ');
+      })
+      .filter(Boolean)
+      .join(' | ');
+    if (src) rows.push([t('certificate.fields.sources'), src]);
+  }
+
+  if (signals.length) {
+    rows.push([t('certificate.fields.topSignals'), signals.join(' • ')]);
+  }
 
   const labelWidth = 140;
   const lineHeight = 18;

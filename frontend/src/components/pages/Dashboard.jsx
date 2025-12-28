@@ -19,6 +19,31 @@ export default function Dashboard() {
   const [lastFile, setLastFile] = useState(null);
   const [downloadingCert, setDownloadingCert] = useState(false);
 
+  const parsedDetails = (() => {
+    if (!result?.details) return null;
+    if (typeof result.details === 'string') {
+      try { return JSON.parse(result.details); } catch { return { details: result.details }; }
+    }
+    return result.details;
+  })();
+
+  const confidenceValue = (() => {
+    const v = result?.confidence ?? parsedDetails?.confidence;
+    const n = typeof v === 'number' ? v : Number(v);
+    if (!Number.isFinite(n)) return null;
+    return Math.max(0, Math.min(100, n));
+  })();
+
+  const providerLabel = result?.provider ?? parsedDetails?.provider;
+  const consensusLabel = parsedDetails?.consensus;
+  const sources = Array.isArray(parsedDetails?.sources) ? parsedDetails.sources : [];
+  const signals = (() => {
+    const a = Array.isArray(parsedDetails?.anomalies) ? parsedDetails.anomalies : [];
+    const i = Array.isArray(parsedDetails?.indicators) ? parsedDetails.indicators : [];
+    const s = [...a, ...i].map((x) => String(x)).filter(Boolean);
+    return s.slice(0, 3);
+  })();
+
   useEffect(() => {
     let mounted = true;
     userApi.getDashboard()
@@ -160,6 +185,7 @@ export default function Dashboard() {
                         <button type="button" className="btn-secondary text-sm px-4 py-2 inline-flex items-center gap-2" onClick={onDownloadCertificate} disabled={downloadingCert}>
                           {downloadingCert ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />} {t('certificate.download')}
                         </button>
+                        <div className="mt-2 text-xs text-gray-500">{t('certificate.basedOnExplainability')}</div>
                       </div>
                     </div>
                     <div className={`px-4 py-2 rounded-full border text-sm font-bold flex items-center gap-2 ${verdictColor(result.verdict)}`}>
@@ -185,14 +211,57 @@ export default function Dashboard() {
                     </div>
                   </div>
 
+                  <div className="p-4 rounded-xl bg-white/5 border border-white/10 mb-6">
+                    <div className="flex items-center justify-between gap-4 mb-3">
+                      <div>
+                        <div className="text-sm text-gray-400">{t('dashboard.explainabilityTitle')}</div>
+                        <div className="text-xs text-gray-500 mt-1">{t('dashboard.explainabilitySubtitle')}</div>
+                      </div>
+                      {confidenceValue !== null && (
+                        <div className="text-sm font-semibold text-white">{t('dashboard.confidence')}: {confidenceValue.toFixed(0)}%</div>
+                      )}
+                    </div>
+
+                    {confidenceValue !== null ? (
+                      <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden mb-3">
+                        <div className="bg-primary h-full rounded-full" style={{ width: `${confidenceValue}%` }} />
+                      </div>
+                    ) : (
+                      <div className="text-sm text-gray-500 mb-3">{t('dashboard.explainabilityUnavailable')}</div>
+                    )}
+
+                    <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-400">
+                      {providerLabel ? <div><span className="text-gray-500">{t('dashboard.provider')}:</span> {providerLabel}</div> : null}
+                      {consensusLabel ? <div><span className="text-gray-500">{t('dashboard.consensus')}:</span> {consensusLabel}</div> : null}
+                      {sources.length ? (
+                        <div>
+                          <span className="text-gray-500">{t('dashboard.sources')}:</span>{' '}
+                          {sources.map((s, idx) => {
+                            const name = s?.provider || s?.name || s?.source;
+                            const score = typeof s?.score === 'number' ? `${Math.round(s.score)}%` : null;
+                            const conf = typeof s?.confidence === 'number' ? `${Math.round(s.confidence)}%` : null;
+                            const label = [name, score ? `${t('dashboard.scoreShort')} ${score}` : null, conf ? `${t('dashboard.confidenceShort')} ${conf}` : null].filter(Boolean).join(' • ');
+                            return (
+                              <span key={`${label}-${idx}`}>{idx ? ' | ' : ''}{label}</span>
+                            );
+                          })}
+                        </div>
+                      ) : null}
+                    </div>
+
+                    {signals.length ? (
+                      <div className="mt-3 text-sm text-gray-300">
+                        <div className="text-xs text-gray-500 mb-1">{t('dashboard.topSignals')}</div>
+                        <ul className="list-disc pl-5 space-y-1">
+                          {signals.map((s, idx) => <li key={`${s}-${idx}`}>{s}</li>)}
+                        </ul>
+                      </div>
+                    ) : null}
+                  </div>
+
                   {result.details && (
                     <div className="bg-black/20 rounded-xl p-4 font-mono text-sm text-gray-300 overflow-x-auto">
-                      <pre>{JSON.stringify((() => {
-                        if (typeof result.details === 'string') {
-                          try { return JSON.parse(result.details); } catch { return { details: result.details }; }
-                        }
-                        return result.details;
-                      })(), null, 2)}</pre>
+                      <pre>{JSON.stringify(parsedDetails, null, 2)}</pre>
                     </div>
                   )}
                 </div>
