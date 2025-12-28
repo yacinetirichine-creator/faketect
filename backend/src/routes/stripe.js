@@ -4,13 +4,14 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const { auth } = require('../middleware/auth');
+const { paymentLimiter, webhookLimiter } = require('../middleware/rateLimiter');
 const { getStripeProducts } = require('../config/stripe-products');
 
 // ⚠️ IMPORTANT: Le webhook DOIT être géré avec express.raw() AVANT express.json()
 // C'est géré dans index.js avec une route spéciale
 
 // Webhook Stripe (gestion des événements de paiement)
-router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+router.post('/webhook', webhookLimiter, express.raw({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'];
   let event;
 
@@ -81,7 +82,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 });
 
 // Créer une session de checkout
-router.post('/create-checkout', auth, async (req, res) => {
+router.post('/create-checkout', auth, paymentLimiter, async (req, res) => {
   try {
     const { planId, billing, locale } = req.body; // planId: 'STANDARD', 'PROFESSIONAL', 'BUSINESS', 'ENTERPRISE' | billing: 'monthly' ou 'yearly' | locale: 'fr', 'en', etc.
     

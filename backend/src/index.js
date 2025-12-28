@@ -14,7 +14,17 @@ const path = require('path');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const logger = require('./config/logger');
-const { globalLimiter } = require('./middleware/rateLimiter');
+const { 
+  globalLimiter, 
+  apiSlowDown,
+  ddosProtection,
+  authLimiter,
+  registerLimiter,
+  adminLimiter,
+  paymentLimiter,
+  webhookLimiter,
+  passwordResetLimiter
+} = require('./middleware/rateLimiter');
 
 const app = express();
 
@@ -36,6 +46,12 @@ app.use(express.json({ limit: '50mb' }));
 
 // Static files
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
+// Protection DDoS première ligne (ultra-stricte)
+app.use('/api/', ddosProtection);
+
+// Slow-down progressif (ralentit avant de bloquer)
+app.use('/api/', apiSlowDown);
 
 // Rate limiting global (après static files pour ne pas limiter les images)
 app.use('/api/', globalLimiter);

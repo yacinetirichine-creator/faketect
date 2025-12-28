@@ -1,12 +1,13 @@
 const express = require('express');
 const prisma = require('../config/db');
 const { auth, admin } = require('../middleware/auth');
+const { adminLimiter } = require('../middleware/rateLimiter');
 const { cleanupOldAnalyses, cleanupOrphanFiles } = require('../services/cleanup');
 const cache = require('../services/cache');
 const PLANS = require('../config/plans');
 
 const router = express.Router();
-router.use(auth, admin);
+router.use(auth, admin, adminLimiter);
 
 router.get('/metrics', async (req, res) => {
   const now = new Date();

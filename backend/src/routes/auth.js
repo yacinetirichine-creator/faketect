@@ -4,14 +4,14 @@ const jwt = require('jsonwebtoken');
 const { v4: uuid } = require('uuid');
 const prisma = require('../config/db');
 const { auth } = require('../middleware/auth');
-const { authLimiter } = require('../middleware/rateLimiter');
+const { authLimiter, registerLimiter, passwordResetLimiter } = require('../middleware/rateLimiter');
 const { registerValidation, loginValidation, profileUpdateValidation } = require('../middleware/validators');
 const logger = require('../config/logger');
 const { sendWelcomeEmail } = require('../services/email');
 
 const router = express.Router();
 
-router.post('/register', authLimiter, registerValidation, async (req, res) => {
+router.post('/register', registerLimiter, registerValidation, async (req, res) => {
   try {
     const { email, password, name, language = 'fr', phone, acceptMarketing = false } = req.body;
     
