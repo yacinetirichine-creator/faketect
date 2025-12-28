@@ -84,6 +84,7 @@ app.use('/api/admin', require('./routes/admin'));
 app.use('/api/plans', require('./routes/plans'));
 app.use('/api/stripe', require('./routes/stripe'));
 app.use('/api/chatbot', require('./routes/chatbot'));
+app.use('/api/newsletter', require('./routes/newsletter'));
 
 // Error handling amélioré
 app.use((err, req, res, next) => {

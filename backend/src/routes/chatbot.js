@@ -8,12 +8,12 @@ const router = express.Router();
 
 /**
  * POST /api/chatbot/message
- * Envoyer un message au chatbot (utilisateurs)
+ * Envoyer un message au chatbot (PUBLIC - pas d'authentification requise)
  */
 router.post('/message', async (req, res) => {
   try {
     const { message, language = 'fr', conversationId = null } = req.body;
-    const userId = req.user?.id || null;
+    const userId = null; // Chatbot accessible sans compte
 
     if (!message || message.trim().length === 0) {
       return res.status(400).json({ error: 'Message requis' });

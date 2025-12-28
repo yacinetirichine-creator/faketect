@@ -14,6 +14,7 @@ import Settings from './components/pages/Settings';
 import AdminDashboard from './components/pages/admin/AdminDashboard';
 import AdminUsers from './components/pages/admin/AdminUsers';
 import AdminChat from './components/pages/admin/AdminChat';
+import AdminNewsletter from './components/pages/admin/AdminNewsletter';
 import PrivacyPolicy from './components/pages/PrivacyPolicy';
 import TermsOfService from './components/pages/TermsOfService';
 import LegalPage from './components/pages/LegalPage';
@@ -73,6 +74,7 @@ export default function App() {
           <Route index element={<AdminDashboard />} />
           <Route path="users" element={<AdminUsers />} />
           <Route path="chat" element={<AdminChat />} />
+          <Route path="newsletter" element={<AdminNewsletter />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

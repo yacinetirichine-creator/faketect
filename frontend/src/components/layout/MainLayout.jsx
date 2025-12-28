@@ -6,6 +6,7 @@ import useAuthStore from '../../stores/authStore';
 import { languages, normalizeLanguage, persistLanguage } from '../../i18n';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../services/api';
+import NewsletterSubscribe from '../NewsletterSubscribe';
 
 export default function MainLayout() {
   const { t, i18n } = useTranslation();
@@ -69,9 +70,9 @@ export default function MainLayout() {
                       <button 
                         key={l.code} 
                         onClick={() => changeLang(l.code)}
-                        className={`w-full px-4 py-2 text-left hover:bg-white/5 flex items-center gap-2 text-sm ${currentLang === l.code ? 'text-primary font-medium' : 'text-gray-400'}`}
+                        className={`w-full px-4 py-2 text-left hover:bg-white/5 flex items-center gap-2 text-sm transition-colors ${currentLang === l.code ? 'text-primary font-semibold bg-primary/10' : 'text-gray-200 hover:text-white'}`}
                       >
-                        <span>{l.flag}</span> {l.name}
+                        <span className="text-base">{l.flag}</span> <span className="font-medium">{l.name}</span>
                       </button>
                     ))}
                   </motion.div>
@@ -151,7 +152,7 @@ export default function MainLayout() {
 
       <footer className="bg-surface border-t border-white/10 py-12 mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
@@ -159,10 +160,11 @@ export default function MainLayout() {
                 </div>
                 <span className="font-display font-bold text-xl">FakeTect</span>
               </div>
-              <p className="text-gray-400 max-w-sm mb-4">
+              <p className="text-gray-400 max-w-sm mb-6">
                 {t('footer.description', 'Détection de deepfakes par intelligence artificielle.')}
               </p>
-              <p className="text-xs text-gray-500">
+              <NewsletterSubscribe />
+              <p className="text-xs text-gray-500 mt-4">
                 JARVIS - SAS au capital de 100 EUR<br />
                 SIREN : 928 499 166 - RCS Paris<br />
                 128 Rue la Boétie, 75008 PARIS
