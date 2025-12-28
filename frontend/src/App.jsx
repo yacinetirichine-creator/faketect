@@ -14,6 +14,7 @@ import Settings from './components/pages/Settings';
 import AdminDashboard from './components/pages/admin/AdminDashboard';
 import AdminUsers from './components/pages/admin/AdminUsers';
 import { Loader2 } from 'lucide-react';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const Protected = ({ children }) => {
   const { isAuthenticated, token, user, hasHydrated } = useAuthStore();
@@ -42,23 +43,25 @@ export default function App() {
   }, [token, user, isFetchingUser]);
 
   return (
-    <Routes>
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<Landing />} />
-        <Route path="/pricing" element={<Pricing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Route>
-      <Route path="/dashboard" element={<Protected><DashboardLayout /></Protected>}>
-        <Route index element={<Dashboard />} />
-        <Route path="history" element={<History />} />
-        <Route path="settings" element={<Settings />} />
-      </Route>
-      <Route path="/admin" element={<Admin><DashboardLayout isAdmin /></Admin>}>
-        <Route index element={<AdminDashboard />} />
-        <Route path="users" element={<AdminUsers />} />
-      </Route>
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <ErrorBoundary>
+      <Routes>
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Landing />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Route>
+        <Route path="/dashboard" element={<Protected><DashboardLayout /></Protected>}>
+          <Route index element={<Dashboard />} />
+          <Route path="history" element={<History />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+        <Route path="/admin" element={<Admin><DashboardLayout isAdmin /></Admin>}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="users" element={<AdminUsers />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </ErrorBoundary>
   );
 }

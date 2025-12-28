@@ -1,6 +1,6 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LayoutDashboard, History, Settings, LogOut, Users, BarChart3, ChevronLeft, Menu, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, History, Settings, LogOut, Users, BarChart3, ChevronLeft, Menu, ShieldCheck, Shield } from 'lucide-react';
 import { useState } from 'react';
 import useAuthStore from '../../stores/authStore';
 
@@ -14,13 +14,17 @@ export default function DashboardLayout({ isAdmin = false }) {
   const userLinks = [
     { to: '/dashboard', icon: LayoutDashboard, label: t('dashboard.overview') },
     { to: '/dashboard/history', icon: History, label: t('dashboard.history') },
-    { to: '/dashboard/settings', icon: Settings, label: t('dashboard.settings') }
+    { to: '/dashboard/settings', icon: Settings, label: t('dashboard.settings') },
+    ...(user?.role === 'ADMIN' ? [{ to: '/admin', icon: Shield, label: t('nav.admin') }] : [])
   ];
   const adminLinks = [
+    { to: '/dashboard', icon: LayoutDashboard, label: t('nav.dashboard') },
     { to: '/admin', icon: BarChart3, label: t('admin.metrics') },
     { to: '/admin/users', icon: Users, label: t('admin.users') }
   ];
   const links = isAdmin ? adminLinks : userLinks;
+
+  const isActive = (to) => location.pathname === to || location.pathname.startsWith(`${to}/`);
 
   return (
     <div className="min-h-screen bg-background flex text-white">
@@ -43,7 +47,7 @@ export default function DashboardLayout({ isAdmin = false }) {
               key={l.to} 
               to={l.to} 
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
-                location.pathname === l.to 
+                isActive(l.to) 
                   ? 'bg-primary/10 text-primary border border-primary/20' 
                   : 'text-gray-400 hover:bg-white/5 hover:text-white'
               }`}

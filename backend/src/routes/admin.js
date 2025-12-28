@@ -43,6 +43,35 @@ router.get('/users', async (req, res) => {
   res.json({ users, pagination: { page: +page, limit: +limit, total, pages: Math.ceil(total / limit) } });
 });
 
+router.get('/analyses', async (req, res) => {
+  const { page = 1, limit = 20, search } = req.query;
+  const where = search
+    ? {
+        OR: [
+          { id: { contains: search, mode: 'insensitive' } },
+          { fileName: { contains: search, mode: 'insensitive' } },
+          { user: { is: { email: { contains: search, mode: 'insensitive' } } } },
+          { user: { is: { name: { contains: search, mode: 'insensitive' } } } }
+        ]
+      }
+    : {};
+
+  const [analyses, total] = await Promise.all([
+    prisma.analysis.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      skip: (page - 1) * limit,
+      take: +limit,
+      include: {
+        user: { select: { id: true, email: true, name: true } }
+      }
+    }),
+    prisma.analysis.count({ where })
+  ]);
+
+  res.json({ analyses, pagination: { page: +page, limit: +limit, total, pages: Math.ceil(total / limit) } });
+});
+
 router.put('/users/:id', async (req, res) => {
   const { plan, role } = req.body;
   const user = await prisma.user.update({ where: { id: req.params.id }, data: { ...(plan && { plan }), ...(role && { role }) } });

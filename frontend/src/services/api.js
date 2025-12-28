@@ -36,6 +36,7 @@ export const userApi = {
 export const adminApi = {
   getMetrics: () => api.get('/admin/metrics'),
   getUsers: (params) => api.get('/admin/users', { params }),
+  getAnalyses: (params) => api.get('/admin/analyses', { params }),
   updateUser: (id, data) => api.put(`/admin/users/${id}`, data),
   deleteUser: (id) => api.delete(`/admin/users/${id}`)
 };

@@ -57,8 +57,12 @@ const useAuthStore = create(persist((set, get) => ({
   name: 'faketect-auth',
   partialize: (s) => ({ token: s.token, user: s.user, isAuthenticated: s.isAuthenticated }),
   onRehydrateStorage: () => (state, error) => {
-    if (error) return;
+    // Never block the UI on hydration: even if storage fails, we should render.
     state?.setHasHydrated?.(true);
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.warn('Auth store hydration error:', error);
+    }
   }
 }));
 
