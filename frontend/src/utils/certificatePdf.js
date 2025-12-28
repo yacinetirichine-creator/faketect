@@ -1,4 +1,5 @@
 import { jsPDF } from 'jspdf';
+import { interpretResult, getSimpleMessage, getConfidenceMessage } from './resultInterpreter';
 
 function formatDateTime(date) {
   try {
@@ -57,7 +58,7 @@ function shortenHex(hex, head = 12, tail = 12) {
   return `${h.slice(0, head)}…${h.slice(-tail)}`;
 }
 
-export async function downloadCertificatePdf({ t, analysis, user, file }) {
+export async function downloadCertificatePdf({ t, analysis, user, file, currentLanguage = 'fr' }) {
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
 
   const margin = 56;
@@ -105,7 +106,13 @@ export async function downloadCertificatePdf({ t, analysis, user, file }) {
     : '';
 
   const aiScoreValue = analysis?.aiScore ?? analysis?.ai_score;
-  const aiScore = typeof aiScoreValue === 'number' ? `${aiScoreValue.toFixed(1)}%` : safeText(aiScoreValue);
+  const aiScoreNumber = typeof aiScoreValue === 'number' ? aiScoreValue : parseFloat(aiScoreValue) || 0;
+  const aiScore = `${aiScoreNumber.toFixed(1)}%`;
+
+  // Interprétation ludique du résultat
+  const result = interpretResult(aiScoreNumber);
+  const simpleMessage = getSimpleMessage(result.level, currentLanguage);
+  const confidenceMsg = confidenceValue !== null ? getConfidenceMessage(confidenceValue, currentLanguage) : '';
 
   const fileHashFull = await sha256HexFromFile(file);
   const fileHash = shortenHex(fileHashFull);
@@ -122,8 +129,23 @@ export async function downloadCertificatePdf({ t, analysis, user, file }) {
 
   let y = margin;
 
+  // === LOGO FAKETECT ===
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(28);
+  doc.setTextColor(99, 102, 241); // Indigo-500
+  doc.text('FakeTect', margin, y);
+  
+  y += 10;
+  doc.setDrawColor(99, 102, 241);
+  doc.setLineWidth(2);
+  doc.line(margin, y, margin + 100, y);
+
+  y += 30;
+
+  // === TITRE ===
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(20);
+  doc.setTextColor(30);
   doc.text(t('certificate.title'), margin, y);
 
   y += 22;
@@ -136,24 +158,118 @@ export async function downloadCertificatePdf({ t, analysis, user, file }) {
   doc.setDrawColor(220);
   doc.line(margin, y, pageWidth - margin, y);
 
-  y += 24;
+  y += 30;
+
+  // === RÉSULTAT VISUEL LUDIQUE ===
+  const boxHeight = 140;
+  const boxY = y;
+
+  // Fond coloré selon le résultat
+  const bgColors = {
+    real: [220, 252, 231],    // green-100
+    uncertain: [254, 243, 199], // amber-100
+    fake: [254, 226, 226]      // red-100
+  };
+  const borderColors = {
+    real: [34, 197, 94],       // green-500
+    uncertain: [245, 158, 11],  // amber-500
+    fake: [239, 68, 68]        // red-500
+  };
+
+  doc.setFillColor(...bgColors[result.level]);
+  doc.setDrawColor(...borderColors[result.level]);
+  doc.setLineWidth(3);
+  doc.roundedRect(margin, boxY, contentWidth, boxHeight, 8, 8, 'FD');
+
+  // Emoji et titre
+  y += 35;
+  doc.setFontSize(40);
+  doc.setTextColor(...borderColors[result.level]);
+  const titleWithEmoji = `${result.emoji} ${simpleMessage.title}`;
+  const titleWidth = doc.getTextWidth(titleWithEmoji);
+  doc.text(titleWithEmoji, (pageWidth - titleWidth) / 2, y);
+
+  // Score visuel (barre de progression)
+  y += 35;
+  const barWidth = contentWidth - 80;
+  const barX = margin + 40;
+  const barHeight = 20;
+
+  // Fond de la barre (gris)
+  doc.setFillColor(229, 231, 235); // gray-200
+  doc.setDrawColor(209, 213, 219); // gray-300
+  doc.setLineWidth(1);
+  doc.roundedRect(barX, y, barWidth, barHeight, 4, 4, 'FD');
+
+  // Barre de progression colorée
+  const progressWidth = (barWidth * result.realPercentage) / 100;
+  const gradientColors = {
+    real: [34, 197, 94],      // green-500
+    uncertain: [245, 158, 11], // amber-500
+    fake: [239, 68, 68]       // red-500
+  };
+  doc.setFillColor(...gradientColors[result.level]);
+  doc.roundedRect(barX, y, progressWidth, barHeight, 4, 4, 'F');
+
+  // Pourcentage au centre
+  y += 14;
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(30);
+  const percentText = `${result.realPercentage}% ${currentLanguage === 'fr' ? 'RÉEL' : 'REAL'}`;
+  const percentWidth = doc.getTextWidth(percentText);
+  doc.text(percentText, (pageWidth - percentWidth) / 2, y);
+
+  // Labels gauche/droite
+  y += 20;
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(100);
+  const labelReal = currentLanguage === 'fr' ? '100% Réel' : '100% Real';
+  const labelAI = currentLanguage === 'fr' ? '100% IA' : '100% AI';
+  doc.text(labelReal, barX, y);
+  const labelAIWidth = doc.getTextWidth(labelAI);
+  doc.text(labelAI, barX + barWidth - labelAIWidth, y);
+
+  // Explication simple
+  y += 20;
+  doc.setFontSize(11);
+  doc.setTextColor(60);
+  const explanationLines = doc.splitTextToSize(simpleMessage.explanation, contentWidth - 80);
+  doc.text(explanationLines, margin + 40, y);
+
+  y = boxY + boxHeight + 30;
+
+  // === SECTION TECHNIQUE PROFESSIONNELLE ===
+  doc.setFillColor(249, 250, 251); // gray-50
+  doc.setDrawColor(229, 231, 235); // gray-200
+  doc.setLineWidth(1);
+  
+  const techBoxY = y;
+  const techBoxHeight = 200;
+  doc.roundedRect(margin, techBoxY, contentWidth, techBoxHeight, 8, 8, 'FD');
+
+  y += 25;
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(30);
+  const techTitle = currentLanguage === 'fr' ? '📊 Analyse Technique Détaillée' : '📊 Detailed Technical Analysis';
+  doc.text(techTitle, margin + 20, y);
+
+  y += 25;
   doc.setTextColor(30);
 
   const rows = [
     [t('certificate.fields.analysisId'), analysisId],
-    [t('certificate.fields.user'), userName],
-    [t('certificate.fields.date'), formatDateTimeUtc(now)],
-    [t('certificate.fields.file'), fileName],
-    [t('certificate.fields.fileHash'), fileHash || '—'],
     [t('certificate.fields.score'), aiScore],
-    [t('certificate.fields.verdict'), verdictLabel],
     [t('certificate.fields.confidence'), confidenceValue !== null ? `${confidenceValue.toFixed(0)}%` : '—'],
-    [t('certificate.fields.fingerprint'), fingerprint]
+    [t('certificate.fields.verdict'), verdictLabel]
   ];
 
   if (provider) rows.push([t('certificate.fields.provider'), provider]);
-  if (framesAnalyzed !== null) rows.push([t('certificate.fields.framesAnalyzed'), String(Math.round(framesAnalyzed))]);
   if (consensus) rows.push([t('certificate.fields.consensus'), consensus]);
+  if (framesAnalyzed !== null) rows.push([t('certificate.fields.framesAnalyzed'), String(Math.round(framesAnalyzed))]);
+  
   if (sources.length) {
     const src = sources
       .map((s) => {
@@ -173,12 +289,49 @@ export async function downloadCertificatePdf({ t, analysis, user, file }) {
     rows.push([t('certificate.fields.topSignals'), signals.join(' • ')]);
   }
 
-  const labelWidth = 140;
-  const lineHeight = 18;
+  const labelWidth = 120;
+  const lineHeight = 16;
 
-  doc.setFontSize(11);
+  doc.setFontSize(10);
 
   for (const [label, value] of rows) {
+    if (y > techBoxY + techBoxHeight - 30) break; // Éviter débordement
+
+    doc.setFont('helvetica', 'bold');
+    doc.text(label, margin + 20, y);
+
+    doc.setFont('helvetica', 'normal');
+    const valueX = margin + 20 + labelWidth;
+    const valueText = safeText(value) || '—';
+
+    const split = doc.splitTextToSize(valueText, contentWidth - labelWidth - 40);
+    doc.text(split, valueX, y);
+
+    y += Math.max(lineHeight, split.length * lineHeight);
+  }
+
+  y = techBoxY + techBoxHeight + 30;
+
+  // === INFORMATIONS DE VÉRIFICATION ===
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(30);
+  const verifyTitle = currentLanguage === 'fr' ? '🔐 Informations de Vérification' : '🔐 Verification Information';
+  doc.text(verifyTitle, margin, y);
+
+  y += 20;
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+
+  const verifyRows = [
+    [t('certificate.fields.user'), userName],
+    [t('certificate.fields.date'), formatDateTimeUtc(now)],
+    [t('certificate.fields.file'), fileName],
+    [t('certificate.fields.fileHash'), fileHash || '—'],
+    [t('certificate.fields.fingerprint'), fingerprint]
+  ];
+
+  for (const [label, value] of verifyRows) {
     doc.setFont('helvetica', 'bold');
     doc.text(label, margin, y);
 
@@ -191,14 +344,26 @@ export async function downloadCertificatePdf({ t, analysis, user, file }) {
 
     y += Math.max(lineHeight, split.length * lineHeight);
 
-    if (y > doc.internal.pageSize.getHeight() - margin - 40) {
+    if (y > doc.internal.pageSize.getHeight() - margin - 60) {
       doc.addPage();
       y = margin;
     }
   }
 
+  // === EXPLICATION CONFIANCE (si disponible) ===
+  if (confidenceMsg) {
+    y += 20;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'italic');
+    doc.setTextColor(100);
+    const confLines = doc.splitTextToSize(confidenceMsg, contentWidth);
+    doc.text(confLines, margin, y);
+  }
+
+  // === FOOTER ===
   const footer = `${t('certificate.generatedAt', { date: formatDateTimeUtc(now) })} • ${t('certificate.verificationHint')}`;
   doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
   doc.setTextColor(120);
   const footerLines = doc.splitTextToSize(footer, contentWidth);
   doc.text(footerLines, margin, doc.internal.pageSize.getHeight() - margin / 2);

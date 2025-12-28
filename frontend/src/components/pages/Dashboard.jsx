@@ -2,11 +2,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDropzone } from 'react-dropzone';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload, FileImage, AlertCircle, CheckCircle2, TrendingUp, Shield, Clock, Loader2, Zap, History, Download } from 'lucide-react';
+import { Upload, FileImage, AlertCircle, CheckCircle2, TrendingUp, Shield, Clock, Loader2, Zap, History, Download, XCircle, HelpCircle } from 'lucide-react';
 import { userApi, analysisApi } from '../../services/api';
 import useAuthStore from '../../stores/authStore';
 import toast from 'react-hot-toast';
 import { downloadCertificatePdf } from '../../utils/certificatePdf';
+import { interpretResult, getSimpleMessage, getConfidenceMessage } from '../../utils/resultInterpreter';
+import i18n from '../../i18n';
 
 export default function Dashboard() {
   const { t } = useTranslation();
@@ -108,7 +110,13 @@ export default function Dashboard() {
     if (!result) return;
     setDownloadingCert(true);
     try {
-      await downloadCertificatePdf({ t, analysis: result, user, file: lastFile });
+      await downloadCertificatePdf({ 
+        t, 
+        analysis: result, 
+        user, 
+        file: lastFile,
+        currentLanguage: i18n.language
+      });
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error('Certificate PDF generation failed:', e);
@@ -186,96 +194,127 @@ export default function Dashboard() {
           <AnimatePresence>
             {result && (
               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
-                <div className="card bg-surface/50 border-white/10 border-l-4 border-l-primary">
-                  <div className="flex items-start justify-between mb-6">
-                    <div>
-                      <h3 className="text-lg font-bold text-white mb-1">{t('dashboard.result')}</h3>
-                      <p className="text-sm text-gray-400">{t('common.id')}: {result.id}</p>
-                      <div className="mt-3">
-                        <button type="button" className="btn-secondary text-sm px-4 py-2 inline-flex items-center gap-2" onClick={onDownloadCertificate} disabled={downloadingCert}>
-                          {downloadingCert ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />} {t('certificate.download')}
-                        </button>
-                        <div className="mt-2 text-xs text-gray-500">{t('certificate.basedOnExplainability')}</div>
-                      </div>
-                    </div>
-                    <div className={`px-4 py-2 rounded-full border text-sm font-bold flex items-center gap-2 ${verdictColor(result.verdict)}`}>
-                      {(result.verdict?.key || result.verdict) === 'likely_real' ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
-                      {t(`verdicts.${(result.verdict?.key || result.verdict)}`, String(result.verdict?.key || result.verdict || '').replace('_', ' ').toUpperCase())}
-                    </div>
-                  </div>
+                {(() => {
+                  const interpretation = interpretResult(result.aiScore);
+                  const message = getSimpleMessage(interpretation.level, i18n.language);
+                  const confidenceMsg = getConfidenceMessage(confidenceValue, i18n.language);
 
-                  <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                      <div className="text-sm text-gray-400 mb-1">{t('dashboard.score')}</div>
-                      <div className="text-2xl font-bold text-white">{Number(result.aiScore ?? 0).toFixed(1)}%</div>
-                      <div className="w-full bg-white/10 h-2 rounded-full mt-2 overflow-hidden">
-                        <div className="bg-primary h-full rounded-full" style={{ width: `${Math.max(0, Math.min(100, Number(result.aiScore ?? 0)))}%` }} />
-                      </div>
-                    </div>
-                    <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                      <div className="text-sm text-gray-400 mb-1">{t('dashboard.processingTime')}</div>
-                      <div className="text-2xl font-bold text-white">1.2s</div>
-                      <div className="flex items-center gap-1 text-xs text-green-400 mt-2">
-                        <Zap size={12} /> {t('dashboard.ultraFast')}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-4 rounded-xl bg-white/5 border border-white/10 mb-6">
-                    <div className="flex items-center justify-between gap-4 mb-3">
-                      <div>
-                        <div className="text-sm text-gray-400">{t('dashboard.explainabilityTitle')}</div>
-                        <div className="text-xs text-gray-500 mt-1">{t('dashboard.explainabilitySubtitle')}</div>
-                      </div>
-                      {confidenceValue !== null && (
-                        <div className="text-sm font-semibold text-white">{t('dashboard.confidence')}: {confidenceValue.toFixed(0)}%</div>
-                      )}
-                    </div>
-
-                    {confidenceValue !== null ? (
-                      <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden mb-3">
-                        <div className="bg-primary h-full rounded-full" style={{ width: `${confidenceValue}%` }} />
-                      </div>
-                    ) : (
-                      <div className="text-sm text-gray-500 mb-3">{t('dashboard.explainabilityUnavailable')}</div>
-                    )}
-
-                    <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-400">
-                      {providerLabel ? <div><span className="text-gray-500">{t('dashboard.provider')}:</span> {providerLabel}</div> : null}
-                      {consensusLabel ? <div><span className="text-gray-500">{t('dashboard.consensus')}:</span> {consensusLabel}</div> : null}
-                      {framesAnalyzed !== null ? <div><span className="text-gray-500">{t('dashboard.framesAnalyzed')}:</span> {Math.round(framesAnalyzed)}</div> : null}
-                      {sources.length ? (
-                        <div>
-                          <span className="text-gray-500">{t('dashboard.sources')}:</span>{' '}
-                          {sources.map((s, idx) => {
-                            const name = s?.provider || s?.name || s?.source;
-                            const score = typeof s?.score === 'number' ? `${Math.round(s.score)}%` : null;
-                            const conf = typeof s?.confidence === 'number' ? `${Math.round(s.confidence)}%` : null;
-                            const label = [name, score ? `${t('dashboard.scoreShort')} ${score}` : null, conf ? `${t('dashboard.confidenceShort')} ${conf}` : null].filter(Boolean).join(' • ');
-                            return (
-                              <span key={`${label}-${idx}`}>{idx ? ' | ' : ''}{label}</span>
-                            );
-                          })}
+                  return (
+                    <div className={`card ${interpretation.bgColor} border-2 ${interpretation.borderColor}`}>
+                      {/* En-tête avec verdict pédagogique */}
+                      <div className="text-center mb-8">
+                        <div className={`w-24 h-24 mx-auto rounded-full ${interpretation.bgColor} border-4 ${interpretation.borderColor} flex items-center justify-center mb-4`}>
+                          <span className="text-6xl">
+                            {interpretation.level === 'real' && <CheckCircle2 className={interpretation.textColor} size={64} strokeWidth={3} />}
+                            {interpretation.level === 'uncertain' && <HelpCircle className={interpretation.textColor} size={64} strokeWidth={3} />}
+                            {interpretation.level === 'fake' && <XCircle className={interpretation.textColor} size={64} strokeWidth={3} />}
+                          </span>
                         </div>
-                      ) : null}
-                    </div>
-
-                    {signals.length ? (
-                      <div className="mt-3 text-sm text-gray-300">
-                        <div className="text-xs text-gray-500 mb-1">{t('dashboard.topSignals')}</div>
-                        <ul className="list-disc pl-5 space-y-1">
-                          {signals.map((s, idx) => <li key={`${s}-${idx}`}>{s}</li>)}
-                        </ul>
+                        
+                        <h3 className={`text-3xl font-black ${interpretation.textColor} mb-3 tracking-wide`}>
+                          {interpretation.emoji} {message.title}
+                        </h3>
+                        
+                        <div className="max-w-2xl mx-auto">
+                          <p className="text-xl text-white/90 leading-relaxed mb-2">
+                            {message.explanation}
+                          </p>
+                          {confidenceValue !== null && (
+                            <p className="text-sm text-white/60 italic">
+                              {confidenceMsg}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                    ) : null}
-                  </div>
 
-                  {result.details && (
-                    <div className="bg-black/20 rounded-xl p-4 font-mono text-sm text-gray-300 overflow-x-auto">
-                      <pre>{JSON.stringify(parsedDetails, null, 2)}</pre>
+                      {/* Grande jauge visuelle */}
+                      <div className="mb-8">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-lg font-semibold text-white">Résultat</span>
+                          <span className={`text-4xl font-black ${interpretation.textColor}`}>
+                            {interpretation.realPercentage.toFixed(0)}% {interpretation.level === 'real' ? 'RÉEL' : interpretation.level === 'fake' ? 'IA' : 'INCERTAIN'}
+                          </span>
+                        </div>
+                        <div className="relative h-8 bg-white/10 rounded-full overflow-hidden shadow-inner">
+                          <div 
+                            className={`absolute top-0 left-0 h-full ${interpretation.barColor} rounded-full transition-all duration-1000 shadow-lg`}
+                            style={{ width: `${interpretation.realPercentage}%` }}
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-sm font-bold text-white drop-shadow-lg">
+                              {interpretation.realPercentage > 50 ? '← Plus réel' : 'Plus IA →'}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex justify-between mt-2 text-xs text-white/50">
+                          <span>100% Réel</span>
+                          <span>50%</span>
+                          <span>100% IA</span>
+                        </div>
+                      </div>
+
+                      {/* Détails techniques (optionnel, repliable) */}
+                      <details className="mt-6">
+                        <summary className="cursor-pointer text-sm text-white/60 hover:text-white/80 mb-3">
+                          📊 Voir les détails techniques
+                        </summary>
+                        
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                            <div className="text-xs text-gray-400 mb-1">Score IA brut</div>
+                            <div className="text-xl font-bold text-white">{Number(result.aiScore ?? 0).toFixed(1)}%</div>
+                          </div>
+                          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                            <div className="text-xs text-gray-400 mb-1">Temps de traitement</div>
+                            <div className="text-xl font-bold text-white">1.2s</div>
+                            <div className="flex items-center gap-1 text-xs text-green-400 mt-1">
+                              <Zap size={10} /> Ultra rapide
+                            </div>
+                          </div>
+                        </div>
+
+                        {confidenceValue !== null && (
+                          <div className="mb-4">
+                            <div className="text-xs text-gray-400 mb-2">Confiance: {confidenceValue.toFixed(0)}%</div>
+                            <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden">
+                              <div className="bg-primary h-full rounded-full" style={{ width: `${confidenceValue}%` }} />
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="text-xs text-gray-400 space-y-1">
+                          <p><span className="text-gray-500">ID:</span> {result.id}</p>
+                          {providerLabel && <p><span className="text-gray-500">Fournisseur:</span> {providerLabel}</p>}
+                          {consensusLabel && <p><span className="text-gray-500">Consensus:</span> {consensusLabel}</p>}
+                          {framesAnalyzed !== null && <p><span className="text-gray-500">Frames analysées:</span> {Math.round(framesAnalyzed)}</p>}
+                        </div>
+
+                        {signals.length > 0 && (
+                          <div className="mt-3 text-xs">
+                            <div className="text-gray-500 mb-1">Signaux détectés:</div>
+                            <ul className="list-disc pl-4 space-y-1 text-gray-400">
+                              {signals.map((s, idx) => <li key={idx}>{s}</li>)}
+                            </ul>
+                          </div>
+                        )}
+                      </details>
+
+                      {/* Bouton certificat */}
+                      <div className="mt-6 text-center">
+                        <button 
+                          type="button" 
+                          className="btn-primary px-6 py-3 inline-flex items-center gap-2" 
+                          onClick={onDownloadCertificate} 
+                          disabled={downloadingCert}
+                        >
+                          {downloadingCert ? <Loader2 className="animate-spin" size={18} /> : <Download size={18} />}
+                          Télécharger le certificat
+                        </button>
+                        <p className="text-xs text-white/40 mt-2">Certificat PDF avec preuve d'analyse</p>
+                      </div>
                     </div>
-                  )}
-                </div>
+                  );
+                })()}
               </motion.div>
             )}
           </AnimatePresence>
