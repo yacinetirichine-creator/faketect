@@ -1,12 +1,15 @@
 class DetectionService {
-  async analyze(buffer, mimeType) {
-    const isVideo = mimeType.startsWith('video/');
+  async analyze(input, mimeType, filename = 'file') {
+    // Backward-compatible signature:
+    // - analyze(buffer, mimeType)
+    // - analyze(streamOrBuffer, mimeType, filename)
+    const isVideo = String(mimeType || '').startsWith('video/');
     
     // Pour les vidéos, utiliser uniquement Sightengine (support vidéo)
     if (isVideo) {
       if (process.env.SIGHTENGINE_USER && process.env.SIGHTENGINE_SECRET) {
         try {
-          return await this.analyzeVideoWithSightengine(buffer, mimeType);
+          return await this.analyzeVideoWithSightengine(input, mimeType, filename);
         } catch (e) {
           console.error('Sightengine video error:', e);
           return this.demoAnalysis('video');
@@ -16,27 +19,28 @@ class DetectionService {
     }
     
     // Pour les images : analyse combinée pour plus de précision
-    const results = [];
-    
-    // 1. Illuminarty
+    const jobs = [];
+
     if (process.env.ILLUMINARTY_USER && process.env.ILLUMINARTY_SECRET) {
-      try {
-        const illuminartyResult = await this.analyzeWithIlluminarty(buffer, mimeType);
-        results.push(illuminartyResult);
-      } catch (e) {
-        console.error('Illuminarty API error:', e);
-      }
+      jobs.push(
+        this.analyzeWithIlluminarty(input, mimeType, filename).catch((e) => {
+          console.error('Illuminarty API error:', e);
+          return null;
+        })
+      );
     }
-    
-    // 2. Sightengine
+
     if (process.env.SIGHTENGINE_USER && process.env.SIGHTENGINE_SECRET) {
-      try {
-        const sightengineResult = await this.analyzeWithSightengine(buffer, mimeType);
-        results.push(sightengineResult);
-      } catch (e) {
-        console.error('Sightengine API error:', e);
-      }
+      jobs.push(
+        this.analyzeWithSightengine(input, mimeType, filename).catch((e) => {
+          console.error('Sightengine API error:', e);
+          return null;
+        })
+      );
     }
+
+    const settled = await Promise.all(jobs);
+    const results = settled.filter(Boolean);
     
     // Si au moins une API a fonctionné, combiner les résultats
     if (results.length > 0) {
@@ -78,24 +82,24 @@ class DetectionService {
     };
   }
 
-  async analyzeWithIlluminarty(buffer, mimeType) {
+  async analyzeWithIlluminarty(input, mimeType, filename = 'image.jpg') {
     const FormData = require('form-data');
     const formData = new FormData();
     
-    formData.append('image', buffer, { 
-      filename: 'image.jpg', 
+    formData.append('image', input, { 
+      filename: filename || 'image.jpg', 
       contentType: mimeType 
     });
     formData.append('api_user', process.env.ILLUMINARTY_USER);
     formData.append('api_secret', process.env.ILLUMINARTY_SECRET);
 
-    const res = await fetch('https://api.illuminarty.ai/v1/analyze', {
+    const res = await this.fetchWithTimeout('https://api.illuminarty.ai/v1/analyze', {
       method: 'POST',
       headers: {
         'X-API-Key': process.env.ILLUMINARTY_API_KEY
       },
       body: formData
-    });
+    }, 15_000);
 
     if (!res.ok) {
       throw new Error(`Illuminarty API error: ${res.status}`);
@@ -116,19 +120,19 @@ class DetectionService {
     };
   }
 
-  async analyzeWithSightengine(buffer, mimeType) {
+  async analyzeWithSightengine(input, mimeType, filename = 'image.jpg') {
     const FormData = require('form-data');
     const formData = new FormData();
     
-    formData.append('media', buffer, { filename: 'image.jpg', contentType: mimeType });
+    formData.append('media', input, { filename: filename || 'image.jpg', contentType: mimeType });
     formData.append('models', 'genai');
     formData.append('api_user', process.env.SIGHTENGINE_USER);
     formData.append('api_secret', process.env.SIGHTENGINE_SECRET);
 
-    const res = await fetch('https://api.sightengine.com/1.0/check.json', { 
+    const res = await this.fetchWithTimeout('https://api.sightengine.com/1.0/check.json', { 
       method: 'POST', 
       body: formData 
-    });
+    }, 15_000);
     
     const data = await res.json();
     
@@ -147,28 +151,29 @@ class DetectionService {
     throw new Error('Sightengine API returned error');
   }
 
-  async analyzeVideoWithSightengine(buffer, mimeType) {
+  async analyzeVideoWithSightengine(input, mimeType, filename = 'video.mp4') {
     const FormData = require('form-data');
     const formData = new FormData();
     
-    formData.append('media', buffer, { 
-      filename: 'video.mp4', 
+    formData.append('media', input, { 
+      filename: filename || 'video.mp4', 
       contentType: mimeType 
     });
     formData.append('models', 'genai');
     formData.append('api_user', process.env.SIGHTENGINE_USER);
     formData.append('api_secret', process.env.SIGHTENGINE_SECRET);
 
-    const res = await fetch('https://api.sightengine.com/1.0/video/check.json', { 
+    const res = await this.fetchWithTimeout('https://api.sightengine.com/1.0/video/check.json', { 
       method: 'POST', 
       body: formData 
-    });
+    }, 45_000);
     
     const data = await res.json();
     
     if (data.status === 'success') {
       // Pour les vidéos, Sightengine analyse plusieurs frames
       const frames = data.data?.frames || [];
+      if (!frames.length) throw new Error('Sightengine video: no frames returned');
       const avgScore = frames.reduce((sum, f) => sum + (f.genai?.prob || 0), 0) / frames.length * 100;
       
       return { 
@@ -203,6 +208,16 @@ class DetectionService {
     if (score >= 50) return { key: 'possibly_ai', color: 'yellow' };
     if (score >= 30) return { key: 'possibly_real', color: 'lime' };
     return { key: 'likely_real', color: 'green' };
+  }
+
+  async fetchWithTimeout(url, options, timeoutMs) {
+    const controller = new AbortController();
+    const t = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      return await fetch(url, { ...options, signal: controller.signal });
+    } finally {
+      clearTimeout(t);
+    }
   }
 }
 

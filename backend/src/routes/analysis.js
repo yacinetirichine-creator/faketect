@@ -45,8 +45,32 @@ router.post('/file', auth, checkLimit, upload.single('file'), async (req, res) =
       data: { id: uuid(), userId: req.user.id, type, fileName: req.file.originalname, fileUrl: `/uploads/${req.file.filename}` }
     });
     
-    const buffer = fs.readFileSync(req.file.path);
-    const result = await detection.analyze(buffer, req.file.mimetype);
+    const fileStream = fs.createReadStream(req.file.path);
+    const result = await detection.analyze(fileStream, req.file.mimetype, req.file.originalname);
+
+    const safeDetailsString = (() => {
+      try {
+        const s = JSON.stringify(result);
+        // Prevent huge DB rows (video responses can be very large)
+        const max = 200_000;
+        if (s.length <= max) return s;
+
+        const summary = {
+          aiScore: result.aiScore,
+          isAi: result.isAi,
+          confidence: result.confidence,
+          verdict: result.verdict,
+          provider: result.provider,
+          sources: result.sources,
+          consensus: result.consensus,
+          framesAnalyzed: result.framesAnalyzed,
+          truncated: true
+        };
+        return JSON.stringify(summary);
+      } catch {
+        return null;
+      }
+    })();
     
     const updated = await prisma.analysis.update({
       where: { id: analysis.id },
@@ -54,7 +78,7 @@ router.post('/file', auth, checkLimit, upload.single('file'), async (req, res) =
         aiScore: result.aiScore, 
         isAi: result.isAi, 
         confidence: result.confidence, 
-        details: JSON.stringify(result)
+        details: safeDetailsString
       }
     });
     
