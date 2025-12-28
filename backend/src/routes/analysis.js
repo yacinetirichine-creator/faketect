@@ -8,6 +8,7 @@ const prisma = require('../config/db');
 const { auth, checkLimit } = require('../middleware/auth');
 const { validateVideoDuration } = require('../middleware/videoValidation');
 const detection = require('../services/detection');
+const { sendQuotaWarningEmail } = require('../services/emailAutomation');
 const cache = require('../services/cache');
 const { sendLimitReachedEmail } = require('../services/email');
 
@@ -138,7 +139,22 @@ router.post('/file', auth, checkLimit, upload.single('file'), validateVideoDurat
       }
     } else {
       // Plans payants : incrémenter usedToday et usedMonth comme avant
-      await prisma.user.update({ where: { id: req.user.id }, data: { usedToday: { increment: 1 }, usedMonth: { increment: 1 } } });
+      const updatedUser = await prisma.user.update({ 
+        where: { id: req.user.id }, 
+        data: { usedToday: { increment: 1 }, usedMonth: { increment: 1 } },
+        select: { usedMonth: true, plan: true, email: true, name: true, language: true, id: true }
+      });
+      
+      // Vérifier si l'utilisateur atteint 75% du quota et envoyer email d'alerte
+      const planLimits = { FREE: 10, PRO: 100, BUSINESS: 500 };
+      const limit = planLimits[updatedUser.plan] || 10;
+      const percentUsed = (updatedUser.usedMonth / limit) * 100;
+      
+      if (percentUsed >= 75 && percentUsed < 85) { // Envoyer seulement entre 75-85% pour éviter spam
+        sendQuotaWarningEmail(updatedUser).catch(err => {
+          console.error('Failed to send quota warning email:', err.message);
+        });
+      }
     }
     
     res.json({ 

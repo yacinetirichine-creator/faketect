@@ -104,6 +104,7 @@ const PORT = process.env.PORT || 3001;
 const { initializeStripeProducts } = require('./config/stripe-products');
 const { initCleanupJobs } = require('./services/cleanup');
 const { initRedis, disconnect: disconnectRedis } = require('./services/cache');
+const { startEmailAutomationCron } = require('./services/emailCron');
 const { initEmail } = require('./services/email');
 const prisma = require('./config/db');
 
@@ -135,6 +136,13 @@ app.listen(PORT, async () => {
     initEmail();
   } catch (error) {
     console.error('⚠️ Email initialization failed:', error.message);
+  }
+  
+  // Démarrer CRON email automation (non-bloquant)
+  try {
+    startEmailAutomationCron();
+  } catch (error) {
+    console.error('⚠️ Email automation cron failed:', error.message);
   }
   
   // Initialiser Stripe si la clé est présente
