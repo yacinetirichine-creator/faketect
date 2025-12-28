@@ -5,6 +5,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://api.faketect.app/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
   "headers": [
