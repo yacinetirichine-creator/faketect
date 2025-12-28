@@ -1,5 +1,9 @@
 require('dotenv').config();
 
+// Initialiser Sentry en premier (monitoring optionnel)
+const { initSentry } = require('./config/sentry');
+initSentry();
+
 // Valider les variables d'environnement au démarrage
 const { validateEnv } = require('./config/validateEnv');
 validateEnv();

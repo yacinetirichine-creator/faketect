@@ -6,6 +6,10 @@ import App from './App';
 import './styles/index.css';
 import './i18n';
 
+// Initialiser Sentry en premier (monitoring optionnel)
+import { initSentry } from './config/sentry';
+initSentry();
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
