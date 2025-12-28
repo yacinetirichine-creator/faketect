@@ -13,6 +13,11 @@ const useAuthStore = create(persist((set, get) => ({
     try {
       const { data } = await api.post('/auth/login', { email, password });
       set({ user: data.user, token: data.token, isAuthenticated: true, isLoading: false });
+      // Synchroniser la langue avec i18n
+      if (data.user.language) {
+        const i18n = await import('../i18n');
+        i18n.default.changeLanguage(data.user.language);
+      }
       return { success: true };
     } catch (e) {
       set({ isLoading: false });
@@ -40,6 +45,11 @@ const useAuthStore = create(persist((set, get) => ({
     try {
       const { data } = await api.get('/auth/me');
       set({ user: data.user, isAuthenticated: true });
+      // Synchroniser la langue
+      if (data.user.language) {
+        const i18n = await import('../i18n');
+        i18n.default.changeLanguage(data.user.language);
+      }
     } catch { get().logout(); }
   }
 }), { name: 'faketect-auth', partialize: (s) => ({ token: s.token, user: s.user, isAuthenticated: s.isAuthenticated }) }));

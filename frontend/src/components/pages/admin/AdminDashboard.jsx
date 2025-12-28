@@ -8,10 +8,24 @@ export default function AdminDashboard() {
   const { t } = useTranslation();
   const [metrics, setMetrics] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  useEffect(() => { adminApi.getMetrics().then(({ data }) => { setMetrics(data); setLoading(false); }); }, []);
+  useEffect(() => { 
+    adminApi.getMetrics()
+      .then(({ data }) => { 
+        setMetrics(data); 
+        setLoading(false); 
+      })
+      .catch((err) => {
+        console.error('Admin metrics error:', err);
+        setError(err.response?.data?.error || 'Erreur de chargement');
+        setLoading(false);
+      });
+  }, []);
 
   if (loading) return <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-primary-500" size={32} /></div>;
+  
+  if (error) return <div className="card bg-red-50 border-red-200 text-red-600"><p>Erreur: {error}</p></div>;
 
   const stats = [
     { icon: Users, label: t('admin.totalUsers'), value: metrics?.users?.total || 0, color: 'text-primary-600 bg-primary-100' },

@@ -26,7 +26,12 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
     pt: { translation: pt },
     it: { translation: it }
   },
-  fallbackLng: 'en',
+  lng: 'fr',
+  fallbackLng: 'fr',
+  detection: {
+    order: ['localStorage', 'navigator'],
+    caches: ['localStorage']
+  },
   interpolation: { escapeValue: false }
 });
 
