@@ -129,24 +129,35 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
 
   let y = margin;
 
-  // === LOGO FAKETECT ===
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(28);
-  doc.setTextColor(99, 102, 241); // Indigo-500
-  doc.text('FakeTect', margin, y);
+  // === EN-TÊTE MODERNE AVEC DÉGRADÉ ===
+  // Background header bleu
+  doc.setFillColor(99, 102, 241); // Indigo-500
+  doc.rect(0, 0, pageWidth, 140, 'F');
   
-  y += 10;
-  doc.setDrawColor(99, 102, 241);
-  doc.setLineWidth(2);
-  doc.line(margin, y, margin + 100, y);
-
-  y += 30;
-
-  // === TITRE ===
+  // Logo FakeTect (grand et centré)
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(20);
-  doc.setTextColor(30);
-  doc.text(t('certificate.title'), margin, y);
+  doc.setFontSize(42);
+  doc.setTextColor(255, 255, 255);
+  const logoText = 'FakeTect';
+  const logoWidth = doc.getTextWidth(logoText);
+  doc.text(logoText, (pageWidth - logoWidth) / 2, 60);
+  
+  // Sous-titre
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(14);
+  doc.setTextColor(220, 220, 255);
+  const subText = t('certificate.subtitle', 'Certificat d\'Authenticité');
+  const subWidth = doc.getTextWidth(subText);
+  doc.text(subText, (pageWidth - subWidth) / 2, 85);
+  
+  // Date de génération
+  doc.setFontSize(10);
+  doc.setTextColor(200, 200, 255);
+  const dateText = `Généré le ${formatDateTimeUtc(now)}`;
+  const dateWidth = doc.getTextWidth(dateText);
+  doc.text(dateText, (pageWidth - dateWidth) / 2, 105);
+
+  y = 160;
 
   y += 22;
   doc.setFont('helvetica', 'normal');
@@ -160,11 +171,11 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
 
   y += 30;
 
-  // === RÉSULTAT VISUEL LUDIQUE ===
-  const boxHeight = 140;
+  // === RÉSULTAT VISUEL PROFESSIONNEL ===
+  const boxHeight = 150;
   const boxY = y;
 
-  // Fond coloré selon le résultat
+  // Fond coloré selon le résultat avec gradient visuel
   const bgColors = {
     real: [220, 252, 231],    // green-100
     uncertain: [254, 243, 199], // amber-100
@@ -176,9 +187,15 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
     fake: [239, 68, 68]        // red-500
   };
 
+  // Ombre légère pour effet de profondeur
+  doc.setFillColor(200, 200, 200);
+  doc.setDrawColor(200, 200, 200);
+  doc.roundedRect(margin + 2, boxY + 2, contentWidth, boxHeight, 8, 8, 'F');
+
+  // Carte principale
   doc.setFillColor(...bgColors[result.level]);
   doc.setDrawColor(...borderColors[result.level]);
-  doc.setLineWidth(3);
+  doc.setLineWidth(2);
   doc.roundedRect(margin, boxY, contentWidth, boxHeight, 8, 8, 'FD');
 
   // Emoji et titre
@@ -241,18 +258,27 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
   y = boxY + boxHeight + 30;
 
   // === SECTION TECHNIQUE PROFESSIONNELLE ===
-  doc.setFillColor(249, 250, 251); // gray-50
-  doc.setDrawColor(229, 231, 235); // gray-200
-  doc.setLineWidth(1);
-  
+  // Ombre pour effet de profondeur
+  doc.setFillColor(220, 220, 220);
+  doc.setDrawColor(220, 220, 220);
   const techBoxY = y;
   const techBoxHeight = 200;
+  doc.roundedRect(margin + 2, techBoxY + 2, contentWidth, techBoxHeight, 8, 8, 'F');
+  
+  // Carte principale avec bordure indigo
+  doc.setFillColor(249, 250, 251); // gray-50
+  doc.setDrawColor(99, 102, 241); // indigo-500
+  doc.setLineWidth(1.5);
   doc.roundedRect(margin, techBoxY, contentWidth, techBoxHeight, 8, 8, 'FD');
+
+  // Bande de titre avec fond indigo léger
+  doc.setFillColor(238, 242, 255); // indigo-50
+  doc.roundedRect(margin, techBoxY, contentWidth, 35, 8, 8, 'F');
 
   y += 25;
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(30);
+  doc.setTextColor(67, 56, 202); // indigo-700
   const techTitle = currentLanguage === 'fr' ? '📊 Analyse Technique Détaillée' : '📊 Detailed Technical Analysis';
   doc.text(techTitle, margin + 20, y);
 
@@ -313,33 +339,52 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
   y = techBoxY + techBoxHeight + 30;
 
   // === INFORMATIONS DE VÉRIFICATION ===
-  doc.setFontSize(11);
+  // Encadré sécurité avec bordure verte
+  const verifyBoxY = y - 10;
+  const verifyBoxHeight = 110;
+  
+  // Ombre
+  doc.setFillColor(220, 220, 220);
+  doc.roundedRect(margin + 2, verifyBoxY + 2, contentWidth, verifyBoxHeight, 8, 8, 'F');
+  
+  // Fond avec bordure verte pour authenticité
+  doc.setFillColor(240, 253, 244); // green-50
+  doc.setDrawColor(34, 197, 94); // green-500
+  doc.setLineWidth(1.5);
+  doc.roundedRect(margin, verifyBoxY, contentWidth, verifyBoxHeight, 8, 8, 'FD');
+  
+  y += 5;
+  doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(30);
-  const verifyTitle = currentLanguage === 'fr' ? '🔐 Informations de Vérification' : '🔐 Verification Information';
-  doc.text(verifyTitle, margin, y);
+  doc.setTextColor(22, 101, 52); // green-800
+  const verifyTitle = currentLanguage === 'fr' ? '🔐 Certificat Authentique & Vérifiable' : '🔐 Authentic & Verifiable Certificate';
+  doc.text(verifyTitle, margin + 20, y);
 
   y += 20;
-  doc.setFontSize(10);
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
+  doc.setTextColor(60);
 
   const verifyRows = [
     [t('certificate.fields.user'), userName],
     [t('certificate.fields.date'), formatDateTimeUtc(now)],
     [t('certificate.fields.file'), fileName],
-    [t('certificate.fields.fileHash'), fileHash || '—'],
     [t('certificate.fields.fingerprint'), fingerprint]
   ];
 
+  const shortLabelWidth = 90;
+
   for (const [label, value] of verifyRows) {
     doc.setFont('helvetica', 'bold');
-    doc.text(label, margin, y);
+    doc.setTextColor(22, 101, 52); // green-800
+    doc.text(label, margin + 20, y);
 
     doc.setFont('helvetica', 'normal');
-    const valueX = margin + labelWidth;
+    doc.setTextColor(60);
+    const valueX = margin + 20 + shortLabelWidth;
     const valueText = safeText(value) || '—';
 
-    const split = doc.splitTextToSize(valueText, contentWidth - labelWidth);
+    const split = doc.splitTextToSize(valueText, contentWidth - shortLabelWidth - 40);
     doc.text(split, valueX, y);
 
     y += Math.max(lineHeight, split.length * lineHeight);
@@ -360,13 +405,37 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
     doc.text(confLines, margin, y);
   }
 
-  // === FOOTER ===
-  const footer = `${t('certificate.generatedAt', { date: formatDateTimeUtc(now) })} • ${t('certificate.verificationHint')}`;
-  doc.setFontSize(9);
+  // === FOOTER PROFESSIONNEL ===
+  const footerY = doc.internal.pageSize.getHeight() - 40;
+  
+  // Bande de footer avec fond indigo
+  doc.setFillColor(99, 102, 241); // indigo-500
+  doc.rect(0, footerY, pageWidth, 40, 'F');
+  
+  // Logo FakeTect en blanc
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  doc.setTextColor(255, 255, 255);
+  const footerLogo = 'FakeTect';
+  const footerLogoWidth = doc.getTextWidth(footerLogo);
+  doc.text(footerLogo, (pageWidth - footerLogoWidth) / 2, footerY + 15);
+  
+  // Slogan
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(120);
-  const footerLines = doc.splitTextToSize(footer, contentWidth);
-  doc.text(footerLines, margin, doc.internal.pageSize.getHeight() - margin / 2);
+  doc.setFontSize(8);
+  doc.setTextColor(200, 200, 255);
+  const slogan = currentLanguage === 'fr' 
+    ? 'Détection IA & Deepfakes en temps réel • www.faketect.com'
+    : 'Real-time AI & Deepfake Detection • www.faketect.com';
+  const sloganWidth = doc.getTextWidth(slogan);
+  doc.text(slogan, (pageWidth - sloganWidth) / 2, footerY + 25);
+  
+  // Note de validation
+  doc.setFontSize(7);
+  doc.setTextColor(180, 180, 255);
+  const validation = t('certificate.verificationHint');
+  const validationWidth = doc.getTextWidth(validation);
+  doc.text(validation, (pageWidth - validationWidth) / 2, footerY + 33);
 
   const filename = analysisId ? `faketect-certificate-${analysisId}.pdf` : 'faketect-certificate.pdf';
   doc.save(filename);
