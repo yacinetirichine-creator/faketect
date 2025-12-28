@@ -6,10 +6,9 @@ import useAuthStore from '../../stores/authStore';
 import { languages } from '../../i18n';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../services/api';
-import i18n from '../../i18n';
 
 export default function MainLayout() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { isAuthenticated, user, logout, updateUser } = useAuthStore();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
