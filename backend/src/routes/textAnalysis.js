@@ -55,14 +55,23 @@ router.post('/analyze', auth, checkLimit, async (req, res) => {
       }
     });
 
-    // Incrémenter les compteurs
-    await prisma.user.update({
-      where: { id: req.user.id },
-      data: {
-        usedToday: { increment: 1 },
-        usedMonth: { increment: 1 }
-      }
-    });
+    // Incrémenter les compteurs selon le plan
+    if (req.user.plan === 'FREE') {
+      // Plan FREE : incrémenter uniquement usedTotal
+      await prisma.user.update({
+        where: { id: req.user.id },
+        data: { usedTotal: { increment: 1 } }
+      });
+    } else {
+      // Plans payants : incrémenter usedToday et usedMonth comme avant
+      await prisma.user.update({
+        where: { id: req.user.id },
+        data: {
+          usedToday: { increment: 1 },
+          usedMonth: { increment: 1 }
+        }
+      });
+    }
 
     // Générer un verdict
     const verdict = getVerdict(result.aiScore);

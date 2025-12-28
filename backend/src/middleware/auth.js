@@ -30,23 +30,33 @@ const checkLimit = async (req, res, next) => {
     const isNewDay = now.toDateString() !== lastReset.toDateString();
     const isNewMonth = now.getMonth() !== lastReset.getMonth() || now.getFullYear() !== lastReset.getFullYear();
     
-    if (isNewDay || isNewMonth) {
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { usedToday: 0, ...(isNewMonth && { usedMonth: 0 }), lastReset: now }
-      });
-      user.usedToday = 0;
-      if (isNewMonth) user.usedMonth = 0;
+    // Plan FREE : limite totale de 10 tests (pas de reset)
+    if (user.plan === 'FREE') {
+      if (user.usedTotal >= 10) {
+        return res.status(429).json({ error: 'Limite de 10 tests gratuits atteinte. Passez à un plan payant pour continuer.' });
+      }
+      // Pas de reset pour FREE, on continue
+    } else {
+      // Plans payants : reset quotidien/mensuel comme avant
+      if (isNewDay || isNewMonth) {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { usedToday: 0, ...(isNewMonth && { usedMonth: 0 }), lastReset: now }
+        });
+        user.usedToday = 0;
+        if (isNewMonth) user.usedMonth = 0;
+      }
+      
+      // Vérifier limite quotidienne pour tous les plans (sauf Enterprise illimité)
+      if (plan.perDay && user.usedToday >= plan.perDay) {
+        return res.status(429).json({ error: 'Limite quotidienne atteinte' });
+      }
+      // Vérifier limite mensuelle
+      if (plan.perMonth > 0 && user.usedMonth >= plan.perMonth) {
+        return res.status(429).json({ error: 'Limite mensuelle atteinte' });
+      }
     }
     
-    // Vérifier limite quotidienne pour tous les plans (sauf Enterprise illimité)
-    if (plan.perDay && user.usedToday >= plan.perDay) {
-      return res.status(429).json({ error: 'Limite quotidienne atteinte' });
-    }
-    // Vérifier limite mensuelle
-    if (plan.perMonth > 0 && user.usedMonth >= plan.perMonth) {
-      return res.status(429).json({ error: 'Limite mensuelle atteinte' });
-    }
     next();
   } catch (e) { next(e); }
 };

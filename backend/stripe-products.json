@@ -1,0 +1,22 @@
+{
+  "STANDARD": {
+    "productId": "prod_TgmlZOc4tkmaxO",
+    "monthlyPriceId": "price_1SjPByIaJ0g5yYYSfEI3f8Zg",
+    "yearlyPriceId": "price_1SjPBzIaJ0g5yYYSw9EGBGlX"
+  },
+  "PROFESSIONAL": {
+    "productId": "prod_TgmlEBV8wcSr7r",
+    "monthlyPriceId": "price_1SjPBzIaJ0g5yYYSG8ytllBA",
+    "yearlyPriceId": "price_1SjPC0IaJ0g5yYYSJ2JqVKdZ"
+  },
+  "BUSINESS": {
+    "productId": "prod_TgmlfUCCENF3eB",
+    "monthlyPriceId": "price_1SjPC0IaJ0g5yYYSGE4avDSE",
+    "yearlyPriceId": "price_1SjPC1IaJ0g5yYYSFfaTjsnA"
+  },
+  "ENTERPRISE": {
+    "productId": "prod_TgmlGZMYs37ASz",
+    "monthlyPriceId": "price_1SjPC2IaJ0g5yYYSMUaPOuiT",
+    "yearlyPriceId": "price_1SjPC2IaJ0g5yYYS73sqbk2I"
+  }
+}

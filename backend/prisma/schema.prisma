@@ -21,6 +21,7 @@ model User {
   stripeSubscriptionId  String?
   usedToday             Int        @default(0)
   usedMonth             Int        @default(0)
+  usedTotal             Int        @default(0)
   lastReset             DateTime   @default(now())
   createdAt             DateTime   @default(now())
   updatedAt             DateTime   @updatedAt

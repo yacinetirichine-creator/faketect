@@ -82,7 +82,14 @@ router.post('/file', auth, checkLimit, upload.single('file'), async (req, res) =
       }
     });
     
-    await prisma.user.update({ where: { id: req.user.id }, data: { usedToday: { increment: 1 }, usedMonth: { increment: 1 } } });
+    // Incrémenter les compteurs selon le plan
+    if (req.user.plan === 'FREE') {
+      // Plan FREE : incrémenter uniquement usedTotal
+      await prisma.user.update({ where: { id: req.user.id }, data: { usedTotal: { increment: 1 } } });
+    } else {
+      // Plans payants : incrémenter usedToday et usedMonth comme avant
+      await prisma.user.update({ where: { id: req.user.id }, data: { usedToday: { increment: 1 }, usedMonth: { increment: 1 } } });
+    }
     
     res.json({ 
       success: true, 

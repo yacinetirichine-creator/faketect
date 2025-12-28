@@ -4,6 +4,54 @@ const path = require('path');
 const cron = require('node-cron');
 
 /**
+ * Supprime les comptes FREE inactifs de plus de 30 jours
+ */
+async function cleanupInactiveFreeAccounts() {
+  try {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    console.log(`🧹 Nettoyage des comptes FREE inactifs créés avant le ${thirtyDaysAgo.toISOString()}`);
+
+    // Récupérer les comptes FREE de plus de 30 jours
+    const inactiveFreeUsers = await prisma.user.findMany({
+      where: {
+        plan: 'FREE',
+        createdAt: {
+          lt: thirtyDaysAgo
+        },
+        role: 'USER' // Ne pas supprimer les admins
+      }
+    });
+
+    console.log(`👥 ${inactiveFreeUsers.length} comptes FREE inactifs à supprimer`);
+
+    let deletedUsers = 0;
+
+    // Supprimer chaque utilisateur (cascade sur analyses)
+    for (const user of inactiveFreeUsers) {
+      try {
+        // Les analyses seront supprimées automatiquement grâce au onDelete: Cascade
+        await prisma.user.delete({
+          where: { id: user.id }
+        });
+        deletedUsers++;
+        console.log(`✅ Compte FREE supprimé : ${user.email} (créé le ${user.createdAt.toISOString()})`);
+      } catch (error) {
+        console.error(`❌ Erreur suppression utilisateur ${user.email}:`, error.message);
+      }
+    }
+
+    console.log(`✅ Nettoyage comptes FREE terminé : ${deletedUsers} comptes supprimés`);
+
+    return { usersDeleted: deletedUsers };
+  } catch (error) {
+    console.error('❌ Erreur lors du nettoyage des comptes FREE:', error);
+    throw error;
+  }
+}
+
+/**
  * Supprime les analyses et fichiers de plus de 90 jours (conformément aux CGV)
  */
 async function cleanupOldAnalyses() {
@@ -127,6 +175,7 @@ function initCleanupJobs() {
     try {
       await cleanupOldAnalyses();
       await cleanupOrphanFiles();
+      await cleanupInactiveFreeAccounts(); // Suppression des comptes FREE > 30 jours
     } catch (error) {
       console.error('❌ Erreur dans le cron de nettoyage:', error);
     }
@@ -138,5 +187,6 @@ function initCleanupJobs() {
 module.exports = {
   cleanupOldAnalyses,
   cleanupOrphanFiles,
+  cleanupInactiveFreeAccounts,
   initCleanupJobs
 };
