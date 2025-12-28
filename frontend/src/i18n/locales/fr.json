@@ -47,6 +47,23 @@
       "api": { "title": "API développeurs", "desc": "Intégration fluide avec votre stack" },
       "metadata": { "title": "Analyse des métadonnées", "desc": "Inspection approfondie des EXIF et métadonnées" },
       "security": { "title": "Sécurité entreprise", "desc": "Chiffrement et confidentialité de niveau bancaire" }
+    },
+    "footer": {
+      "description": "Détection IA avancée pour protéger l'authenticité de vos contenus.",
+      "product": "Produit",
+      "pricing": "Tarifs",
+      "features": "Fonctionnalités",
+      "getStarted": "Commencer",
+      "support": "Support",
+      "security": "Sécurité",
+      "legal": "Mentions légales",
+      "legalNotice": "Mentions légales",
+      "privacy": "Confidentialité",
+      "cookies": "Cookies",
+      "manageCookies": "Gérer les cookies",
+      "rights": "Tous droits réservés",
+      "gdpr": "Conforme RGPD",
+      "stripe": "Paiements sécurisés Stripe"
     }
   }
 }

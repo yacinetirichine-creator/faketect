@@ -47,6 +47,23 @@
       "api": { "title": "Developer API", "desc": "Seamless integration with your stack" },
       "metadata": { "title": "Metadata forensics", "desc": "Deep EXIF and metadata inspection" },
       "security": { "title": "Enterprise security", "desc": "Bank-grade encryption and privacy" }
+    },
+    "footer": {
+      "description": "Advanced AI detection to protect the authenticity of your content.",
+      "product": "Product",
+      "pricing": "Pricing",
+      "features": "Features",
+      "getStarted": "Get Started",
+      "support": "Support",
+      "security": "Security",
+      "legal": "Legal",
+      "legalNotice": "Legal Notice",
+      "privacy": "Privacy",
+      "cookies": "Cookies",
+      "manageCookies": "Manage cookies",
+      "rights": "All rights reserved",
+      "gdpr": "GDPR compliant",
+      "stripe": "Stripe secure payments"
     }
   }
 }

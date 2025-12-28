@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Shield, FileSearch, Video, Layers, Code, Database, CheckCircle2, ArrowRight, Lock, Zap, Activity } from 'lucide-react';
+import { Shield, FileSearch, Video, Layers, Code, Database, CheckCircle2, ArrowRight, Lock, Zap, Activity, FileText, Cookie } from 'lucide-react';
+import CookieConsent from '../CookieConsent';
 
 const container = {
   hidden: { opacity: 0 },
@@ -244,6 +245,109 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="relative border-t border-white/5 bg-surface/50 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 py-16">
+          <div className="grid md:grid-cols-4 gap-12 mb-12">
+            {/* Company Info */}
+            <div className="md:col-span-1">
+              <div className="flex items-center gap-2 mb-4">
+                <Shield className="text-primary" size={28} />
+                <span className="text-2xl font-bold text-gradient">Faketect</span>
+              </div>
+              <p className="text-gray-400 text-sm mb-4 leading-relaxed">
+                {t('landing.footer.description')}
+              </p>
+              <div className="text-xs text-gray-500 space-y-1">
+                <p className="font-semibold text-gray-400">JARVIS</p>
+                <p>SAS au capital de 100 EUR</p>
+                <p>SIREN: 928 499 166</p>
+                <p>RCS Paris</p>
+                <p>128 Rue la Boétie</p>
+                <p>75008 PARIS, France</p>
+              </div>
+            </div>
+
+            {/* Product */}
+            <div>
+              <h3 className="font-semibold mb-4 text-white">{t('landing.footer.product')}</h3>
+              <ul className="space-y-3 text-sm">
+                <li><Link to="/pricing" className="text-gray-400 hover:text-primary transition-colors">{t('landing.footer.pricing')}</Link></li>
+                <li><Link to="/dashboard" className="text-gray-400 hover:text-primary transition-colors">{t('landing.footer.features')}</Link></li>
+                <li><Link to="/register" className="text-gray-400 hover:text-primary transition-colors">{t('landing.footer.getStarted')}</Link></li>
+              </ul>
+            </div>
+
+            {/* Support */}
+            <div>
+              <h3 className="font-semibold mb-4 text-white">{t('landing.footer.support')}</h3>
+              <ul className="space-y-3 text-sm">
+                <li><a href="mailto:contact@faketect.com" className="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                <li><a href="mailto:dpo@faketect.com" className="text-gray-400 hover:text-primary transition-colors">DPO</a></li>
+                <li><a href="mailto:security@faketect.com" className="text-gray-400 hover:text-primary transition-colors">{t('landing.footer.security')}</a></li>
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <h3 className="font-semibold mb-4 text-white">{t('landing.footer.legal')}</h3>
+              <ul className="space-y-3 text-sm">
+                <li><Link to="/legal/mentions" className="text-gray-400 hover:text-primary transition-colors flex items-center gap-2">
+                  <FileText size={14} /> {t('landing.footer.legalNotice')}
+                </Link></li>
+                <li><Link to="/legal/privacy" className="text-gray-400 hover:text-primary transition-colors flex items-center gap-2">
+                  <Shield size={14} /> {t('landing.footer.privacy')}
+                </Link></li>
+                <li><Link to="/legal/cookies" className="text-gray-400 hover:text-primary transition-colors flex items-center gap-2">
+                  <Cookie size={14} /> {t('landing.footer.cookies')}
+                </Link></li>
+                <li><Link to="/legal/terms" className="text-gray-400 hover:text-primary transition-colors">CGU</Link></li>
+                <li><Link to="/legal/sales" className="text-gray-400 hover:text-primary transition-colors">CGV</Link></li>
+                <li>
+                  <button 
+                    onClick={() => {
+                      localStorage.removeItem('cookieConsent');
+                      window.location.reload();
+                    }}
+                    className="text-gray-400 hover:text-primary transition-colors text-left flex items-center gap-2"
+                  >
+                    <Cookie size={14} /> {t('landing.footer.manageCookies')}
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="pt-8 border-t border-white/5">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-sm text-gray-500">
+                © 2024 JARVIS - {t('landing.footer.rights')}
+              </p>
+              <div className="flex items-center gap-6 text-xs text-gray-500">
+                <span className="flex items-center gap-2">
+                  <span className="text-green-400">🇫🇷</span> {t('landing.footer.gdpr')}
+                </span>
+                <span className="flex items-center gap-2">
+                  <Lock size={12} /> {t('landing.footer.stripe')}
+                </span>
+                <a 
+                  href="https://www.cnil.fr" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors"
+                >
+                  CNIL
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      {/* Cookie Consent Banner */}
+      <CookieConsent />
     </div>
   );
 }
