@@ -159,29 +159,60 @@ export default function MainLayout() {
                 </div>
                 <span className="font-display font-bold text-xl">FakeTect</span>
               </div>
-              <p className="text-gray-400 max-w-sm">
-                {t('footer.description')}
+              <p className="text-gray-400 max-w-sm mb-4">
+                {t('footer.description', 'Détection de deepfakes par intelligence artificielle.')}
+              </p>
+              <p className="text-xs text-gray-500">
+                JARVIS - SAS au capital de 100 EUR<br />
+                SIREN : 928 499 166 - RCS Paris<br />
+                128 Rue la Boétie, 75008 PARIS
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-4 text-white">{t('footer.product')}</h3>
+              <h3 className="font-semibold mb-4 text-white">{t('footer.product', 'Produit')}</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><Link to="/pricing" className="hover:text-primary transition-colors">{t('footer.links.pricing')}</Link></li>
-                <li><Link to="/features" className="hover:text-primary transition-colors">{t('footer.links.features')}</Link></li>
-                <li><Link to="/api" className="hover:text-primary transition-colors">{t('footer.links.api')}</Link></li>
+                <li><Link to="/pricing" className="hover:text-primary transition-colors">{t('footer.links.pricing', 'Tarifs')}</Link></li>
+                <li><Link to="/dashboard" className="hover:text-primary transition-colors">{t('footer.links.features', 'Fonctionnalités')}</Link></li>
+                <li><a href="mailto:contact@faketect.com" className="hover:text-primary transition-colors">{t('footer.links.contact', 'Contact')}</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4 text-white">{t('footer.company')}</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><Link to="/about" className="hover:text-primary transition-colors">{t('footer.links.about')}</Link></li>
-                <li><Link to="/blog" className="hover:text-primary transition-colors">{t('footer.links.blog')}</Link></li>
-                <li><Link to="/contact" className="hover:text-primary transition-colors">{t('footer.links.contact')}</Link></li>
+              <h3 className="font-semibold mb-4 text-white">{t('footer.legal', 'Mentions légales')}</h3>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li><Link to="/legal/mentions" className="hover:text-primary transition-colors">Mentions légales</Link></li>
+                <li><Link to="/legal/privacy" className="hover:text-primary transition-colors">Politique de confidentialité</Link></li>
+                <li><Link to="/legal/cookies" className="hover:text-primary transition-colors">Politique de cookies</Link></li>
+                <li><Link to="/legal/terms" className="hover:text-primary transition-colors">CGU</Link></li>
+                <li><Link to="/legal/sales" className="hover:text-primary transition-colors">CGV</Link></li>
+                <li>
+                  <button 
+                    onClick={() => {
+                      localStorage.removeItem('cookie_consent');
+                      window.location.reload();
+                    }}
+                    className="hover:text-primary transition-colors"
+                  >
+                    Gérer les cookies
+                  </button>
+                </li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-white/10 mt-12 pt-8 text-center text-gray-500 text-sm">
-            {t('footer.rights')}
+          <div className="border-t border-white/10 mt-12 pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+              <p className="text-gray-500 text-sm">
+                © {new Date().getFullYear()} JARVIS - Tous droits réservés
+              </p>
+              <div className="flex items-center gap-4 text-xs text-gray-500">
+                <span>🇫🇷 Conforme RGPD</span>
+                <span>•</span>
+                <span>🔒 Paiements sécurisés Stripe</span>
+                <span>•</span>
+                <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                  CNIL
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </footer>

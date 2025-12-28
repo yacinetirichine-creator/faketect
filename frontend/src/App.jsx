@@ -13,6 +13,10 @@ import History from './components/pages/History';
 import Settings from './components/pages/Settings';
 import AdminDashboard from './components/pages/admin/AdminDashboard';
 import AdminUsers from './components/pages/admin/AdminUsers';
+import PrivacyPolicy from './components/pages/PrivacyPolicy';
+import LegalPage from './components/pages/LegalPage';
+import CookiesPage from './components/pages/CookiesPage';
+import CookieConsent from './components/CookieConsent';
 import { Loader2 } from 'lucide-react';
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -44,12 +48,18 @@ export default function App() {
 
   return (
     <ErrorBoundary>
+      <CookieConsent />
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Landing />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/legal/privacy" element={<PrivacyPolicy />} />
+          <Route path="/legal/cookies" element={<CookiesPage />} />
+          <Route path="/legal/terms" element={<LegalPage type="terms" />} />
+          <Route path="/legal/sales" element={<LegalPage type="sales" />} />
+          <Route path="/legal/mentions" element={<LegalPage type="legal" />} />
         </Route>
         <Route path="/dashboard" element={<Protected><DashboardLayout /></Protected>}>
           <Route index element={<Dashboard />} />
