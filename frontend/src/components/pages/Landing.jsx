@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Shield, FileSearch, Video, Layers, Code, Database, CheckCircle2, ArrowRight, Lock, Zap, Activity, FileText, Cookie } from 'lucide-react';
 import CookieConsent from '../CookieConsent';
+import DemoSection from '../DemoSection';
 
 const container = {
   hidden: { opacity: 0 },
@@ -197,6 +198,9 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      {/* Demo Section - Exemples d'analyses */}
+      <DemoSection />
 
       {/* Features Grid */}
       <section className="py-32 relative">

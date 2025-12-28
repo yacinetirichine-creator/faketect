@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import { downloadCertificatePdf } from '../../utils/certificatePdf';
 import { interpretResult, getSimpleMessage, getConfidenceMessage } from '../../utils/resultInterpreter';
 import i18n from '../../i18n';
+import Tutorial from '../Tutorial';
 
 export default function Dashboard() {
   const { t } = useTranslation();
@@ -20,6 +21,7 @@ export default function Dashboard() {
   const [result, setResult] = useState(null);
   const [lastFile, setLastFile] = useState(null);
   const [downloadingCert, setDownloadingCert] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   const parsedDetails = (() => {
     if (!result?.details) return null;
@@ -143,14 +145,25 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-8">
+      {/* Tutorial Component */}
+      <Tutorial onClose={() => setShowTutorial(false)} autoShow={true} />
+      
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white mb-1">{t('dashboard.welcome')}, {user?.name}</h1>
           <p className="text-gray-400">{t('dashboard.subtitle')}</p>
         </div>
-        <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-400 flex items-center gap-2">
-          <Zap size={16} className="text-yellow-400" />
-          {remainingLabel ? `${remainingLabel} ${t('dashboard.remaining')}` : t('dashboard.remaining')}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setShowTutorial(true)}
+            className="px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm text-white/60 hover:text-white transition-colors"
+          >
+            📚 {t('dashboard.tutorial', 'Tutoriel')}
+          </button>
+          <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-400 flex items-center gap-2">
+            <Zap size={16} className="text-yellow-400" />
+            {remainingLabel ? `${remainingLabel} ${t('dashboard.remaining')}` : t('dashboard.remaining')}
+          </div>
         </div>
       </div>
 
