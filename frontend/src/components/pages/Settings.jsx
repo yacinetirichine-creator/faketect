@@ -1,18 +1,25 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { User, Globe, CreditCard, ExternalLink, Loader2, ShieldCheck } from 'lucide-react';
+import { User, Globe, CreditCard, ExternalLink, Loader2, ShieldCheck, Trash2, AlertTriangle, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
 import useAuthStore from '../../stores/authStore';
 import api, { stripeApi } from '../../services/api';
 import { languages, normalizeLanguage, persistLanguage } from '../../i18n';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 export default function Settings() {
   const { t, i18n } = useTranslation();
-  const { user, updateUser } = useAuthStore();
+  const { user, updateUser, logout } = useAuthStore();
+  const navigate = useNavigate();
   const currentLang = normalizeLanguage(i18n.resolvedLanguage || i18n.language);
   const [name, setName] = useState(user?.name || '');
   const [loading, setLoading] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState('');
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [showPlanModal, setShowPlanModal] = useState(false);
+  const [planChangeLoading, setPlanChangeLoading] = useState(false);
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -39,6 +46,49 @@ export default function Settings() {
     } catch (error) {
       toast.error(error.response?.data?.error || t('common.errorGeneric'));
       setPortalLoading(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (deleteConfirmation !== user?.email) {
+      toast.error('Email de confirmation incorrect');
+      return;
+    }
+
+    setDeleteLoading(true);
+    try {
+      await api.delete('/user/account', {
+        data: { confirmation: deleteConfirmation }
+      });
+      
+      toast.success('Compte supprimé avec succès');
+      logout();
+      navigate('/');
+    } catch (error) {
+      toast.error(error.response?.data?.error || 'Erreur lors de la suppression');
+      setDeleteLoading(false);
+    }
+  };
+
+  const handleChangePlan = async (newPlan) => {
+    setPlanChangeLoading(true);
+    try {
+      const { data } = await api.post('/user/change-plan', { newPlan });
+      
+      if (data.requiresPayment) {
+        navigate('/pricing');
+        return;
+      }
+
+      if (data.success) {
+        toast.success(data.message);
+        updateUser({ plan: data.newPlan });
+        setShowPlanModal(false);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.error || 'Erreur lors du changement de plan');
+    } finally {
+      setPlanChangeLoading(false);
     }
   };
 
@@ -111,21 +161,195 @@ export default function Settings() {
           </div>
           <div className="flex gap-3">
             {user?.plan !== 'FREE' && (
-              <button 
-                onClick={openCustomerPortal}
-                disabled={portalLoading}
-                className="btn-outline flex items-center gap-2"
-              >
-                {portalLoading ? <Loader2 className="animate-spin" size={16} /> : <ExternalLink size={16} />}
-                {t('settings.subscription.manage')}
-              </button>
+              <>
+                <button 
+                  onClick={openCustomerPortal}
+                  disabled={portalLoading}
+                  className="btn-outline flex items-center gap-2"
+                >
+                  {portalLoading ? <Loader2 className="animate-spin" size={16} /> : <ExternalLink size={16} />}
+                  {t('settings.subscription.manage')}
+                </button>
+                <button 
+                  onClick={() => setShowPlanModal(true)}
+                  className="btn-outline flex items-center gap-2 text-yellow-400 border-yellow-400/30 hover:bg-yellow-400/10"
+                >
+                  <ArrowDownCircle size={16} />
+                  Changer de plan
+                </button>
+              </>
             )}
-            <a href="/pricing" className="btn-primary">
-              {user?.plan === 'FREE' ? t('settings.subscription.upgrade') : t('settings.subscription.change')}
-            </a>
+            {user?.plan === 'FREE' && (
+              <a href="/pricing" className="btn-primary flex items-center gap-2">
+                <ArrowUpCircle size={16} />
+                {t('settings.subscription.upgrade')}
+              </a>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Delete Account Section */}
+      <div className="card bg-surface/50 border-red-500/20">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 bg-red-500/10 rounded-lg flex items-center justify-center">
+            <AlertTriangle className="text-red-400" size={20} />
+          </div>
+          <h2 className="text-xl font-semibold text-white">Zone de danger</h2>
+        </div>
+
+        <div className="flex items-center justify-between p-4 bg-red-500/5 rounded-xl border border-red-500/20">
+          <div>
+            <p className="font-semibold text-white">Supprimer mon compte</p>
+            <p className="text-sm text-gray-400">Cette action est irréversible. Toutes vos données seront supprimées.</p>
+          </div>
+          <button 
+            onClick={() => setShowDeleteModal(true)}
+            className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg border border-red-500/30 transition-colors flex items-center gap-2"
+          >
+            <Trash2 size={16} />
+            Supprimer
+          </button>
+        </div>
+      </div>
+
+      {/* Delete Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-surface border border-red-500/30 rounded-2xl p-6 max-w-md w-full">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center">
+                <AlertTriangle className="text-red-400" size={24} />
+              </div>
+              <h3 className="text-xl font-bold text-white">Confirmer la suppression</h3>
+            </div>
+
+            <div className="space-y-4 mb-6">
+              <p className="text-gray-300">
+                Êtes-vous absolument sûr de vouloir supprimer votre compte ?
+              </p>
+              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+                <p className="text-sm text-red-300 font-medium mb-2">Cette action va :</p>
+                <ul className="text-sm text-red-200 space-y-1 list-disc list-inside">
+                  <li>Supprimer toutes vos analyses</li>
+                  <li>Annuler votre abonnement (si actif)</li>
+                  <li>Effacer toutes vos données personnelles</li>
+                  <li>Cette action est IRRÉVERSIBLE</li>
+                </ul>
+              </div>
+
+              <div>
+                <label className="label text-white">
+                  Tapez votre email <span className="text-red-400">({user?.email})</span> pour confirmer :
+                </label>
+                <input
+                  type="email"
+                  value={deleteConfirmation}
+                  onChange={(e) => setDeleteConfirmation(e.target.value)}
+                  placeholder={user?.email}
+                  className="input"
+                  autoFocus
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setDeleteConfirmation('');
+                }}
+                className="flex-1 btn-outline"
+                disabled={deleteLoading}
+              >
+                Annuler
+              </button>
+              <button
+                onClick={handleDeleteAccount}
+                disabled={deleteConfirmation !== user?.email || deleteLoading}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {deleteLoading ? (
+                  <>
+                    <Loader2 className="animate-spin" size={16} />
+                    Suppression...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 size={16} />
+                    Supprimer définitivement
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Plan Change Modal */}
+      {showPlanModal && user?.plan !== 'FREE' && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-surface border border-white/10 rounded-2xl p-6 max-w-md w-full">
+            <h3 className="text-xl font-bold text-white mb-4">Changer de plan</h3>
+
+            <div className="space-y-3 mb-6">
+              {user?.plan === 'BUSINESS' && (
+                <button
+                  onClick={() => handleChangePlan('PRO')}
+                  disabled={planChangeLoading}
+                  className="w-full p-4 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-colors text-left"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-semibold text-white">Plan PRO</p>
+                      <p className="text-sm text-gray-400">50 analyses/jour • 9.99€/mois</p>
+                    </div>
+                    <ArrowDownCircle className="text-yellow-400" size={20} />
+                  </div>
+                </button>
+              )}
+
+              {user?.plan === 'PRO' && (
+                <button
+                  onClick={() => handleChangePlan('BUSINESS')}
+                  disabled={planChangeLoading}
+                  className="w-full p-4 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-colors text-left"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-semibold text-white">Plan BUSINESS</p>
+                      <p className="text-sm text-gray-400">Analyses illimitées • 29.99€/mois</p>
+                    </div>
+                    <ArrowUpCircle className="text-green-400" size={20} />
+                  </div>
+                </button>
+              )}
+
+              <button
+                onClick={() => handleChangePlan('FREE')}
+                disabled={planChangeLoading}
+                className="w-full p-4 bg-red-500/10 hover:bg-red-500/20 rounded-xl border border-red-500/30 transition-colors text-left"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-semibold text-white">Plan FREE</p>
+                    <p className="text-sm text-red-300">3 analyses/jour • Gratuit • Annule l'abonnement</p>
+                  </div>
+                  <ArrowDownCircle className="text-red-400" size={20} />
+                </div>
+              </button>
+            </div>
+
+            <button
+              onClick={() => setShowPlanModal(false)}
+              className="w-full btn-outline"
+              disabled={planChangeLoading}
+            >
+              Annuler
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
