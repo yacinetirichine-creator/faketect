@@ -14,6 +14,7 @@ import Settings from './components/pages/Settings';
 import AdminDashboard from './components/pages/admin/AdminDashboard';
 import AdminUsers from './components/pages/admin/AdminUsers';
 import PrivacyPolicy from './components/pages/PrivacyPolicy';
+import TermsOfService from './components/pages/TermsOfService';
 import LegalPage from './components/pages/LegalPage';
 import CookiesPage from './components/pages/CookiesPage';
 import CookieConsent from './components/CookieConsent';
@@ -57,7 +58,7 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/legal/privacy" element={<PrivacyPolicy />} />
           <Route path="/legal/cookies" element={<CookiesPage />} />
-          <Route path="/legal/terms" element={<LegalPage type="terms" />} />
+          <Route path="/legal/terms" element={<TermsOfService />} />
           <Route path="/legal/sales" element={<LegalPage type="sales" />} />
           <Route path="/legal/mentions" element={<LegalPage type="legal" />} />
         </Route>
