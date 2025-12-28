@@ -11,6 +11,7 @@ Société par actions simplifiée au capital de 100 EUR
 Siège social : 128 Rue la Boétie, 75008 PARIS  
 SIREN : 928 499 166  
 RCS Paris  
+N° TVA intracommunautaire : FR09938848546  
 
 **Responsable de la publication et Délégué à la Protection des Données (DPO) :**  
 Email : contact@faketect.com  
@@ -36,10 +37,12 @@ La plateforme **Faketect** permet la détection de deepfakes par analyse d'image
 ### 3.1 Données d'identification et de compte
 - Nom et prénom
 - Adresse email
+- Numéro de téléphone (optionnel, collecté avec consentement pour communications marketing)
 - Mot de passe (chiffré avec bcrypt)
 - Date de création du compte
 - Langue préférée
 - Statut d'abonnement
+- Consentement marketing (opt-in pour communications WhatsApp)
 
 ### 3.2 Données de paiement
 - Informations de facturation (nom, adresse)
@@ -77,6 +80,7 @@ La plateforme **Faketect** permet la détection de deepfakes par analyse d'image
 | Traitement des paiements et facturation | Obligation légale (Art. 6.1.c RGPD) | 10 ans (obligations comptables et fiscales) |
 | Support client et assistance | Intérêt légitime (Art. 6.1.f RGPD) | 3 ans après la dernière interaction |
 | Amélioration des services et analyses statistiques | Intérêt légitime (Art. 6.1.f RGPD) | Données anonymisées conservées indéfiniment |
+| Communications marketing via WhatsApp (informations sur futurs produits) | Consentement explicite (Art. 6.1.a RGPD) | Jusqu'au retrait du consentement + 3 ans |
 | Envoi de newsletters et communications marketing | Consentement (Art. 6.1.a RGPD) | Jusqu'au retrait du consentement + 3 ans |
 | Prévention de la fraude et sécurité | Intérêt légitime (Art. 6.1.f RGPD) | 1 an après détection |
 | Respect des obligations légales | Obligation légale (Art. 6.1.c RGPD) | Selon obligations légales |

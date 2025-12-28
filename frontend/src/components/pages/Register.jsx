@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Mail, Lock, User, ShieldCheck } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, ShieldCheck, Phone } from 'lucide-react';
 import useAuthStore from '../../stores/authStore';
 import toast from 'react-hot-toast';
 
@@ -12,13 +12,15 @@ export default function Register() {
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [acceptMarketing, setAcceptMarketing] = useState(false);
   const [show, setShow] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const lang = (i18n.resolvedLanguage || i18n.language || 'fr').split('-')[0];
-    const res = await register(email, password, name, lang);
+    const res = await register(email, password, name, lang, phone, acceptMarketing);
     if (res.success) { toast.success(t('auth.registerSuccess')); navigate('/dashboard'); }
     else toast.error(res.error);
   };
@@ -53,6 +55,15 @@ export default function Register() {
             </div>
 
             <div>
+              <label className="label">{t('auth.phone')} <span className="text-gray-500 text-xs">({t('common.optional', 'optionnel')})</span></label>
+              <div className="relative">
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
+                <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className="input pl-10" placeholder={t('auth.placeholders.phone')} autoComplete="tel" />
+              </div>
+              <p className="text-xs text-gray-500 mt-1">{t('auth.phoneHint')}</p>
+            </div>
+
+            <div>
               <label className="label">{t('auth.password')}</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
@@ -61,6 +72,19 @@ export default function Register() {
                   {show ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+            </div>
+
+            <div className="flex items-start gap-2">
+              <input 
+                type="checkbox" 
+                id="marketing" 
+                checked={acceptMarketing} 
+                onChange={(e) => setAcceptMarketing(e.target.checked)}
+                className="mt-1 w-4 h-4 text-primary bg-surface border-white/20 rounded focus:ring-primary focus:ring-2"
+              />
+              <label htmlFor="marketing" className="text-xs text-gray-400 leading-relaxed">
+                {t('auth.marketingConsent')} <Link to="/legal/privacy" className="text-primary hover:underline">{t('auth.privacyPolicy')}</Link>
+              </label>
             </div>
 
             <button type="submit" disabled={isLoading} className="btn-primary w-full py-3.5 text-lg shadow-lg shadow-primary/25">

@@ -15,7 +15,7 @@ Siège social : 128 Rue la Boétie, 75008 PARIS
 SIREN : 928 499 166  
 RCS : Paris  
 Email : contact@faketect.com  
-N° TVA intracommunautaire : FR (à compléter si soumis à TVA)
+N° TVA intracommunautaire : FR09938848546
 
 **Et l'Acheteur :**  
 Toute personne physique ou morale souscrivant à un abonnement payant sur la plateforme Faketect.

@@ -14,6 +14,7 @@ Société par actions simplifiée au capital de 100 EUR
 Siège social : 128 Rue la Boétie, 75008 PARIS  
 SIREN : 928 499 166  
 RCS : Paris  
+N° TVA intracommunautaire : FR09938848546  
 Email : contact@faketect.com  
 Téléphone : (À compléter si disponible)
 

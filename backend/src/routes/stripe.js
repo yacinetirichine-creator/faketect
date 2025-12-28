@@ -122,10 +122,12 @@ router.post('/create-checkout', auth, async (req, res) => {
       metadata: {
         userId: req.user.id.toString(),
         planId: planId,
-        billing: billing
+        billing: billing,
+        vat_number: 'FR09938848546' // N° TVA intracommunautaire JARVIS
       },
       allow_promotion_codes: true, // Permet l'utilisation de codes promo
-      billing_address_collection: 'auto', // Collecte automatique de l'adresse selon le pays
+      billing_address_collection: 'required', // Obligatoire pour la TVA
+      tax_id_collection: { enabled: true }, // Collecte du numéro de TVA client (B2B)
       automatic_tax: { enabled: true } // Calcul automatique de la TVA selon le pays
     });
 

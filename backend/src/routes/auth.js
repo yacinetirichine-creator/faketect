@@ -4,16 +4,21 @@ const jwt = require('jsonwebtoken');
 const { v4: uuid } = require('uuid');
 const prisma = require('../config/db');
 const { auth } = require('../middleware/auth');
+const { authLimiter } = require('../middleware/rateLimiter');
+const { registerValidation, loginValidation, profileUpdateValidation } = require('../middleware/validators');
+const logger = require('../config/logger');
 
 const router = express.Router();
 
-router.post('/register', async (req, res) => {
+router.post('/register', authLimiter, registerValidation, async (req, res) => {
   try {
     const { email, password, name, language = 'fr', phone, acceptMarketing = false } = req.body;
-    if (!email || !password) return res.status(400).json({ error: 'Email et mot de passe requis' });
     
     const exists = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
-    if (exists) return res.status(400).json({ error: 'Email déjà utilisé' });
+    if (exists) {
+      logger.logAuth('register', email, false, 'Email already exists');
+      return res.status(400).json({ error: 'Email déjà utilisé' });
+    }
     
     const user = await prisma.user.create({
       data: { 
@@ -28,37 +33,51 @@ router.post('/register', async (req, res) => {
     });
     
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    logger.logAuth('register', email, true);
     res.status(201).json({ token, user: { id: user.id, email: user.email, name: user.name, plan: user.plan, role: user.role, language: user.language } });
   } catch (e) {
-    console.error('Registration error:', e);
+    logger.logError(e, req);
     res.status(500).json({ error: 'Erreur inscription', details: e.message });
   }
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', authLimiter, loginValidation, async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
     if (!user || !(await bcrypt.compare(password, user.password))) {
+      logger.logAuth('login', email, false, 'Invalid credentials');
       return res.status(401).json({ error: 'Identifiants invalides' });
     }
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    logger.logAuth('login', email, true);
     res.json({ token, user: { id: user.id, email: user.email, name: user.name, plan: user.plan, role: user.role, language: user.language, usedToday: user.usedToday, usedMonth: user.usedMonth } });
   } catch (e) {
-    console.error('Login error:', e);
+    logger.logError(e, req);
     res.status(500).json({ error: 'Erreur connexion', details: e.message });
   }
 });
 
 router.get('/me', auth, async (req, res) => {
-  const user = await prisma.user.findUnique({ where: { id: req.user.id }, select: { id: true, email: true, name: true, role: true, plan: true, language: true, usedToday: true, usedMonth: true } });
-  res.json({ user });
+  try {
+    const user = await prisma.user.findUnique({ where: { id: req.user.id }, select: { id: true, email: true, name: true, role: true, plan: true, language: true, usedToday: true, usedMonth: true } });
+    res.json({ user });
+  } catch (e) {
+    logger.logError(e, req);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
 });
 
-router.put('/profile', auth, async (req, res) => {
-  const { name, language } = req.body;
-  const user = await prisma.user.update({ where: { id: req.user.id }, data: { ...(name && { name }), ...(language && { language }) } });
-  res.json({ user });
+router.put('/profile', auth, profileUpdateValidation, async (req, res) => {
+  try {
+    const { name, language } = req.body;
+    const user = await prisma.user.update({ where: { id: req.user.id }, data: { ...(name && { name }), ...(language && { language }) } });
+    logger.info('Profile updated', { userId: req.user.id });
+    res.json({ user });
+  } catch (e) {
+    logger.logError(e, req);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
 });
 
 module.exports = router;

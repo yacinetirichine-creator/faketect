@@ -24,10 +24,10 @@ const useAuthStore = create(persist((set, get) => ({
     }
   },
 
-  register: async (email, password, name, language) => {
+  register: async (email, password, name, language, phone, acceptMarketing) => {
     set({ isLoading: true });
     try {
-      const { data } = await api.post('/auth/register', { email, password, name, language });
+      const { data } = await api.post('/auth/register', { email, password, name, language, phone, acceptMarketing });
       set({ user: data.user, token: data.token, isAuthenticated: true, isLoading: false });
       return { success: true, user: data.user };
     } catch (e) {

@@ -41,6 +41,7 @@ async function initializeStripeProducts() {
         unit_amount: plan.monthlyPrice * 100,
         currency: 'eur',
         recurring: { interval: 'month' },
+        tax_behavior: 'exclusive', // Prix HT, TVA calculée automatiquement
         metadata: { plan_id: key, billing: 'monthly' }
       });
 
@@ -50,6 +51,7 @@ async function initializeStripeProducts() {
         unit_amount: plan.yearlyPrice * 100,
         currency: 'eur',
         recurring: { interval: 'year' },
+        tax_behavior: 'exclusive', // Prix HT, TVA calculée automatiquement
         metadata: { plan_id: key, billing: 'yearly' }
       });
 
