@@ -44,4 +44,9 @@ export const plansApi = {
   getPlans: () => api.get('/plans')
 };
 
+export const stripeApi = {
+  createCheckout: (planId, billing) => api.post('/stripe/create-checkout', { planId, billing }),
+  getCustomerPortal: () => api.post('/stripe/customer-portal')
+};
+
 export default api;

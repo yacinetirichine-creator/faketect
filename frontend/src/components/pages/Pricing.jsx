@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Check, Sparkles, Loader2 } from 'lucide-react';
-import { plansApi } from '../../services/api';
+import { plansApi, stripeApi } from '../../services/api';
 import useAuthStore from '../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -14,13 +14,29 @@ export default function Pricing() {
   const [plans, setPlans] = useState([]);
   const [yearly, setYearly] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [checkoutLoading, setCheckoutLoading] = useState(null);
 
   useEffect(() => { plansApi.getPlans().then(({ data }) => { setPlans(data.plans); setLoading(false); }); }, []);
 
-  const handleChoose = (id) => {
-    if (!isAuthenticated) navigate('/register');
-    else if (id === 'FREE') navigate('/dashboard');
-    else toast.info('Payment integration coming soon!');
+  const handleChoose = async (id) => {
+    if (!isAuthenticated) {
+      navigate('/register');
+      return;
+    }
+    
+    if (id === 'FREE') {
+      navigate('/dashboard');
+      return;
+    }
+
+    try {
+      setCheckoutLoading(id);
+      const { data } = await stripeApi.createCheckout(id, yearly ? 'yearly' : 'monthly');
+      window.location.href = data.url;
+    } catch (error) {
+      toast.error(error.response?.data?.error || 'Erreur lors de la création du checkout');
+      setCheckoutLoading(null);
+    }
   };
 
   if (loading) return <div className="flex items-center justify-center h-96"><Loader2 className="animate-spin text-primary" size={32} /></div>;
@@ -70,8 +86,10 @@ export default function Pricing() {
                   ))}
                 </ul>
 
-                <button onClick={() => handleChoose(p.id)} disabled={cur} className={`w-full py-3 rounded-xl font-semibold transition-all ${cur ? 'bg-white/5 text-gray-500 cursor-not-allowed' : pop ? 'bg-primary text-white hover:bg-primary-600 shadow-lg shadow-primary/25' : 'bg-surface text-white hover:bg-surface/80 border border-white/10'}`}>
-                  {cur ? t('pricing.current') : p.id === 'FREE' ? t('pricing.free') : t('pricing.choose')}
+                <button onClick={() => handleChoose(p.id)} disabled={cur || checkoutLoading === p.id} className={`w-full py-3 rounded-xl font-semibold transition-all ${cur ? 'bg-white/5 text-gray-500 cursor-not-allowed' : pop ? 'bg-primary text-white hover:bg-primary-600 shadow-lg shadow-primary/25' : 'bg-surface text-white hover:bg-surface/80 border border-white/10'}`}>
+                  {checkoutLoading === p.id ? (
+                    <Loader2 className="animate-spin mx-auto" size={20} />
+                  ) : cur ? t('pricing.current') : p.id === 'FREE' ? t('pricing.free') : t('pricing.choose')}
                 </button>
               </motion.div>
             );

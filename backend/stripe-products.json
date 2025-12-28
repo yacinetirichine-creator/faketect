@@ -1,0 +1,22 @@
+{
+  "STARTER": {
+    "productId": "prod_Tgh1JeF2vn76Kc",
+    "monthlyPriceId": "price_1SjJdbIaJ0g5yYYSa6IcgFUw",
+    "yearlyPriceId": "price_1SjJdcIaJ0g5yYYSNTtrvpxr"
+  },
+  "PRO": {
+    "productId": "prod_Tgh17Ei4bVM3nz",
+    "monthlyPriceId": "price_1SjJdcIaJ0g5yYYSSKrT1uu8",
+    "yearlyPriceId": "price_1SjJddIaJ0g5yYYSemnyjrFO"
+  },
+  "BUSINESS": {
+    "productId": "prod_Tgh1V0PddTFCNv",
+    "monthlyPriceId": "price_1SjJddIaJ0g5yYYSQvMiGAyP",
+    "yearlyPriceId": "price_1SjJdeIaJ0g5yYYSXdO7gDl7"
+  },
+  "ENTERPRISE": {
+    "productId": "prod_Tgh1Rbhnb13Fm1",
+    "monthlyPriceId": "price_1SjJdeIaJ0g5yYYSTVUk628S",
+    "yearlyPriceId": "price_1SjJdfIaJ0g5yYYSBlyUvP4y"
+  }
+}

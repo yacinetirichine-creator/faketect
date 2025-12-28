@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { User, Globe, CreditCard } from 'lucide-react';
+import { User, Globe, CreditCard, ExternalLink, Loader2 } from 'lucide-react';
 import useAuthStore from '../../stores/authStore';
-import api from '../../services/api';
+import api, { stripeApi } from '../../services/api';
 import { languages } from '../../i18n';
 import toast from 'react-hot-toast';
 
@@ -11,6 +11,7 @@ export default function Settings() {
   const { user, updateUser } = useAuthStore();
   const [name, setName] = useState(user?.name || '');
   const [loading, setLoading] = useState(false);
+  const [portalLoading, setPortalLoading] = useState(false);
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -28,20 +29,31 @@ export default function Settings() {
     try { await api.put('/auth/profile', { language: code }); updateUser({ language: code }); } catch {}
   };
 
+  const openCustomerPortal = async () => {
+    try {
+      setPortalLoading(true);
+      const { data } = await stripeApi.getCustomerPortal();
+      window.location.href = data.url;
+    } catch (error) {
+      toast.error(error.response?.data?.error || 'Erreur');
+      setPortalLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">{t('dashboard.settings')}</h1>
+      <h1 className="text-3xl font-bold text-white">{t('dashboard.settings')}</h1>
 
-      <div className="card">
+      <div className="card bg-surface/50 border-white/10">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center"><User className="text-primary-600" size={20} /></div>
-          <h2 className="text-xl font-semibold">Profil</h2>
+          <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center"><User className="text-primary" size={20} /></div>
+          <h2 className="text-xl font-semibold text-white">Profil</h2>
         </div>
 
         <form onSubmit={handleSave} className="space-y-4 max-w-md">
           <div>
             <label className="label">Email</label>
-            <input type="email" value={user?.email || ''} disabled className="input bg-surface-100" />
+            <input type="email" value={user?.email || ''} disabled className="input bg-white/5 cursor-not-allowed" />
           </div>
           <div>
             <label className="label">{t('auth.name')}</label>
@@ -51,15 +63,15 @@ export default function Settings() {
         </form>
       </div>
 
-      <div className="card">
+      <div className="card bg-surface/50 border-white/10">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-accent-100 rounded-lg flex items-center justify-center"><Globe className="text-accent-600" size={20} /></div>
-          <h2 className="text-xl font-semibold">Langue</h2>
+          <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center"><Globe className="text-accent" size={20} /></div>
+          <h2 className="text-xl font-semibold text-white">Langue</h2>
         </div>
 
         <div className="grid grid-cols-3 md:grid-cols-5 gap-3 max-w-2xl">
           {languages.map(l => (
-            <button key={l.code} onClick={() => changeLang(l.code)} className={`flex items-center justify-center gap-2 p-3 rounded-xl transition-colors ${i18n.language === l.code ? 'bg-primary-100 text-primary-700 ring-2 ring-primary-500' : 'bg-surface-100 hover:bg-surface-200'}`}>
+            <button key={l.code} onClick={() => changeLang(l.code)} className={`flex items-center justify-center gap-2 p-3 rounded-xl transition-colors ${i18n.language === l.code ? 'bg-primary/20 text-primary border-2 border-primary/50' : 'bg-white/5 hover:bg-white/10 text-gray-400 border border-white/10'}`}>
               <span className="text-xl">{l.flag}</span>
               <span className="font-medium">{l.code.toUpperCase()}</span>
             </button>
@@ -67,18 +79,32 @@ export default function Settings() {
         </div>
       </div>
 
-      <div className="card">
+      <div className="card bg-surface/50 border-white/10">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center"><CreditCard className="text-green-600" size={20} /></div>
-          <h2 className="text-xl font-semibold">Abonnement</h2>
+          <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center"><CreditCard className="text-green-400" size={20} /></div>
+          <h2 className="text-xl font-semibold text-white">Abonnement</h2>
         </div>
 
-        <div className="flex items-center justify-between p-4 bg-surface-50 rounded-xl">
+        <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
           <div>
-            <p className="font-semibold">Plan {user?.plan}</p>
-            <p className="text-sm text-surface-500">{user?.plan === 'FREE' ? '3 analyses/jour' : 'Voir tarifs'}</p>
+            <p className="font-semibold text-white">Plan {user?.plan}</p>
+            <p className="text-sm text-gray-400">{user?.plan === 'FREE' ? '3 analyses/jour' : 'Abonnement actif'}</p>
           </div>
-          <a href="/pricing" className="btn-outline">Changer</a>
+          <div className="flex gap-3">
+            {user?.plan !== 'FREE' && (
+              <button 
+                onClick={openCustomerPortal}
+                disabled={portalLoading}
+                className="btn-outline flex items-center gap-2"
+              >
+                {portalLoading ? <Loader2 className="animate-spin" size={16} /> : <ExternalLink size={16} />}
+                Gérer l'abonnement
+              </button>
+            )}
+            <a href="/pricing" className="btn-primary">
+              {user?.plan === 'FREE' ? 'Upgrade' : 'Changer'}
+            </a>
+          </div>
         </div>
       </div>
     </div>

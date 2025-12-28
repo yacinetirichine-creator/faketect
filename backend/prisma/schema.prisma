@@ -8,20 +8,21 @@ datasource db {
 }
 
 model User {
-  id            String     @id @default(uuid())
-  email         String     @unique
-  password      String
-  name          String?
-  role          String     @default("USER")
-  plan          String     @default("FREE")
-  language      String     @default("fr")
-  stripeId      String?
-  usedToday     Int        @default(0)
-  usedMonth     Int        @default(0)
-  lastReset     DateTime   @default(now())
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  analyses      Analysis[]
+  id                    String     @id @default(uuid())
+  email                 String     @unique
+  password              String
+  name                  String?
+  role                  String     @default("USER")
+  plan                  String     @default("FREE")
+  language              String     @default("fr")
+  stripeCustomerId      String?
+  stripeSubscriptionId  String?
+  usedToday             Int        @default(0)
+  usedMonth             Int        @default(0)
+  lastReset             DateTime   @default(now())
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+  analyses              Analysis[]
 }
 
 model Analysis {
