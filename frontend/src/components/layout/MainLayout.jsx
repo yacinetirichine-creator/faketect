@@ -65,12 +65,12 @@ export default function MainLayout() {
               <div className="flex items-center gap-4">
                 <Link to="/dashboard" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">{t('nav.dashboard')}</Link>
                 {user?.role === 'ADMIN' && <Link to="/admin" className="text-sm font-medium text-accent hover:text-accent-400 transition-colors">{t('nav.admin')}</Link>}
-                <button onClick={() => { logout(); navigate('/'); }} className="btn-outline px-4 py-2 text-sm h-auto rounded-lg">{t('nav.logout')}</button>
+                <button onClick={() => { logout(); navigate('/'); }} className="px-4 py-2 text-sm rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/10 transition-all">{t('nav.logout')}</button>
               </div>
             ) : (
               <div className="flex items-center gap-4">
-                <Link to="/login" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">{t('auth.login')}</Link>
-                <Link to="/register" className="btn-primary px-4 py-2 text-sm h-auto rounded-lg shadow-none hover:shadow-lg hover:shadow-primary/20">{t('auth.register')}</Link>
+                <Link to="/login" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">{t('nav.connexion', 'Login')}</Link>
+                <Link to="/register" className="px-4 py-2 text-sm rounded-lg bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20 transition-all">{t('nav.inscription', 'Sign Up')}</Link>
               </div>
             )}
           </div>
