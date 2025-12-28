@@ -3,63 +3,11 @@ const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const auth = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
+const { getStripeProducts } = require('../config/stripe-products');
 
-// Charger les IDs de produits Stripe
-const STRIPE_PRICES = require('../stripe-products.json');
-
-// Créer une session de checkout
-router.post('/create-checkout', auth, async (req, res) => {
-  try {
-    const { planId, billing, locale } = req.body; // planId: 'STARTER', 'PRO', etc. | billing: 'monthly' ou 'yearly' | locale: 'fr', 'en', etc.
-    
-    if (!STRIPE_PRICES[planId]) {
-      return res.status(400).json({ error: 'Plan invalide' });
-    }
-
-    const priceId = billing === 'yearly' 
-      ? STRIPE_PRICES[planId].yearlyPriceId 
-      : STRIPE_PRICES[planId].monthlyPriceId;
-
-    // Mapping des locales i18n vers Stripe
-    const stripeLocales = {
-      'fr': 'fr',
-      'en': 'en',
-      'es': 'es',
-      'de': 'de',
-      'pt': 'pt-BR',
-      'it': 'it',
-      'ja': 'ja',
-      'zh': 'zh'
-    };
-
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [{
-        price: priceId,
-        quantity: 1,
-      }],
-      mode: 'subscription',
-      locale: stripeLocales[locale] || 'auto', // Détection automatique ou langue choisie
-      success_url: `${process.env.FRONTEND_URL}/dashboard?success=true`,
-      cancel_url: `${process.env.FRONTEND_URL}/pricing?canceled=true`,
-      customer_email: req.user.email,
-      client_reference_id: req.user.id.toString(),
-      metadata: {
-        userId: req.user.id.toString(),
-        planId: planId,
-        billing: billing
-      },
-      billing_address_collection: 'auto', // Collecte automatique de l'adresse selon le pays
-      automatic_tax: { enabled: true } // Calcul automatique de la TVA selon le pays
-    });
-
-    res.json({ url: session.url });
-  } catch (error) {
-    console.error('Erreur checkout:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
+// ⚠️ IMPORTANT: Le webhook DOIT être géré avec express.raw() AVANT express.json()
+// C'est géré dans index.js avec une route spéciale
 
 // Webhook Stripe (gestion des événements de paiement)
 router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
@@ -119,6 +67,61 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
   }
 
   res.json({ received: true });
+});
+
+// Créer une session de checkout
+router.post('/create-checkout', auth, async (req, res) => {
+  try {
+    const { planId, billing, locale } = req.body; // planId: 'STARTER', 'PRO', etc. | billing: 'monthly' ou 'yearly' | locale: 'fr', 'en', etc.
+    
+    const STRIPE_PRICES = getStripeProducts();
+    
+    if (!STRIPE_PRICES[planId]) {
+      return res.status(400).json({ error: 'Plan invalide' });
+    }
+
+    const priceId = billing === 'yearly' 
+      ? STRIPE_PRICES[planId].yearlyPriceId 
+      : STRIPE_PRICES[planId].monthlyPriceId;
+
+    // Mapping des locales i18n vers Stripe
+    const stripeLocales = {
+      'fr': 'fr',
+      'en': 'en',
+      'es': 'es',
+      'de': 'de',
+      'pt': 'pt-BR',
+      'it': 'it',
+      'ja': 'ja',
+      'zh': 'zh'
+    };
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [{
+        price: priceId,
+        quantity: 1,
+      }],
+      mode: 'subscription',
+      locale: stripeLocales[locale] || 'auto', // Détection automatique ou langue choisie
+      success_url: `${process.env.FRONTEND_URL}/dashboard?success=true`,
+      cancel_url: `${process.env.FRONTEND_URL}/pricing?canceled=true`,
+      customer_email: req.user.email,
+      client_reference_id: req.user.id.toString(),
+      metadata: {
+        userId: req.user.id.toString(),
+        planId: planId,
+        billing: billing
+      },
+      billing_address_collection: 'auto', // Collecte automatique de l'adresse selon le pays
+      automatic_tax: { enabled: true } // Calcul automatique de la TVA selon le pays
+    });
+
+    res.json({ url: session.url });
+  } catch (error) {
+    console.error('Erreur checkout:', error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // Récupérer le portail client Stripe
