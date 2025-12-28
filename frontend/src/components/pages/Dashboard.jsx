@@ -16,6 +16,8 @@ export default function Dashboard() {
   const [loadError, setLoadError] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState(null);
+  const [lastFile, setLastFile] = useState(null);
+  const [downloadingCert, setDownloadingCert] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -36,6 +38,7 @@ export default function Dashboard() {
 
   const onDrop = useCallback(async (files) => {
     if (!files.length) return;
+    setLastFile(files[0]);
     setAnalyzing(true);
     setResult(null);
     try {
@@ -66,13 +69,17 @@ export default function Dashboard() {
     return c[verdictKey] || 'text-gray-400 bg-gray-500/10 border-gray-500/20';
   };
 
-  const onDownloadCertificate = () => {
+  const onDownloadCertificate = async () => {
+    if (!result) return;
+    setDownloadingCert(true);
     try {
-      downloadCertificatePdf({ t, analysis: result, user });
+      await downloadCertificatePdf({ t, analysis: result, user, file: lastFile });
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error('Certificate PDF generation failed:', e);
       toast.error(t('certificate.downloadError'));
+    } finally {
+      setDownloadingCert(false);
     }
   };
 
@@ -150,8 +157,8 @@ export default function Dashboard() {
                       <h3 className="text-lg font-bold text-white mb-1">{t('dashboard.result')}</h3>
                       <p className="text-sm text-gray-400">{t('common.id')}: {result.id}</p>
                       <div className="mt-3">
-                        <button type="button" className="btn-secondary text-sm px-4 py-2 inline-flex items-center gap-2" onClick={onDownloadCertificate}>
-                          <Download size={16} /> {t('certificate.download')}
+                        <button type="button" className="btn-secondary text-sm px-4 py-2 inline-flex items-center gap-2" onClick={onDownloadCertificate} disabled={downloadingCert}>
+                          {downloadingCert ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />} {t('certificate.download')}
                         </button>
                       </div>
                     </div>
