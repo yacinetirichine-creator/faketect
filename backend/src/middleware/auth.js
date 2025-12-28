@@ -26,8 +26,9 @@ const checkLimit = async (req, res, next) => {
     const user = req.user;
     const plan = PLANS[user.plan] || PLANS.FREE;
     const now = new Date();
-    const isNewDay = now.toDateString() !== new Date(user.lastReset).toDateString();
-    const isNewMonth = now.getMonth() !== new Date(user.lastReset).getMonth();
+    const lastReset = new Date(user.lastReset);
+    const isNewDay = now.toDateString() !== lastReset.toDateString();
+    const isNewMonth = now.getMonth() !== lastReset.getMonth() || now.getFullYear() !== lastReset.getFullYear();
     
     if (isNewDay || isNewMonth) {
       await prisma.user.update({
@@ -38,9 +39,11 @@ const checkLimit = async (req, res, next) => {
       if (isNewMonth) user.usedMonth = 0;
     }
     
-    if (user.plan === 'FREE' && plan.perDay && user.usedToday >= plan.perDay) {
+    // Vérifier limite quotidienne pour tous les plans (sauf Enterprise illimité)
+    if (plan.perDay && user.usedToday >= plan.perDay) {
       return res.status(429).json({ error: 'Limite quotidienne atteinte' });
     }
+    // Vérifier limite mensuelle
     if (plan.perMonth > 0 && user.usedMonth >= plan.perMonth) {
       return res.status(429).json({ error: 'Limite mensuelle atteinte' });
     }

@@ -1,6 +1,7 @@
 const express = require('express');
 const prisma = require('../config/db');
 const { auth, admin } = require('../middleware/auth');
+const { cleanupOldAnalyses, cleanupOrphanFiles } = require('../services/cleanup');
 const PLANS = require('../config/plans');
 
 const router = express.Router();
@@ -82,6 +83,22 @@ router.delete('/users/:id', async (req, res) => {
   if (req.params.id === req.user.id) return res.status(400).json({ error: 'Impossible' });
   await prisma.user.delete({ where: { id: req.params.id } });
   res.json({ success: true });
+});
+
+// Route pour nettoyer manuellement les anciens fichiers
+router.post('/cleanup', async (req, res) => {
+  try {
+    const results = await cleanupOldAnalyses();
+    const orphans = await cleanupOrphanFiles();
+    res.json({ 
+      success: true, 
+      message: 'Nettoyage terminé',
+      ...results,
+      ...orphans
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 module.exports = router;

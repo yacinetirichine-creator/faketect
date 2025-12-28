@@ -188,7 +188,18 @@ Génération de certificats PDF horodatés et cryptographiquement signés attest
 - Rapports personnalisés
 - Analyses par lots
 
-### 9.4 Plan Enterprise (Sur devis)
+### 9.4 Plan Business (€89/mois)
+- 2000 analyses par mois
+- Fichiers max : 100 MB (images), 500 MB (vidéos)
+- Historique illimité
+- Support prioritaire (6h)
+- API access (50,000 requêtes/mois)
+- Analyses par lots (jusqu'à 50 fichiers)
+- Certificats avancés avec blockchain
+- Intégration Slack/Teams
+- Rapports d'analyse détaillés
+
+### 9.5 Plan Enterprise (Sur devis)
 - Analyses illimitées
 - Fichiers illimités
 - SLA 99.9%
@@ -197,7 +208,7 @@ Génération de certificats PDF horodatés et cryptographiquement signés attest
 - Déploiement on-premise possible
 - Personnalisation avancée
 
-### 9.5 Modification des plans
+### 9.6 Modification des plans
 JARVIS se réserve le droit de modifier les caractéristiques et tarifs des plans avec un préavis de 30 jours. Les abonnements en cours conservent leurs conditions jusqu'à la prochaine échéance.
 
 ---

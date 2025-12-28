@@ -29,6 +29,7 @@ const PORT = process.env.PORT || 3001;
 
 // Initialiser les produits Stripe au démarrage
 const { initializeStripeProducts } = require('./config/stripe-products');
+const { initCleanupJobs } = require('./services/cleanup');
 const prisma = require('./config/db');
 
 app.listen(PORT, async () => {
@@ -54,4 +55,7 @@ app.listen(PORT, async () => {
   } else {
     console.log('⚠️ STRIPE_SECRET_KEY not found - Stripe features disabled');
   }
+  
+  // Initialiser les tâches de nettoyage automatique (90 jours)
+  initCleanupJobs();
 });

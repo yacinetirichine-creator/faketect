@@ -62,6 +62,17 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       }
       break;
 
+    case 'invoice.payment_failed':
+      const invoice = event.data.object;
+      const failedUser = await prisma.user.findFirst({
+        where: { stripeCustomerId: invoice.customer }
+      });
+      if (failedUser) {
+        console.log(`⚠️ Échec de paiement pour user ${failedUser.id} - Email: ${failedUser.email}`);
+        // TODO: Envoyer email de notification à l'utilisateur
+      }
+      break;
+
     default:
       console.log(`Unhandled event type ${event.type}`);
   }
@@ -72,7 +83,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 // Créer une session de checkout
 router.post('/create-checkout', auth, async (req, res) => {
   try {
-    const { planId, billing, locale } = req.body; // planId: 'STARTER', 'PRO', etc. | billing: 'monthly' ou 'yearly' | locale: 'fr', 'en', etc.
+    const { planId, billing, locale } = req.body; // planId: 'STANDARD', 'PROFESSIONAL', 'BUSINESS', 'ENTERPRISE' | billing: 'monthly' ou 'yearly' | locale: 'fr', 'en', etc.
     
     const STRIPE_PRICES = getStripeProducts();
     
@@ -113,6 +124,7 @@ router.post('/create-checkout', auth, async (req, res) => {
         planId: planId,
         billing: billing
       },
+      allow_promotion_codes: true, // Permet l'utilisation de codes promo
       billing_address_collection: 'auto', // Collecte automatique de l'adresse selon le pays
       automatic_tax: { enabled: true } // Calcul automatique de la TVA selon le pays
     });

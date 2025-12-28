@@ -64,6 +64,19 @@ La souscription à un abonnement payant implique l'acceptation pleine et entièr
 - Certificats d'authenticité avancés
 - Intégrations webhooks
 
+#### Plan Business - €89/mois (€890/an)
+- 2000 analyses par mois
+- Images max : 100 MB
+- Vidéos max : 500 MB
+- Historique illimité
+- Support prioritaire (6h)
+- API access (50,000 requêtes/mois)
+- Analyses par lots (jusqu'à 50 fichiers)
+- Certificats avancés avec vérification blockchain
+- Accès bêta aux nouvelles fonctionnalités
+- Rapports d'analyse détaillés
+- Intégration Slack/Teams
+
 #### Plan Enterprise - Sur devis
 - Analyses illimitées
 - Taille fichiers illimitée
@@ -96,6 +109,7 @@ La tarification exacte est affichée avant validation de la commande.
 **Abonnement annuel :** -17% par rapport au mensuel
 - Standard : €99/an au lieu de €119.88
 - Professional : €299/an au lieu de €359.88
+- Business : €890/an au lieu de €1068
 
 **Code promo :** Des codes promotionnels peuvent être proposés ponctuellement.
 
