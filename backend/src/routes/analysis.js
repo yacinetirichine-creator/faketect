@@ -2,10 +2,12 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const { v4: uuid } = require('uuid');
 const prisma = require('../config/db');
 const { auth, checkLimit } = require('../middleware/auth');
 const detection = require('../services/detection');
+const cache = require('../services/cache');
 
 const router = express.Router();
 
@@ -34,6 +36,20 @@ const upload = multer({
   }
 });
 
+/**
+ * Calculer le hash SHA-256 d'un fichier pour le cache
+ */
+async function getFileHash(filePath) {
+  return new Promise((resolve, reject) => {
+    const hash = crypto.createHash('sha256');
+    const stream = fs.createReadStream(filePath);
+    
+    stream.on('data', (data) => hash.update(data));
+    stream.on('end', () => resolve(hash.digest('hex')));
+    stream.on('error', reject);
+  });
+}
+
 router.post('/file', auth, checkLimit, upload.single('file'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'Fichier requis' });
@@ -41,12 +57,33 @@ router.post('/file', auth, checkLimit, upload.single('file'), async (req, res) =
     const type = req.file.mimetype.startsWith('image/') ? 'IMAGE' : 
                  req.file.mimetype.startsWith('video/') ? 'VIDEO' : 'DOCUMENT';
     
+    // Calculer le hash du fichier pour le cache
+    const fileHash = await getFileHash(req.file.path);
+    const cacheKey = `analysis:${fileHash}`;
+    
+    // Vérifier si le résultat est en cache
+    let result = await cache.get(cacheKey);
+    let fromCache = false;
+    
+    if (result) {
+      console.log(`✅ Cache HIT pour ${req.file.originalname} (${fileHash.substring(0, 12)}...)`);
+      fromCache = true;
+    } else {
+      console.log(`⚠️  Cache MISS pour ${req.file.originalname} (${fileHash.substring(0, 12)}...)`);
+      
+      // Analyser le fichier avec l'API
+      const fileStream = fs.createReadStream(req.file.path);
+      result = await detection.analyze(fileStream, req.file.mimetype, req.file.originalname);
+      
+      // Stocker le résultat en cache (TTL: 7 jours pour économiser les coûts)
+      const ttl = 7 * 24 * 60 * 60; // 7 jours
+      await cache.set(cacheKey, result, ttl);
+    }
+    
+    // Créer l'analyse en BDD
     const analysis = await prisma.analysis.create({
       data: { id: uuid(), userId: req.user.id, type, fileName: req.file.originalname, fileUrl: `/uploads/${req.file.filename}` }
     });
-    
-    const fileStream = fs.createReadStream(req.file.path);
-    const result = await detection.analyze(fileStream, req.file.mimetype, req.file.originalname);
 
     const safeDetailsString = (() => {
       try {
@@ -100,7 +137,8 @@ router.post('/file', auth, checkLimit, upload.single('file'), async (req, res) =
         provider: result.provider,
         sources: result.sources,
         consensus: result.consensus,
-        framesAnalyzed: result.framesAnalyzed
+        framesAnalyzed: result.framesAnalyzed,
+        fromCache // Indiquer si le résultat vient du cache
       } 
     });
   } catch (e) { 

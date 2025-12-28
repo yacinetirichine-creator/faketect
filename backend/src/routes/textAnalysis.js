@@ -1,7 +1,9 @@
 const express = require('express');
+const crypto = require('crypto');
 const { auth, checkLimit } = require('../middleware/auth');
 const openai = require('../services/openai');
 const prisma = require('../config/db');
+const cache = require('../services/cache');
 const { v4: uuid } = require('uuid');
 
 const router = express.Router();
@@ -26,6 +28,28 @@ router.post('/analyze', auth, checkLimit, async (req, res) => {
       });
     }
 
+    // Calculer le hash du texte pour le cache
+    const textHash = crypto.createHash('sha256').update(text.trim()).digest('hex');
+    const cacheKey = `text:${textHash}`;
+    
+    // Vérifier si le résultat est en cache
+    let result = await cache.get(cacheKey);
+    let fromCache = false;
+    
+    if (result) {
+      console.log(`✅ Cache HIT pour texte (${textHash.substring(0, 12)}...)`);
+      fromCache = true;
+    } else {
+      console.log(`⚠️  Cache MISS pour texte (${textHash.substring(0, 12)}...)`);
+      
+      // Analyser avec OpenAI
+      result = await openai.analyzeText(text);
+      
+      // Stocker le résultat en cache (TTL: 30 jours pour le texte)
+      const ttl = 30 * 24 * 60 * 60; // 30 jours
+      await cache.set(cacheKey, result, ttl);
+    }
+
     // Créer l'analyse en BDD
     const analysis = await prisma.analysis.create({
       data: {
@@ -36,9 +60,6 @@ router.post('/analyze', auth, checkLimit, async (req, res) => {
         fileUrl: null // Pas de fichier pour le texte
       }
     });
-
-    // Analyser avec OpenAI
-    const result = await openai.analyzeText(text);
 
     // Mettre à jour avec les résultats
     const updated = await prisma.analysis.update({
@@ -82,7 +103,8 @@ router.post('/analyze', auth, checkLimit, async (req, res) => {
         ...updated,
         verdict,
         indicators: result.indicators || [],
-        provider: result.provider
+        provider: result.provider,
+        fromCache // Indiquer si le résultat vient du cache
       }
     });
   } catch (error) {

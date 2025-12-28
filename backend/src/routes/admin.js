@@ -2,6 +2,7 @@ const express = require('express');
 const prisma = require('../config/db');
 const { auth, admin } = require('../middleware/auth');
 const { cleanupOldAnalyses, cleanupOrphanFiles } = require('../services/cleanup');
+const cache = require('../services/cache');
 const PLANS = require('../config/plans');
 
 const router = express.Router();
@@ -95,6 +96,35 @@ router.post('/cleanup', async (req, res) => {
       message: 'Nettoyage terminé',
       ...results,
       ...orphans
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Route pour obtenir les statistiques du cache Redis
+router.get('/cache/stats', async (req, res) => {
+  try {
+    const stats = await cache.getStats();
+    res.json({ 
+      success: true, 
+      cache: stats 
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Route pour vider le cache Redis (pattern optionnel)
+router.post('/cache/clear', async (req, res) => {
+  try {
+    const { pattern } = req.body;
+    const targetPattern = pattern || '*';
+    const count = await cache.invalidatePattern(targetPattern);
+    res.json({ 
+      success: true, 
+      message: `${count} clé(s) supprimée(s)`,
+      pattern: targetPattern
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

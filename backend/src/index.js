@@ -65,6 +65,7 @@ const PORT = process.env.PORT || 3001;
 // Initialiser les produits Stripe au démarrage
 const { initializeStripeProducts } = require('./config/stripe-products');
 const { initCleanupJobs } = require('./services/cleanup');
+const { initRedis, disconnect: disconnectRedis } = require('./services/cache');
 const prisma = require('./config/db');
 
 app.listen(PORT, async () => {
@@ -83,6 +84,13 @@ app.listen(PORT, async () => {
     console.log('⚠️ App will continue but database features will not work');
   }
   
+  // Initialiser Redis Cache (non-bloquant)
+  try {
+    initRedis();
+  } catch (error) {
+    console.error('⚠️ Redis initialization failed:', error.message);
+  }
+  
   // Initialiser Stripe si la clé est présente
   if (process.env.STRIPE_SECRET_KEY) {
     try {
@@ -96,4 +104,19 @@ app.listen(PORT, async () => {
   
   // Initialiser les tâches de nettoyage automatique (90 jours)
   initCleanupJobs();
+});
+
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+  console.log('🛑 SIGTERM received, closing server gracefully...');
+  await disconnectRedis();
+  await prisma.$disconnect();
+  process.exit(0);
+});
+
+process.on('SIGINT', async () => {
+  console.log('🛑 SIGINT received, closing server gracefully...');
+  await disconnectRedis();
+  await prisma.$disconnect();
+  process.exit(0);
 });
