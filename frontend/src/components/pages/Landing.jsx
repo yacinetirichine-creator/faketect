@@ -1,83 +1,250 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
-import { Shield, FileSearch, Video, Layers, Code, Database } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { Shield, FileSearch, Video, Layers, Code, Database, CheckCircle2, ArrowRight, Lock, Zap, Activity } from 'lucide-react';
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 }
+};
 
 export default function Landing() {
   const { t } = useTranslation();
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
   const features = [
-    { icon: FileSearch, title: 'Analyse images', desc: 'Détectez IA et deepfakes' },
-    { icon: Video, title: 'Analyse vidéo', desc: 'Jusqu\'à 60 secondes' },
-    { icon: Layers, title: 'Batch', desc: 'Plusieurs fichiers' },
-    { icon: Code, title: 'API', desc: 'Intégration facile' },
-    { icon: Database, title: 'Métadonnées', desc: 'Analyse EXIF' }
+    { icon: FileSearch, title: 'Image Analysis', desc: 'Advanced pixel-level detection algorithms', color: 'text-blue-400', bg: 'bg-blue-400/10' },
+    { icon: Video, title: 'Video Scanning', desc: 'Frame-by-frame deepfake analysis', color: 'text-purple-400', bg: 'bg-purple-400/10' },
+    { icon: Layers, title: 'Batch Processing', desc: 'Analyze multiple files simultaneously', color: 'text-green-400', bg: 'bg-green-400/10' },
+    { icon: Code, title: 'Developer API', desc: 'Seamless integration with your stack', color: 'text-orange-400', bg: 'bg-orange-400/10' },
+    { icon: Database, title: 'Metadata Forensics', desc: 'Deep EXIF and metadata inspection', color: 'text-pink-400', bg: 'bg-pink-400/10' },
+    { icon: Shield, title: 'Enterprise Security', desc: 'Bank-grade encryption and privacy', color: 'text-cyan-400', bg: 'bg-cyan-400/10' }
   ];
 
   return (
-    <div>
-      <section className="relative py-20 lg:py-32 overflow-hidden">
+    <div className="overflow-hidden">
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center pt-20 pb-32">
+        {/* Background Effects */}
         <div className="absolute inset-0 -z-10">
-          <div className="absolute top-20 left-1/4 w-72 h-72 bg-primary-400/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-accent-400/20 rounded-full blur-3xl" />
+          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] animate-pulse-slow" />
+          <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-accent/20 rounded-full blur-[120px] animate-pulse-slow" />
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-50 rounded-full text-primary-700 font-medium text-sm mb-6">
-              <Shield size={16} /> Protection deepfakes
-            </div>
+        <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-16 items-center">
+          <motion.div 
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="relative z-10"
+          >
+            <motion.div variants={item} className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full text-primary-300 text-sm font-medium mb-8 backdrop-blur-sm">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
+              </span>
+              v2.0 Now Available
+            </motion.div>
 
-            <h1 className="text-5xl md:text-7xl font-extrabold text-surface-900 mb-6">
-              {t('hero.title')} <span className="text-gradient">{t('hero.highlight')}</span>
-            </h1>
+            <motion.h1 variants={item} className="text-6xl md:text-7xl font-display font-bold leading-tight mb-6">
+              Detect Deepfakes <br />
+              <span className="text-gradient">In Real Time</span>
+            </motion.h1>
 
-            <p className="text-xl text-surface-600 mb-10 max-w-2xl mx-auto">{t('hero.subtitle')}</p>
+            <motion.p variants={item} className="text-xl text-gray-400 mb-10 max-w-lg leading-relaxed">
+              Protect your digital integrity with the world's most advanced AI detection platform. Fast, accurate, and secure.
+            </motion.p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/register" className="btn-primary text-lg px-8 py-4">{t('hero.cta')}</Link>
-              <Link to="/pricing" className="btn-outline text-lg px-8 py-4">{t('hero.cta2')}</Link>
-            </div>
+            <motion.div variants={item} className="flex flex-col sm:flex-row gap-4">
+              <Link to="/register" className="btn-primary text-lg px-8 py-4 group">
+                Start Free Trial
+                <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
+              </Link>
+              <Link to="/pricing" className="btn-secondary text-lg px-8 py-4">
+                View Pricing
+              </Link>
+            </motion.div>
 
-            <div className="flex flex-wrap justify-center gap-8 mt-16">
-              {[{ v: '95%+', l: 'Précision' }, { v: '1M+', l: 'Analyses' }, { v: '<2s', l: 'Temps' }].map((s, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 + i * 0.1 }} className="text-center">
-                  <div className="text-4xl font-bold text-surface-900">{s.v}</div>
-                  <div className="text-surface-500">{s.l}</div>
-                </motion.div>
-              ))}
-            </div>
+            <motion.div variants={item} className="mt-12 flex items-center gap-8 text-gray-500 text-sm font-medium">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={16} className="text-primary" /> 99.9% Accuracy
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={16} className="text-primary" /> GDPR Compliant
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={16} className="text-primary" /> API Access
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* 3D/Floating Visual */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="relative perspective-1000 hidden lg:block"
+          >
+            <motion.div 
+              animate={{ 
+                rotateY: [0, -5, 0, 5, 0],
+                rotateX: [0, 5, 0, -5, 0],
+                y: [0, -20, 0]
+              }}
+              transition={{ 
+                duration: 8, 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
+              className="relative z-10"
+            >
+              {/* Main Glass Card */}
+              <div className="glass-panel rounded-3xl p-8 border border-white/10 shadow-2xl shadow-primary/20 backdrop-blur-xl bg-gradient-to-br from-white/5 to-white/0">
+                <div className="flex items-center justify-between mb-8">
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 rounded-full bg-red-500" />
+                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                  </div>
+                  <div className="px-3 py-1 rounded-full bg-white/5 text-xs text-gray-400 font-mono">
+                    analysis_v2.py
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/5">
+                    <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+                      <Activity size={24} />
+                    </div>
+                    <div className="flex-1">
+                      <div className="h-2 w-24 bg-white/20 rounded mb-2" />
+                      <div className="h-2 w-16 bg-white/10 rounded" />
+                    </div>
+                    <div className="text-green-400 font-mono text-sm">98.5% REAL</div>
+                  </div>
+
+                  <div className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/5">
+                    <div className="w-12 h-12 rounded-lg bg-red-500/20 flex items-center justify-center text-red-400">
+                      <Lock size={24} />
+                    </div>
+                    <div className="flex-1">
+                      <div className="h-2 w-32 bg-white/20 rounded mb-2" />
+                      <div className="h-2 w-20 bg-white/10 rounded" />
+                    </div>
+                    <div className="text-red-400 font-mono text-sm">DETECTED</div>
+                  </div>
+
+                  {/* Scanning Line Animation */}
+                  <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
+                    <motion.div 
+                      animate={{ top: ['0%', '100%', '0%'] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                      className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating Elements */}
+              <motion.div 
+                animate={{ y: [0, 30, 0] }}
+                transition={{ duration: 5, repeat: Infinity, delay: 1 }}
+                className="absolute -right-12 -top-12 p-4 glass-panel rounded-2xl border border-white/10 shadow-xl"
+              >
+                <Shield size={32} className="text-accent" />
+              </motion.div>
+              
+              <motion.div 
+                animate={{ y: [0, -40, 0] }}
+                transition={{ duration: 6, repeat: Infinity, delay: 2 }}
+                className="absolute -left-8 -bottom-8 p-4 glass-panel rounded-2xl border border-white/10 shadow-xl"
+              >
+                <Zap size={32} className="text-yellow-400" />
+              </motion.div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      <section className="py-20 bg-white">
+      {/* Stats Section */}
+      <section className="py-10 border-y border-white/5 bg-white/5 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">{t('features.title')}</h2>
-            <p className="text-xl text-surface-600">{t('features.subtitle')}</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { label: 'Analyses Performed', value: '1M+' },
+              { label: 'Accuracy Rate', value: '99.9%' },
+              { label: 'Enterprise Clients', value: '500+' },
+              { label: 'Processing Time', value: '<2s' },
+            ].map((stat, i) => (
+              <div key={i} className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-sm text-gray-400 uppercase tracking-wider">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section className="py-32 relative">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">Powerful Detection Engine</h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Our proprietary AI models analyze multiple layers of digital content to expose even the most sophisticated deepfakes.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((f, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="card hover:shadow-xl transition-all group">
-                <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-500 transition-colors">
-                  <f.icon className="text-primary-600 group-hover:text-white" size={24} />
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="group p-8 rounded-3xl bg-surface border border-white/5 hover:border-primary/30 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5"
+              >
+                <div className={`w-14 h-14 rounded-2xl ${f.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  <f.icon className={f.color} size={28} />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{f.title}</h3>
-                <p className="text-surface-600">{f.desc}</p>
+                <h3 className="text-xl font-bold mb-3 text-white group-hover:text-primary transition-colors">{f.title}</h3>
+                <p className="text-gray-400 leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <div className="card bg-gradient-to-br from-surface-900 to-surface-800 text-white p-12">
-            <h2 className="text-3xl font-bold mb-4">Prêt à détecter les faux ?</h2>
-            <p className="text-surface-300 mb-8">Commencez gratuitement avec 3 analyses par jour.</p>
-            <Link to="/register" className="btn bg-white text-surface-900 hover:bg-surface-100 px-8 py-4 text-lg">Créer mon compte gratuit</Link>
+      {/* CTA Section */}
+      <section className="py-32 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-primary/10" />
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+          <div className="glass-panel p-12 rounded-3xl border border-white/10 bg-gradient-to-br from-surface to-surface/50">
+            <h2 className="text-4xl font-bold mb-6">Ready to secure your content?</h2>
+            <p className="text-xl text-gray-400 mb-10">
+              Join thousands of developers and companies trusting FakeTect for their media verification.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/register" className="btn-primary text-lg px-10 py-4 shadow-xl shadow-primary/20">
+                Get Started Free
+              </Link>
+              <Link to="/contact" className="btn-outline text-lg px-10 py-4">
+                Contact Sales
+              </Link>
+            </div>
           </div>
         </div>
       </section>

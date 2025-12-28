@@ -1,6 +1,6 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LayoutDashboard, History, Settings, LogOut, Users, BarChart3, ChevronLeft, Menu } from 'lucide-react';
+import { LayoutDashboard, History, Settings, LogOut, Users, BarChart3, ChevronLeft, Menu, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 import useAuthStore from '../../stores/authStore';
 
@@ -23,41 +23,56 @@ export default function DashboardLayout({ isAdmin = false }) {
   const links = isAdmin ? adminLinks : userLinks;
 
   return (
-    <div className="min-h-screen bg-surface-100 flex">
-      <aside className={`${open ? 'w-64' : 'w-20'} bg-white border-r transition-all flex flex-col`}>
-        <div className="h-16 flex items-center justify-between px-4 border-b">
+    <div className="min-h-screen bg-background flex text-white">
+      <aside className={`${open ? 'w-64' : 'w-20'} bg-surface border-r border-white/10 transition-all duration-300 flex flex-col`}>
+        <div className="h-16 flex items-center justify-between px-4 border-b border-white/10">
           {open && <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg" />
-            <span className="font-bold">FakeTect</span>
+            <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
+              <ShieldCheck size={18} className="text-white" />
+            </div>
+            <span className="font-display font-bold text-lg">FakeTect</span>
           </Link>}
-          <button onClick={() => setOpen(!open)} className="p-2 hover:bg-surface-100 rounded-lg">
+          <button onClick={() => setOpen(!open)} className="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-white transition-colors">
             {open ? <ChevronLeft size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
         <nav className="flex-1 py-4 px-3 space-y-1">
           {links.map(l => (
-            <Link key={l.to} to={l.to} className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors ${location.pathname === l.to ? 'bg-primary-50 text-primary-700' : 'text-surface-600 hover:bg-surface-100'}`}>
+            <Link 
+              key={l.to} 
+              to={l.to} 
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
+                location.pathname === l.to 
+                  ? 'bg-primary/10 text-primary border border-primary/20' 
+                  : 'text-gray-400 hover:bg-white/5 hover:text-white'
+              }`}
+            >
               <l.icon size={20} />
               {open && <span className="font-medium">{l.label}</span>}
             </Link>
           ))}
         </nav>
 
-        <div className="border-t p-4">
+        <div className="border-t border-white/10 p-4">
           {open && <div className="mb-3">
-            <p className="font-medium truncate">{user?.name || user?.email}</p>
-            <p className="text-sm text-surface-500">{user?.plan}</p>
+            <p className="font-medium truncate text-white">{user?.name || user?.email}</p>
+            <p className="text-xs text-gray-500 uppercase tracking-wider">{user?.plan || 'Free Plan'}</p>
           </div>}
-          <button onClick={() => { logout(); navigate('/'); }} className="flex items-center gap-3 px-3 py-2 text-red-600 hover:bg-red-50 rounded-xl w-full">
+          <button 
+            onClick={() => { logout(); navigate('/'); }} 
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors w-full ${!open && 'justify-center'}`}
+          >
             <LogOut size={20} />
-            {open && t('nav.logout')}
+            {open && <span className="font-medium">{t('nav.logout')}</span>}
           </button>
         </div>
       </aside>
 
-      <main className="flex-1 p-6 overflow-auto">
-        <div className="max-w-7xl mx-auto"><Outlet /></div>
+      <main className="flex-1 overflow-auto">
+        <div className="max-w-7xl mx-auto p-8">
+          <Outlet />
+        </div>
       </main>
     </div>
   );
