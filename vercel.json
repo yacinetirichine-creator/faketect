@@ -7,7 +7,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://faketect-api.onrender.com/api/:path*"
+      "destination": "https://faketect.onrender.com/api/:path*"
     }
   ],
   "headers": [
@@ -30,6 +30,6 @@
     }
   ],
   "env": {
-    "VITE_API_URL": "https://faketect-api.onrender.com"
+    "VITE_API_URL": "https://faketect.onrender.com"
   }
 }
