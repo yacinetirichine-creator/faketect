@@ -12,6 +12,8 @@ model User {
   email                 String     @unique
   password              String
   name                  String?
+  phone                 String?
+  acceptMarketing       Boolean    @default(false)
   role                  String     @default("USER")
   plan                  String     @default("FREE")
   language              String     @default("fr")

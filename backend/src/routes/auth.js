@@ -9,14 +9,22 @@ const router = express.Router();
 
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, name, language = 'fr' } = req.body;
+    const { email, password, name, language = 'fr', phone, acceptMarketing = false } = req.body;
     if (!email || !password) return res.status(400).json({ error: 'Email et mot de passe requis' });
     
     const exists = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
     if (exists) return res.status(400).json({ error: 'Email déjà utilisé' });
     
     const user = await prisma.user.create({
-      data: { id: uuid(), email: email.toLowerCase(), password: await bcrypt.hash(password, 12), name, language }
+      data: { 
+        id: uuid(), 
+        email: email.toLowerCase(), 
+        password: await bcrypt.hash(password, 12), 
+        name, 
+        language,
+        phone: phone || null,
+        acceptMarketing
+      }
     });
     
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
