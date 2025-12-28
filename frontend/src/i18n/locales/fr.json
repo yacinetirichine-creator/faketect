@@ -7,5 +7,41 @@
   "dashboard": { "welcome": "Bienvenue", "overview": "Vue d'ensemble", "history": "Historique", "settings": "Paramètres", "total": "Total", "aiDetected": "IA détectée", "real": "Réel", "remaining": "Restantes", "quick": "Analyse rapide", "dropzone": "Glissez ou cliquez", "formats": "JPG, PNG, WebP, PDF", "analyzing": "Analyse...", "result": "Résultat", "score": "Score IA", "confidence": "Confiance", "verdict": "Verdict", "subtitle": "Détection IA avancée à portée de main", "newAnalysis": "Nouvelle Analyse", "drag": "Glissez-déposez votre fichier ici", "drop": "Déposez votre fichier maintenant", "recent": "Analyses Récentes", "noHistory": "Aucune analyse pour le moment" },
   "verdicts": { "ai_generated": "IA", "likely_ai": "Prob. IA", "possibly_ai": "Peut-être IA", "possibly_real": "Peut-être réel", "likely_real": "Prob. réel" },
   "admin": { "title": "Admin", "metrics": "Métriques", "users": "Utilisateurs", "totalUsers": "Total", "newToday": "Nouveaux", "totalAnalyses": "Analyses", "mrr": "MRR" },
-  "common": { "loading": "Chargement...", "save": "Enregistrer", "cancel": "Annuler", "delete": "Supprimer" }
+  "common": { "loading": "Chargement...", "save": "Enregistrer", "cancel": "Annuler", "delete": "Supprimer" },
+  "landing": {
+    "badge": "v2.0 disponible",
+    "hero": {
+      "title": "Détectez les deepfakes",
+      "highlight": "en temps réel",
+      "subtitle": "Protégez votre intégrité numérique avec une plateforme de détection IA rapide, précise et sécurisée.",
+      "ctaPrimary": "Commencer gratuitement",
+      "ctaSecondary": "Voir les tarifs",
+      "trust": { "accuracy": "99,9% de précision", "gdpr": "Conforme RGPD", "api": "Accès API" },
+      "demo": { "real": "98.5% RÉEL", "detected": "DÉTECTÉ" }
+    },
+    "stats": {
+      "analyses": "Analyses réalisées",
+      "accuracy": "Taux de précision",
+      "clients": "Clients entreprises",
+      "speed": "Temps de traitement"
+    },
+    "featuresSection": {
+      "title": "Moteur de détection puissant",
+      "subtitle": "Nos modèles IA analysent plusieurs couches du contenu pour révéler les deepfakes, même les plus sophistiqués."
+    },
+    "cta": {
+      "title": "Prêt à sécuriser vos contenus ?",
+      "subtitle": "Rejoignez des milliers de développeurs et d'entreprises qui font confiance à FakeTect.",
+      "primary": "Commencer gratuitement",
+      "secondary": "Contacter les ventes"
+    },
+    "features": {
+      "image": { "title": "Analyse d'image", "desc": "Algorithmes de détection avancés au niveau du pixel" },
+      "video": { "title": "Analyse vidéo", "desc": "Analyse deepfake image par image" },
+      "batch": { "title": "Traitement par lot", "desc": "Analysez plusieurs fichiers simultanément" },
+      "api": { "title": "API développeurs", "desc": "Intégration fluide avec votre stack" },
+      "metadata": { "title": "Analyse des métadonnées", "desc": "Inspection approfondie des EXIF et métadonnées" },
+      "security": { "title": "Sécurité entreprise", "desc": "Chiffrement et confidentialité de niveau bancaire" }
+    }
+  }
 }

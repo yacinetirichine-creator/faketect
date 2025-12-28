@@ -17,7 +17,11 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await login(email, password);
-    if (res.success) { toast.success('Connexion réussie !'); navigate('/dashboard'); }
+    if (res.success) {
+      toast.success('Connexion réussie !');
+      const role = res.user?.role;
+      navigate(role === 'ADMIN' ? '/admin' : '/dashboard');
+    }
     else toast.error(res.error);
   };
 

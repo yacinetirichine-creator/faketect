@@ -9,11 +9,39 @@
   "admin": { "title": "Admin", "metrics": "Metriche", "users": "Utenti", "totalUsers": "Totale", "newToday": "Nuovi oggi", "totalAnalyses": "Analisi", "mrr": "MRR" },
   "common": { "loading": "Caricamento...", "save": "Salva", "cancel": "Annulla", "delete": "Elimina" },
   "landing": {
+    "badge": "v2.0 disponibile",
+    "hero": {
+      "title": "Rileva deepfake",
+      "highlight": "in tempo reale",
+      "subtitle": "Proteggi la tua integrità digitale con una piattaforma di rilevamento IA veloce, precisa e sicura.",
+      "ctaPrimary": "Inizia gratis",
+      "ctaSecondary": "Vedi prezzi",
+      "trust": { "accuracy": "99,9% di precisione", "gdpr": "Conforme al GDPR", "api": "Accesso API" },
+      "demo": { "real": "98.5% REALE", "detected": "RILEVATO" }
+    },
+    "stats": {
+      "analyses": "Analisi effettuate",
+      "accuracy": "Tasso di precisione",
+      "clients": "Clienti enterprise",
+      "speed": "Tempo di elaborazione"
+    },
+    "featuresSection": {
+      "title": "Motore di rilevamento potente",
+      "subtitle": "I nostri modelli IA analizzano più livelli di contenuto digitale per scoprire anche i deepfake più sofisticati."
+    },
+    "cta": {
+      "title": "Pronto a proteggere i tuoi contenuti?",
+      "subtitle": "Unisciti a migliaia di sviluppatori e aziende che si fidano di FakeTect per la verifica dei media.",
+      "primary": "Inizia gratis",
+      "secondary": "Contatta vendite"
+    },
     "features": {
       "image": { "title": "Analisi immagini", "desc": "Algoritmi di rilevamento avanzati a livello di pixel" },
       "video": { "title": "Scansione video", "desc": "Analisi deepfake fotogramma per fotogramma" },
       "batch": { "title": "Elaborazione batch", "desc": "Analizza più file simultaneamente" },
-      "api": { "title": "API per sviluppatori", "desc": "Integrazione perfetta con il tuo stack" }
+      "api": { "title": "API per sviluppatori", "desc": "Integrazione perfetta con il tuo stack" },
+      "metadata": { "title": "Forense metadati", "desc": "Ispezione approfondita di EXIF e metadati" },
+      "security": { "title": "Sicurezza enterprise", "desc": "Crittografia e privacy di livello bancario" }
     }
   }
 }

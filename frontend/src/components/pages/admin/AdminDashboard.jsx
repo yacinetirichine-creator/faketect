@@ -23,7 +23,7 @@ export default function AdminDashboard() {
       });
   }, []);
 
-  if (loading) return <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-primary-500" size={32} /></div>;
+  if (loading) return <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-primary" size={32} /></div>;
   
   if (error) return <div className="card bg-red-50 border-red-200 text-red-600"><p>Erreur: {error}</p></div>;
 

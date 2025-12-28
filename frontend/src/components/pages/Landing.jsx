@@ -28,8 +28,8 @@ export default function Landing() {
     { icon: Video, title: t('landing.features.video.title', 'Video Scanning'), desc: t('landing.features.video.desc', 'Frame-by-frame deepfake analysis'), color: 'text-purple-400', bg: 'bg-purple-400/10' },
     { icon: Layers, title: t('landing.features.batch.title', 'Batch Processing'), desc: t('landing.features.batch.desc', 'Analyze multiple files simultaneously'), color: 'text-green-400', bg: 'bg-green-400/10' },
     { icon: Code, title: t('landing.features.api.title', 'Developer API'), desc: t('landing.features.api.desc', 'Seamless integration with your stack'), color: 'text-orange-400', bg: 'bg-orange-400/10' },
-    { icon: Database, title: 'Metadata Forensics', desc: 'Deep EXIF and metadata inspection', color: 'text-pink-400', bg: 'bg-pink-400/10' },
-    { icon: Shield, title: 'Enterprise Security', desc: 'Bank-grade encryption and privacy', color: 'text-cyan-400', bg: 'bg-cyan-400/10' }
+    { icon: Database, title: t('landing.features.metadata.title', 'Metadata Forensics'), desc: t('landing.features.metadata.desc', 'Deep EXIF and metadata inspection'), color: 'text-pink-400', bg: 'bg-pink-400/10' },
+    { icon: Shield, title: t('landing.features.security.title', 'Enterprise Security'), desc: t('landing.features.security.desc', 'Bank-grade encryption and privacy'), color: 'text-cyan-400', bg: 'bg-cyan-400/10' }
   ];
 
   return (
@@ -55,37 +55,37 @@ export default function Landing() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
               </span>
-              v2.0 Now Available
+              {t('landing.badge', 'v2.0 disponible')}
             </motion.div>
 
             <motion.h1 variants={item} className="text-6xl md:text-7xl font-display font-bold leading-tight mb-6">
-              Detect Deepfakes <br />
-              <span className="text-gradient">In Real Time</span>
+              {t('landing.hero.title', 'Détectez les deepfakes')} <br />
+              <span className="text-gradient">{t('landing.hero.highlight', 'en temps réel')}</span>
             </motion.h1>
 
             <motion.p variants={item} className="text-xl text-gray-400 mb-10 max-w-lg leading-relaxed">
-              Protect your digital integrity with the world's most advanced AI detection platform. Fast, accurate, and secure.
+              {t('landing.hero.subtitle', "Protégez votre intégrité numérique avec une plateforme de détection IA rapide, précise et sécurisée.")}
             </motion.p>
 
             <motion.div variants={item} className="flex flex-col sm:flex-row gap-4">
               <Link to="/register" className="btn-primary text-lg px-8 py-4 group">
-                Start Free Trial
+                {t('landing.hero.ctaPrimary', 'Commencer gratuitement')}
                 <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
               </Link>
               <Link to="/pricing" className="btn-secondary text-lg px-8 py-4">
-                View Pricing
+                {t('landing.hero.ctaSecondary', 'Voir les tarifs')}
               </Link>
             </motion.div>
 
             <motion.div variants={item} className="mt-12 flex items-center gap-8 text-gray-500 text-sm font-medium">
               <div className="flex items-center gap-2">
-                <CheckCircle2 size={16} className="text-primary" /> 99.9% Accuracy
+                <CheckCircle2 size={16} className="text-primary" /> {t('landing.hero.trust.accuracy', '99,9% de précision')}
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle2 size={16} className="text-primary" /> GDPR Compliant
+                <CheckCircle2 size={16} className="text-primary" /> {t('landing.hero.trust.gdpr', 'Conforme RGPD')}
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle2 size={16} className="text-primary" /> API Access
+                <CheckCircle2 size={16} className="text-primary" /> {t('landing.hero.trust.api', 'Accès API')}
               </div>
             </motion.div>
           </motion.div>
@@ -132,7 +132,7 @@ export default function Landing() {
                       <div className="h-2 w-24 bg-white/20 rounded mb-2" />
                       <div className="h-2 w-16 bg-white/10 rounded" />
                     </div>
-                    <div className="text-green-400 font-mono text-sm">98.5% REAL</div>
+                    <div className="text-green-400 font-mono text-sm">{t('landing.hero.demo.real', '98.5% REAL')}</div>
                   </div>
 
                   <div className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/5">
@@ -143,7 +143,7 @@ export default function Landing() {
                       <div className="h-2 w-32 bg-white/20 rounded mb-2" />
                       <div className="h-2 w-20 bg-white/10 rounded" />
                     </div>
-                    <div className="text-red-400 font-mono text-sm">DETECTED</div>
+                    <div className="text-red-400 font-mono text-sm">{t('landing.hero.demo.detected', 'DETECTED')}</div>
                   </div>
 
                   {/* Scanning Line Animation */}
@@ -183,10 +183,10 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { label: 'Analyses Performed', value: '1M+' },
-              { label: 'Accuracy Rate', value: '99.9%' },
-              { label: 'Enterprise Clients', value: '500+' },
-              { label: 'Processing Time', value: '<2s' },
+              { label: t('landing.stats.analyses', 'Analyses réalisées'), value: '1M+' },
+              { label: t('landing.stats.accuracy', 'Taux de précision'), value: '99.9%' },
+              { label: t('landing.stats.clients', 'Clients entreprises'), value: '500+' },
+              { label: t('landing.stats.speed', 'Temps de traitement'), value: '<2s' },
             ].map((stat, i) => (
               <div key={i} className="text-center">
                 <div className="text-3xl md:text-4xl font-bold text-white mb-1">{stat.value}</div>
@@ -201,10 +201,8 @@ export default function Landing() {
       <section className="py-32 relative">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">Powerful Detection Engine</h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-              Our proprietary AI models analyze multiple layers of digital content to expose even the most sophisticated deepfakes.
-            </p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">{t('landing.featuresSection.title', 'Moteur de détection puissant')}</h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">{t('landing.featuresSection.subtitle', "Nos modèles IA analysent plusieurs couches du contenu pour révéler les deepfakes, même les plus sophistiqués.")}</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -233,16 +231,14 @@ export default function Landing() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-primary/10" />
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <div className="glass-panel p-12 rounded-3xl border border-white/10 bg-gradient-to-br from-surface to-surface/50">
-            <h2 className="text-4xl font-bold mb-6">Ready to secure your content?</h2>
-            <p className="text-xl text-gray-400 mb-10">
-              Join thousands of developers and companies trusting FakeTect for their media verification.
-            </p>
+            <h2 className="text-4xl font-bold mb-6">{t('landing.cta.title', 'Prêt à sécuriser vos contenus ?')}</h2>
+            <p className="text-xl text-gray-400 mb-10">{t('landing.cta.subtitle', "Rejoignez des milliers de développeurs et d'entreprises qui font confiance à FakeTect.")}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/register" className="btn-primary text-lg px-10 py-4 shadow-xl shadow-primary/20">
-                Get Started Free
+                {t('landing.cta.primary', 'Commencer gratuitement')}
               </Link>
               <Link to="/contact" className="btn-outline text-lg px-10 py-4">
-                Contact Sales
+                {t('landing.cta.secondary', 'Contacter les ventes')}
               </Link>
             </div>
           </div>

@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { User, Globe, CreditCard, ExternalLink, Loader2 } from 'lucide-react';
+import { User, Globe, CreditCard, ExternalLink, Loader2, ShieldCheck } from 'lucide-react';
 import useAuthStore from '../../stores/authStore';
 import api, { stripeApi } from '../../services/api';
-import { languages } from '../../i18n';
+import { languages, normalizeLanguage, persistLanguage } from '../../i18n';
 import toast from 'react-hot-toast';
 
 export default function Settings() {
   const { t, i18n } = useTranslation();
   const { user, updateUser } = useAuthStore();
+  const currentLang = normalizeLanguage(i18n.resolvedLanguage || i18n.language);
   const [name, setName] = useState(user?.name || '');
   const [loading, setLoading] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
@@ -25,8 +26,9 @@ export default function Settings() {
   };
 
   const changeLang = async (code) => {
-    i18n.changeLanguage(code);
-    try { await api.put('/auth/profile', { language: code }); updateUser({ language: code }); } catch {}
+    const lang = persistLanguage(code);
+    i18n.changeLanguage(lang);
+    try { await api.put('/auth/profile', { language: lang }); updateUser({ language: lang }); } catch {}
   };
 
   const openCustomerPortal = async () => {
@@ -43,6 +45,23 @@ export default function Settings() {
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-white">{t('dashboard.settings')}</h1>
+
+      {user?.role === 'ADMIN' && (
+        <div className="card bg-surface/50 border-white/10">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center"><ShieldCheck className="text-accent" size={20} /></div>
+            <h2 className="text-xl font-semibold text-white">Admin</h2>
+          </div>
+
+          <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
+            <div>
+              <p className="font-semibold text-white">Accès administrateur</p>
+              <p className="text-sm text-gray-400">Ouvrir le dashboard admin et gérer les utilisateurs</p>
+            </div>
+            <a href="/admin" className="btn-primary">Ouvrir</a>
+          </div>
+        </div>
+      )}
 
       <div className="card bg-surface/50 border-white/10">
         <div className="flex items-center gap-3 mb-6">
@@ -71,7 +90,7 @@ export default function Settings() {
 
         <div className="grid grid-cols-3 md:grid-cols-5 gap-3 max-w-2xl">
           {languages.map(l => (
-            <button key={l.code} onClick={() => changeLang(l.code)} className={`flex items-center justify-center gap-2 p-3 rounded-xl transition-colors ${i18n.language === l.code ? 'bg-primary/20 text-primary border-2 border-primary/50' : 'bg-white/5 hover:bg-white/10 text-gray-400 border border-white/10'}`}>
+            <button key={l.code} onClick={() => changeLang(l.code)} className={`flex items-center justify-center gap-2 p-3 rounded-xl transition-colors ${currentLang === l.code ? 'bg-primary/20 text-primary border-2 border-primary/50' : 'bg-white/5 hover:bg-white/10 text-gray-400 border border-white/10'}`}>
               <span className="text-xl">{l.flag}</span>
               <span className="font-medium">{l.code.toUpperCase()}</span>
             </button>

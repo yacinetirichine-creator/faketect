@@ -7,5 +7,41 @@
   "dashboard": { "welcome": "Welcome", "overview": "Overview", "history": "History", "settings": "Settings", "total": "Total", "aiDetected": "AI detected", "real": "Real", "remaining": "Remaining", "quick": "Quick Analysis", "dropzone": "Drop or click", "formats": "JPG, PNG, WebP, PDF", "analyzing": "Analyzing...", "result": "Result", "score": "AI Score", "confidence": "Confidence", "verdict": "Verdict", "subtitle": "Advanced AI detection at your fingertips", "newAnalysis": "New Analysis", "drag": "Drag & drop your file here", "drop": "Drop your file now", "recent": "Recent Analyses", "noHistory": "No analysis yet" },
   "verdicts": { "ai_generated": "AI", "likely_ai": "Likely AI", "possibly_ai": "Maybe AI", "possibly_real": "Maybe real", "likely_real": "Likely real" },
   "admin": { "title": "Admin", "metrics": "Metrics", "users": "Users", "totalUsers": "Total", "newToday": "New today", "totalAnalyses": "Analyses", "mrr": "MRR" },
-  "common": { "loading": "Loading...", "save": "Save", "cancel": "Cancel", "delete": "Delete" }
+  "common": { "loading": "Loading...", "save": "Save", "cancel": "Cancel", "delete": "Delete" },
+  "landing": {
+    "badge": "v2.0 now available",
+    "hero": {
+      "title": "Detect deepfakes",
+      "highlight": "in real time",
+      "subtitle": "Protect your digital integrity with a fast, accurate, and secure AI detection platform.",
+      "ctaPrimary": "Start free",
+      "ctaSecondary": "View pricing",
+      "trust": { "accuracy": "99.9% accuracy", "gdpr": "GDPR compliant", "api": "API access" },
+      "demo": { "real": "98.5% REAL", "detected": "DETECTED" }
+    },
+    "stats": {
+      "analyses": "Analyses performed",
+      "accuracy": "Accuracy rate",
+      "clients": "Enterprise clients",
+      "speed": "Processing time"
+    },
+    "featuresSection": {
+      "title": "Powerful detection engine",
+      "subtitle": "Our proprietary AI models analyze multiple layers of digital content to expose even the most sophisticated deepfakes."
+    },
+    "cta": {
+      "title": "Ready to secure your content?",
+      "subtitle": "Join thousands of developers and companies trusting FakeTect for media verification.",
+      "primary": "Get started free",
+      "secondary": "Contact sales"
+    },
+    "features": {
+      "image": { "title": "Image analysis", "desc": "Advanced pixel-level detection algorithms" },
+      "video": { "title": "Video scanning", "desc": "Frame-by-frame deepfake analysis" },
+      "batch": { "title": "Batch processing", "desc": "Analyze multiple files simultaneously" },
+      "api": { "title": "Developer API", "desc": "Seamless integration with your stack" },
+      "metadata": { "title": "Metadata forensics", "desc": "Deep EXIF and metadata inspection" },
+      "security": { "title": "Enterprise security", "desc": "Bank-grade encryption and privacy" }
+    }
+  }
 }

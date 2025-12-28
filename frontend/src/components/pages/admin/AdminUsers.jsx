@@ -46,7 +46,7 @@ export default function AdminUsers() {
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-primary-500" size={32} /></div>
+        <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-primary" size={32} /></div>
       ) : (
         <>
           <div className="card overflow-hidden">

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Globe, Menu, X, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 import useAuthStore from '../../stores/authStore';
-import { languages } from '../../i18n';
+import { languages, normalizeLanguage, persistLanguage } from '../../i18n';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../services/api';
 
@@ -14,14 +14,17 @@ export default function MainLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
 
+  const currentLang = normalizeLanguage(i18n.resolvedLanguage || i18n.language);
+
   const changeLang = async (code) => {
-    i18n.changeLanguage(code);
+    const lang = persistLanguage(code);
+    i18n.changeLanguage(lang);
     setLangOpen(false);
     // Sauvegarder en base si connecté
     if (isAuthenticated) {
       try {
-        await api.put('/auth/profile', { language: code });
-        updateUser({ language: code });
+        await api.put('/auth/profile', { language: lang });
+        updateUser({ language: lang });
       } catch (error) {
         console.error('Error saving language:', error);
       }
@@ -66,7 +69,7 @@ export default function MainLayout() {
                       <button 
                         key={l.code} 
                         onClick={() => changeLang(l.code)}
-                        className={`w-full px-4 py-2 text-left hover:bg-white/5 flex items-center gap-2 text-sm ${i18n.language === l.code ? 'text-primary font-medium' : 'text-gray-400'}`}
+                        className={`w-full px-4 py-2 text-left hover:bg-white/5 flex items-center gap-2 text-sm ${currentLang === l.code ? 'text-primary font-medium' : 'text-gray-400'}`}
                       >
                         <span>{l.flag}</span> {l.name}
                       </button>
@@ -84,8 +87,8 @@ export default function MainLayout() {
               </div>
             ) : (
               <div className="flex items-center gap-4">
-                <Link to="/login" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">{t('nav.connexion', 'Login')}</Link>
-                <Link to="/register" className="px-4 py-2 text-sm rounded-lg bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20 transition-all">{t('nav.inscription', 'Sign Up')}</Link>
+                <Link to="/login" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">{t('nav.login')}</Link>
+                <Link to="/register" className="px-4 py-2 text-sm rounded-lg bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20 transition-all">{t('nav.register')}</Link>
               </div>
             )}
           </div>
@@ -117,7 +120,7 @@ export default function MainLayout() {
                       <button 
                         key={l.code} 
                         onClick={() => { changeLang(l.code); setMenuOpen(false); }}
-                        className={`px-3 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors ${i18n.language === l.code ? 'bg-primary/20 text-primary border border-primary/50' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
+                        className={`px-3 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors ${currentLang === l.code ? 'bg-primary/20 text-primary border border-primary/50' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
                       >
                         <span>{l.flag}</span> {l.name}
                       </button>

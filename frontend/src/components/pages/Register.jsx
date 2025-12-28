@@ -7,7 +7,7 @@ import useAuthStore from '../../stores/authStore';
 import toast from 'react-hot-toast';
 
 export default function Register() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { register, isLoading } = useAuthStore();
   const navigate = useNavigate();
   const [name, setName] = useState('');
@@ -17,7 +17,8 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await register(name, email, password);
+    const lang = (i18n.resolvedLanguage || i18n.language || 'fr').split('-')[0];
+    const res = await register(email, password, name, lang);
     if (res.success) { toast.success('Compte créé !'); navigate('/dashboard'); }
     else toast.error(res.error);
   };

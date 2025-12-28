@@ -13,24 +13,33 @@ import History from './components/pages/History';
 import Settings from './components/pages/Settings';
 import AdminDashboard from './components/pages/admin/AdminDashboard';
 import AdminUsers from './components/pages/admin/AdminUsers';
+import { Loader2 } from 'lucide-react';
 
 const Protected = ({ children }) => {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, token, user, hasHydrated } = useAuthStore();
+
+  if (!hasHydrated) return <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-primary" size={32} /></div>;
+  if (token && !user) return <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-primary" size={32} /></div>;
   return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
 const Admin = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated, user, token, hasHydrated } = useAuthStore();
+
+  if (!hasHydrated) return <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-primary" size={32} /></div>;
+  if (token && !user) return <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-primary" size={32} /></div>;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
   if (user?.role !== 'ADMIN') return <Navigate to="/dashboard" replace />;
   return children;
 };
 
 export default function App() {
-  const { fetchUser, token } = useAuthStore();
+  const { fetchUser, token, user, isFetchingUser } = useAuthStore();
   useLanguageSync();
   
-  useEffect(() => { if (token) fetchUser(); }, [token]);
+  useEffect(() => {
+    if (token && !user && !isFetchingUser) fetchUser();
+  }, [token, user, isFetchingUser]);
 
   return (
     <Routes>

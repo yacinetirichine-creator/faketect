@@ -9,11 +9,39 @@
   "admin": { "title": "Admin", "metrics": "Metriken", "users": "Benutzer", "totalUsers": "Gesamt", "newToday": "Neu heute", "totalAnalyses": "Analysen", "mrr": "MRR" },
   "common": { "loading": "Laden...", "save": "Speichern", "cancel": "Abbrechen", "delete": "Löschen" },
   "landing": {
+    "badge": "v2.0 verfügbar",
+    "hero": {
+      "title": "Deepfakes erkennen",
+      "highlight": "in Echtzeit",
+      "subtitle": "Schützen Sie Ihre digitale Integrität mit einer schnellen, präzisen und sicheren KI-Erkennungsplattform.",
+      "ctaPrimary": "Kostenlos starten",
+      "ctaSecondary": "Preise ansehen",
+      "trust": { "accuracy": "99,9% Genauigkeit", "gdpr": "DSGVO-konform", "api": "API-Zugriff" },
+      "demo": { "real": "98.5% ECHT", "detected": "ERKANNT" }
+    },
+    "stats": {
+      "analyses": "Durchgeführte Analysen",
+      "accuracy": "Genauigkeitsrate",
+      "clients": "Enterprise-Kunden",
+      "speed": "Verarbeitungszeit"
+    },
+    "featuresSection": {
+      "title": "Leistungsstarker Erkennungs-Engine",
+      "subtitle": "Unsere proprietären KI-Modelle analysieren mehrere Ebenen digitaler Inhalte, um selbst die raffiniertesten Deepfakes aufzudecken."
+    },
+    "cta": {
+      "title": "Bereit, Ihre Inhalte zu sichern?",
+      "subtitle": "Schließen Sie sich Tausenden von Entwickler:innen und Unternehmen an, die FakeTect vertrauen.",
+      "primary": "Kostenlos loslegen",
+      "secondary": "Vertrieb kontaktieren"
+    },
     "features": {
       "image": { "title": "Bildanalyse", "desc": "Fortgeschrittene Erkennungsalgorithmen auf Pixelebene" },
       "video": { "title": "Video-Scanning", "desc": "Bild-für-Bild-Deepfake-Analyse" },
       "batch": { "title": "Stapelverarbeitung", "desc": "Analysieren Sie mehrere Dateien gleichzeitig" },
-      "api": { "title": "Entwickler-API", "desc": "Nahtlose Integration in Ihren Stack" }
+      "api": { "title": "Entwickler-API", "desc": "Nahtlose Integration in Ihren Stack" },
+      "metadata": { "title": "Metadaten-Forensik", "desc": "Tiefgehende EXIF- und Metadaten-Inspektion" },
+      "security": { "title": "Enterprise-Sicherheit", "desc": "Bankenstarkes Verschlüsselung und Datenschutz" }
     }
   }
 }

@@ -16,8 +16,33 @@ export const languages = [
   { code: 'it', name: 'Italiano', flag: '🇮🇹' }
 ];
 
-// Récupérer la langue du localStorage ou utiliser 'fr' par défaut
-const savedLanguage = localStorage.getItem('i18nextLng') || 'fr';
+export const LANGUAGE_STORAGE_KEY = 'faketect-language';
+
+export function normalizeLanguage(code) {
+  if (!code) return 'fr';
+  const normalized = String(code).trim().toLowerCase().replace('_', '-');
+  return normalized.split('-')[0];
+}
+
+export function isSupportedLanguage(code) {
+  const c = normalizeLanguage(code);
+  return languages.some((l) => l.code === c);
+}
+
+export function getSavedLanguage() {
+  const raw = localStorage.getItem(LANGUAGE_STORAGE_KEY) || localStorage.getItem('i18nextLng');
+  const lang = normalizeLanguage(raw || 'fr');
+  return isSupportedLanguage(lang) ? lang : 'fr';
+}
+
+export function persistLanguage(code) {
+  const lang = normalizeLanguage(code);
+  localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+  localStorage.setItem('i18nextLng', lang);
+  return lang;
+}
+
+const savedLanguage = getSavedLanguage();
 
 i18n
   .use(initReactI18next)
@@ -39,5 +64,8 @@ i18n
       useSuspense: false
     }
   });
+
+// Ensure storage is in sync with the resolved language.
+persistLanguage(savedLanguage);
 
 export default i18n;

@@ -7,13 +7,17 @@ const useAuthStore = create(persist((set, get) => ({
   token: null,
   isAuthenticated: false,
   isLoading: false,
+  hasHydrated: false,
+  isFetchingUser: false,
+
+  setHasHydrated: (value) => set({ hasHydrated: value }),
 
   login: async (email, password) => {
     set({ isLoading: true });
     try {
       const { data } = await api.post('/auth/login', { email, password });
       set({ user: data.user, token: data.token, isAuthenticated: true, isLoading: false });
-      return { success: true };
+      return { success: true, user: data.user };
     } catch (e) {
       set({ isLoading: false });
       return { success: false, error: e.response?.data?.error || 'Erreur' };
@@ -25,23 +29,37 @@ const useAuthStore = create(persist((set, get) => ({
     try {
       const { data } = await api.post('/auth/register', { email, password, name, language });
       set({ user: data.user, token: data.token, isAuthenticated: true, isLoading: false });
-      return { success: true };
+      return { success: true, user: data.user };
     } catch (e) {
       set({ isLoading: false });
       return { success: false, error: e.response?.data?.error || 'Erreur' };
     }
   },
 
-  logout: () => set({ user: null, token: null, isAuthenticated: false }),
+  logout: () => {
+    try { localStorage.removeItem('faketect-auth'); } catch {}
+    set({ user: null, token: null, isAuthenticated: false });
+  },
 
   updateUser: (data) => set((s) => ({ user: { ...s.user, ...data } })),
 
   fetchUser: async () => {
+    set({ isFetchingUser: true });
     try {
       const { data } = await api.get('/auth/me');
-      set({ user: data.user, isAuthenticated: true });
-    } catch { get().logout(); }
+      set({ user: data.user, isAuthenticated: true, isFetchingUser: false });
+    } catch {
+      set({ isFetchingUser: false });
+      get().logout();
+    }
   }
-}), { name: 'faketect-auth', partialize: (s) => ({ token: s.token, user: s.user, isAuthenticated: s.isAuthenticated }) }));
+}), {
+  name: 'faketect-auth',
+  partialize: (s) => ({ token: s.token, user: s.user, isAuthenticated: s.isAuthenticated }),
+  onRehydrateStorage: () => (state, error) => {
+    if (error) return;
+    state?.setHasHydrated?.(true);
+  }
+}));
 
 export default useAuthStore;
