@@ -1,0 +1,19 @@
+{
+  "nav": { "home": "Início", "pricing": "Preços", "login": "Entrar", "register": "Cadastrar", "dashboard": "Painel", "logout": "Sair", "admin": "Admin" },
+  "hero": { "title": "Detecte falsificações", "highlight": "em segundos", "subtitle": "FakeTect usa IA avançada para detectar imagens geradas por IA e deepfakes.", "cta": "Começar grátis", "cta2": "Ver preços" },
+  "features": { "title": "Recursos", "subtitle": "Tudo para detectar conteúdo de IA" },
+  "pricing": { "title": "Preços simples", "subtitle": "Economize 30% anualmente", "monthly": "Mensal", "yearly": "Anual", "perMonth": "/mês", "perYear": "/ano", "popular": "Popular", "choose": "Escolher", "current": "Atual", "free": "Grátis", "save": "Economize" },
+  "auth": { "loginTitle": "Bem-vindo de volta!", "loginSub": "Entre na sua conta", "registerTitle": "Criar conta", "registerSub": "Comece com 3 análises grátis/dia", "email": "Email", "password": "Senha", "confirm": "Confirmar", "name": "Nome completo", "loginBtn": "Entrar", "registerBtn": "Criar conta", "login": "Entrar", "register": "Cadastrar", "noAccount": "Sem conta?", "hasAccount": "Já tem conta?", "loginLink": "Entrar", "registerLink": "Cadastrar" },
+  "dashboard": { "welcome": "Bem-vindo", "overview": "Visão geral", "history": "Histórico", "settings": "Configurações", "total": "Total", "aiDetected": "IA detectada", "real": "Real", "remaining": "Restantes", "quick": "Análise rápida", "dropzone": "Arraste ou clique", "formats": "JPG, PNG, WebP, PDF", "analyzing": "Analisando...", "result": "Resultado", "score": "Pontuação IA", "confidence": "Confiança", "verdict": "Veredito", "subtitle": "Detecção de IA avançada ao seu alcance", "newAnalysis": "Nova análise", "drag": "Arraste e solte seu arquivo aqui", "drop": "Solte seu arquivo agora", "recent": "Análises recentes", "noHistory": "Nenhuma análise ainda" },
+  "verdicts": { "ai_generated": "IA", "likely_ai": "Provavelmente IA", "possibly_ai": "Talvez IA", "possibly_real": "Talvez real", "likely_real": "Provavelmente real" },
+  "admin": { "title": "Admin", "metrics": "Métricas", "users": "Usuários", "totalUsers": "Total", "newToday": "Novos hoje", "totalAnalyses": "Análises", "mrr": "MRR" },
+  "common": { "loading": "Carregando...", "save": "Salvar", "cancel": "Cancelar", "delete": "Excluir" },
+  "landing": {
+    "features": {
+      "image": { "title": "Análise de imagem", "desc": "Algoritmos de detecção avançados em nível de pixel" },
+      "video": { "title": "Varredura de vídeo", "desc": "Análise de deepfake quadro a quadro" },
+      "batch": { "title": "Processamento em lote", "desc": "Analise vários arquivos simultaneamente" },
+      "api": { "title": "API para desenvolvedores", "desc": "Integração perfeita com sua stack" }
+    }
+  }
+}

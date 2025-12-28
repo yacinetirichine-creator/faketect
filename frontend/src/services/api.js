@@ -45,7 +45,7 @@ export const plansApi = {
 };
 
 export const stripeApi = {
-  createCheckout: (planId, billing) => api.post('/stripe/create-checkout', { planId, billing }),
+  createCheckout: (planId, billing, locale) => api.post('/stripe/create-checkout', { planId, billing, locale }),
   getCustomerPortal: () => api.post('/stripe/customer-portal')
 };
 

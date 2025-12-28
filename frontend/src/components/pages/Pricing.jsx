@@ -31,7 +31,7 @@ export default function Pricing() {
 
     try {
       setCheckoutLoading(id);
-      const { data } = await stripeApi.createCheckout(id, yearly ? 'yearly' : 'monthly');
+      const { data } = await stripeApi.createCheckout(id, yearly ? 'yearly' : 'monthly', i18n.language);
       window.location.href = data.url;
     } catch (error) {
       toast.error(error.response?.data?.error || 'Erreur lors de la création du checkout');

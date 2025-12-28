@@ -1,0 +1,19 @@
+{
+  "nav": { "home": "Inicio", "pricing": "Precios", "login": "Iniciar sesión", "register": "Registrarse", "dashboard": "Panel", "logout": "Cerrar sesión", "admin": "Admin" },
+  "hero": { "title": "Detecta falsificaciones", "highlight": "en segundos", "subtitle": "FakeTect utiliza IA avanzada para detectar imágenes generadas por IA y deepfakes.", "cta": "Comenzar gratis", "cta2": "Ver precios" },
+  "features": { "title": "Características", "subtitle": "Todo para detectar contenido de IA" },
+  "pricing": { "title": "Precios simples", "subtitle": "Ahorra 30% anualmente", "monthly": "Mensual", "yearly": "Anual", "perMonth": "/mes", "perYear": "/año", "popular": "Popular", "choose": "Elegir", "current": "Actual", "free": "Gratis", "save": "Ahorra" },
+  "auth": { "loginTitle": "¡Bienvenido de nuevo!", "loginSub": "Inicia sesión en tu cuenta", "registerTitle": "Crear cuenta", "registerSub": "Comienza con 3 análisis gratis/día", "email": "Email", "password": "Contraseña", "confirm": "Confirmar", "name": "Nombre completo", "loginBtn": "Iniciar sesión", "registerBtn": "Crear cuenta", "login": "Iniciar sesión", "register": "Registrarse", "noAccount": "¿No tienes cuenta?", "hasAccount": "¿Ya tienes cuenta?", "loginLink": "Iniciar sesión", "registerLink": "Registrarse" },
+  "dashboard": { "welcome": "Bienvenido", "overview": "Resumen", "history": "Historial", "settings": "Configuración", "total": "Total", "aiDetected": "IA detectada", "real": "Real", "remaining": "Restantes", "quick": "Análisis rápido", "dropzone": "Arrastra o haz clic", "formats": "JPG, PNG, WebP, PDF", "analyzing": "Analizando...", "result": "Resultado", "score": "Puntuación IA", "confidence": "Confianza", "verdict": "Veredicto", "subtitle": "Detección de IA avanzada al alcance de tu mano", "newAnalysis": "Nuevo análisis", "drag": "Arrastra y suelta tu archivo aquí", "drop": "Suelta tu archivo ahora", "recent": "Análisis recientes", "noHistory": "Aún no hay análisis" },
+  "verdicts": { "ai_generated": "IA", "likely_ai": "Probablemente IA", "possibly_ai": "Quizás IA", "possibly_real": "Quizás real", "likely_real": "Probablemente real" },
+  "admin": { "title": "Admin", "metrics": "Métricas", "users": "Usuarios", "totalUsers": "Total", "newToday": "Nuevos hoy", "totalAnalyses": "Análisis", "mrr": "MRR" },
+  "common": { "loading": "Cargando...", "save": "Guardar", "cancel": "Cancelar", "delete": "Eliminar" },
+  "landing": {
+    "features": {
+      "image": { "title": "Análisis de imagen", "desc": "Algoritmos de detección avanzados a nivel de píxel" },
+      "video": { "title": "Escaneo de vídeo", "desc": "Análisis de deepfake fotograma a fotograma" },
+      "batch": { "title": "Procesamiento por lotes", "desc": "Analiza varios archivos simultáneamente" },
+      "api": { "title": "API para desarrolladores", "desc": "Integración perfecta con tu stack" }
+    }
+  }
+}

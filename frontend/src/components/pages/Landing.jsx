@@ -24,10 +24,10 @@ export default function Landing() {
   const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
   const features = [
-    { icon: FileSearch, title: 'Image Analysis', desc: 'Advanced pixel-level detection algorithms', color: 'text-blue-400', bg: 'bg-blue-400/10' },
-    { icon: Video, title: 'Video Scanning', desc: 'Frame-by-frame deepfake analysis', color: 'text-purple-400', bg: 'bg-purple-400/10' },
-    { icon: Layers, title: 'Batch Processing', desc: 'Analyze multiple files simultaneously', color: 'text-green-400', bg: 'bg-green-400/10' },
-    { icon: Code, title: 'Developer API', desc: 'Seamless integration with your stack', color: 'text-orange-400', bg: 'bg-orange-400/10' },
+    { icon: FileSearch, title: t('landing.features.image.title', 'Image Analysis'), desc: t('landing.features.image.desc', 'Advanced pixel-level detection algorithms'), color: 'text-blue-400', bg: 'bg-blue-400/10' },
+    { icon: Video, title: t('landing.features.video.title', 'Video Scanning'), desc: t('landing.features.video.desc', 'Frame-by-frame deepfake analysis'), color: 'text-purple-400', bg: 'bg-purple-400/10' },
+    { icon: Layers, title: t('landing.features.batch.title', 'Batch Processing'), desc: t('landing.features.batch.desc', 'Analyze multiple files simultaneously'), color: 'text-green-400', bg: 'bg-green-400/10' },
+    { icon: Code, title: t('landing.features.api.title', 'Developer API'), desc: t('landing.features.api.desc', 'Seamless integration with your stack'), color: 'text-orange-400', bg: 'bg-orange-400/10' },
     { icon: Database, title: 'Metadata Forensics', desc: 'Deep EXIF and metadata inspection', color: 'text-pink-400', bg: 'bg-pink-400/10' },
     { icon: Shield, title: 'Enterprise Security', desc: 'Bank-grade encryption and privacy', color: 'text-cyan-400', bg: 'bg-cyan-400/10' }
   ];

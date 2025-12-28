@@ -11,7 +11,7 @@ const STRIPE_PRICES = require('../stripe-products.json');
 // Créer une session de checkout
 router.post('/create-checkout', auth, async (req, res) => {
   try {
-    const { planId, billing } = req.body; // planId: 'STARTER', 'PRO', etc. | billing: 'monthly' ou 'yearly'
+    const { planId, billing, locale } = req.body; // planId: 'STARTER', 'PRO', etc. | billing: 'monthly' ou 'yearly' | locale: 'fr', 'en', etc.
     
     if (!STRIPE_PRICES[planId]) {
       return res.status(400).json({ error: 'Plan invalide' });
@@ -21,6 +21,18 @@ router.post('/create-checkout', auth, async (req, res) => {
       ? STRIPE_PRICES[planId].yearlyPriceId 
       : STRIPE_PRICES[planId].monthlyPriceId;
 
+    // Mapping des locales i18n vers Stripe
+    const stripeLocales = {
+      'fr': 'fr',
+      'en': 'en',
+      'es': 'es',
+      'de': 'de',
+      'pt': 'pt-BR',
+      'it': 'it',
+      'ja': 'ja',
+      'zh': 'zh'
+    };
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [{
@@ -28,6 +40,7 @@ router.post('/create-checkout', auth, async (req, res) => {
         quantity: 1,
       }],
       mode: 'subscription',
+      locale: stripeLocales[locale] || 'auto', // Détection automatique ou langue choisie
       success_url: `${process.env.FRONTEND_URL}/dashboard?success=true`,
       cancel_url: `${process.env.FRONTEND_URL}/pricing?canceled=true`,
       customer_email: req.user.email,
@@ -36,7 +49,9 @@ router.post('/create-checkout', auth, async (req, res) => {
         userId: req.user.id.toString(),
         planId: planId,
         billing: billing
-      }
+      },
+      billing_address_collection: 'auto', // Collecte automatique de l'adresse selon le pays
+      automatic_tax: { enabled: true } // Calcul automatique de la TVA selon le pays
     });
 
     res.json({ url: session.url });
