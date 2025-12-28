@@ -50,7 +50,12 @@ router.post('/file', auth, checkLimit, upload.single('file'), async (req, res) =
     
     const updated = await prisma.analysis.update({
       where: { id: analysis.id },
-      data: { aiScore: result.aiScore, isAi: result.isAi, confidence: result.confidence, details: result }
+      data: { 
+        aiScore: result.aiScore, 
+        isAi: result.isAi, 
+        confidence: result.confidence, 
+        details: JSON.stringify(result)
+      }
     });
     
     await prisma.user.update({ where: { id: req.user.id }, data: { usedToday: { increment: 1 }, usedMonth: { increment: 1 } } });

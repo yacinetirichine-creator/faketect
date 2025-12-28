@@ -1,0 +1,37 @@
+services:
+  # Backend API Node.js
+  - type: web
+    name: faketect-api
+    env: node
+    region: frankfurt
+    plan: free
+    buildCommand: cd backend && npm install && npx prisma generate
+    startCommand: cd backend && node src/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PORT
+        value: 3001
+      - key: FRONTEND_URL
+        value: https://faketect.vercel.app
+      - key: SIGHTENGINE_USER
+        sync: false
+      - key: SIGHTENGINE_SECRET
+        sync: false
+      - key: ILLUMINARTY_USER
+        sync: false
+      - key: ILLUMINARTY_SECRET
+        sync: false
+      - key: ILLUMINARTY_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+    healthCheckPath: /api/health
