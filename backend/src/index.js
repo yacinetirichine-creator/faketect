@@ -41,7 +41,23 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/api/', globalLimiter);
 
 // Health check (avant les routes pour ne pas être rate-limité)
-app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
+app.get('/api/health', async (req, res) => {
+  try {
+    // Test connexion DB
+    await prisma.$queryRaw`SELECT 1`;
+    res.json({ 
+      status: 'ok', 
+      database: 'connected',
+      timestamp: new Date().toISOString() 
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      status: 'error', 
+      database: 'disconnected',
+      error: error.message 
+    });
+  }
+});
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
