@@ -12,8 +12,8 @@ const OPTIONAL_ENV_VARS = [
   'STRIPE_SECRET_KEY',
   'STRIPE_WEBHOOK_SECRET',
   'OPENAI_API_KEY',
-  'SIGHTENGINE_USER',
-  'SIGHTENGINE_SECRET',
+  'SIGHTENGINE_API_USER',
+  'SIGHTENGINE_API_SECRET',
   'ILLUMINARTY_API_KEY',
   'PORT',
   'NODE_ENV'
@@ -71,7 +71,7 @@ function validateEnv() {
       environment: env,
       hasStripe: !!process.env.STRIPE_SECRET_KEY,
       hasOpenAI: !!process.env.OPENAI_API_KEY,
-      hasSightengine: !!process.env.SIGHTENGINE_USER,
+      hasSightengine: !!process.env.SIGHTENGINE_API_USER,
       hasIllumarty: !!process.env.ILLUMINARTY_API_KEY
     });
   }

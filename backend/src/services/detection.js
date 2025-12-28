@@ -7,7 +7,7 @@ class DetectionService {
     
     // Pour les vidéos, utiliser uniquement Sightengine (support vidéo)
     if (isVideo) {
-      if (process.env.SIGHTENGINE_USER && process.env.SIGHTENGINE_SECRET) {
+      if (process.env.SIGHTENGINE_API_USER && process.env.SIGHTENGINE_API_SECRET) {
         try {
           return await this.analyzeVideoWithSightengine(input, mimeType, filename);
         } catch (e) {
@@ -30,7 +30,7 @@ class DetectionService {
       );
     }
 
-    if (process.env.SIGHTENGINE_USER && process.env.SIGHTENGINE_SECRET) {
+    if (process.env.SIGHTENGINE_API_USER && process.env.SIGHTENGINE_API_SECRET) {
       jobs.push(
         this.analyzeWithSightengine(input, mimeType, filename).catch((e) => {
           console.error('Sightengine API error:', e);
@@ -126,8 +126,8 @@ class DetectionService {
     
     formData.append('media', input, { filename: filename || 'image.jpg', contentType: mimeType });
     formData.append('models', 'genai');
-    formData.append('api_user', process.env.SIGHTENGINE_USER);
-    formData.append('api_secret', process.env.SIGHTENGINE_SECRET);
+    formData.append('api_user', process.env.SIGHTENGINE_API_USER);
+    formData.append('api_secret', process.env.SIGHTENGINE_API_SECRET);
 
     const res = await this.fetchWithTimeout('https://api.sightengine.com/1.0/check.json', { 
       method: 'POST', 
@@ -160,8 +160,8 @@ class DetectionService {
       contentType: mimeType 
     });
     formData.append('models', 'genai');
-    formData.append('api_user', process.env.SIGHTENGINE_USER);
-    formData.append('api_secret', process.env.SIGHTENGINE_SECRET);
+    formData.append('api_user', process.env.SIGHTENGINE_API_USER);
+    formData.append('api_secret', process.env.SIGHTENGINE_API_SECRET);
 
     const res = await this.fetchWithTimeout('https://api.sightengine.com/1.0/video/check.json', { 
       method: 'POST', 

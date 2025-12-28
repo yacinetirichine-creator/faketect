@@ -132,7 +132,7 @@ test_quota_free() {
     
     # Faire 3 analyses test (devrait passer car < 10)
     for i in {1..3}; do
-        response=$(curl -s -X POST "$API_URL/api/analysis" \
+        response=$(curl -s -X POST "$API_URL/api/analysis/file" \
             -H "Authorization: Bearer $token" \
             -F "file=@/tmp/test.png")
         
