@@ -34,12 +34,14 @@ const prisma = require('./config/db');
 app.listen(PORT, async () => {
   console.log(`🚀 FakeTect API: http://localhost:${PORT}`);
   
-  // Tester la connexion à la base de données
+  // Tester la connexion à la base de données (non-bloquant)
   try {
     await prisma.$connect();
-    console.log('✅ Database connected');
+    await prisma.$queryRaw`SELECT 1`;
+    console.log('✅ Database connected successfully');
   } catch (error) {
-    console.error('❌ Database connection failed:', error.message);
+    console.error('⚠️ Database connection warning:', error.message);
+    console.log('⚠️ App will continue but database features will not work');
   }
   
   // Initialiser Stripe si la clé est présente
