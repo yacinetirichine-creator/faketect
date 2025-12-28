@@ -29,9 +29,18 @@ const PORT = process.env.PORT || 3001;
 
 // Initialiser les produits Stripe au démarrage
 const { initializeStripeProducts } = require('./config/stripe-products');
+const prisma = require('./config/db');
 
 app.listen(PORT, async () => {
   console.log(`🚀 FakeTect API: http://localhost:${PORT}`);
+  
+  // Tester la connexion à la base de données
+  try {
+    await prisma.$connect();
+    console.log('✅ Database connected');
+  } catch (error) {
+    console.error('❌ Database connection failed:', error.message);
+  }
   
   // Initialiser Stripe si la clé est présente
   if (process.env.STRIPE_SECRET_KEY) {

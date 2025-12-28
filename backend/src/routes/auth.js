@@ -21,7 +21,10 @@ router.post('/register', async (req, res) => {
     
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
     res.status(201).json({ token, user: { id: user.id, email: user.email, name: user.name, plan: user.plan, role: user.role, language: user.language } });
-  } catch (e) { res.status(500).json({ error: 'Erreur inscription' }); }
+  } catch (e) {
+    console.error('Registration error:', e);
+    res.status(500).json({ error: 'Erreur inscription', details: e.message });
+  }
 });
 
 router.post('/login', async (req, res) => {
@@ -33,7 +36,10 @@ router.post('/login', async (req, res) => {
     }
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
     res.json({ token, user: { id: user.id, email: user.email, name: user.name, plan: user.plan, role: user.role, language: user.language, usedToday: user.usedToday, usedMonth: user.usedMonth } });
-  } catch (e) { res.status(500).json({ error: 'Erreur connexion' }); }
+  } catch (e) {
+    console.error('Login error:', e);
+    res.status(500).json({ error: 'Erreur connexion', details: e.message });
+  }
 });
 
 router.get('/me', auth, async (req, res) => {
