@@ -1,0 +1,11 @@
+{
+  "nav": { "home": "Accueil", "pricing": "Tarifs", "login": "Connexion", "register": "Inscription", "dashboard": "Dashboard", "logout": "Déconnexion", "admin": "Admin" },
+  "hero": { "title": "Détectez les faux", "highlight": "en quelques secondes", "subtitle": "FakeTect utilise l'IA avancée pour détecter les images générées par IA et les deepfakes.", "cta": "Commencer gratuitement", "cta2": "Voir les tarifs" },
+  "features": { "title": "Fonctionnalités", "subtitle": "Tout pour détecter les contenus IA" },
+  "pricing": { "title": "Tarifs simples", "subtitle": "Économisez 30% en annuel", "monthly": "Mensuel", "yearly": "Annuel", "perMonth": "/mois", "perYear": "/an", "popular": "Populaire", "choose": "Choisir", "current": "Actuel", "free": "Gratuit", "save": "Économisez" },
+  "auth": { "loginTitle": "Bon retour !", "loginSub": "Connectez-vous", "registerTitle": "Créer un compte", "registerSub": "3 analyses gratuites/jour", "email": "Email", "password": "Mot de passe", "confirm": "Confirmer", "name": "Nom", "login": "Connexion", "register": "Inscription", "noAccount": "Pas de compte ?", "hasAccount": "Déjà un compte ?" },
+  "dashboard": { "welcome": "Bienvenue", "overview": "Vue d'ensemble", "history": "Historique", "settings": "Paramètres", "total": "Total", "aiDetected": "IA détectée", "real": "Réel", "remaining": "Restantes", "quick": "Analyse rapide", "dropzone": "Glissez ou cliquez", "formats": "JPG, PNG, WebP, PDF", "analyzing": "Analyse...", "result": "Résultat", "score": "Score IA", "confidence": "Confiance", "verdict": "Verdict" },
+  "verdicts": { "ai_generated": "IA", "likely_ai": "Prob. IA", "possibly_ai": "Peut-être IA", "possibly_real": "Peut-être réel", "likely_real": "Prob. réel" },
+  "admin": { "title": "Admin", "metrics": "Métriques", "users": "Utilisateurs", "totalUsers": "Total", "newToday": "Nouveaux", "totalAnalyses": "Analyses", "mrr": "MRR" },
+  "common": { "loading": "Chargement...", "save": "Enregistrer", "cancel": "Annuler", "delete": "Supprimer" }
+}
