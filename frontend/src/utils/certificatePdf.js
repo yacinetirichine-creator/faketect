@@ -146,30 +146,18 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(14);
   doc.setTextColor(220, 220, 255);
-  const subText = t('certificate.subtitle', 'Certificat d\'Authenticité');
+  const subText = currentLanguage === 'fr' ? 'Certificat d\'Analyse d\'Authenticité' : 'Authenticity Analysis Certificate';
   const subWidth = doc.getTextWidth(subText);
   doc.text(subText, (pageWidth - subWidth) / 2, 85);
   
   // Date de génération
   doc.setFontSize(10);
   doc.setTextColor(200, 200, 255);
-  const dateText = `Généré le ${formatDateTimeUtc(now)}`;
+  const dateText = `${currentLanguage === 'fr' ? 'Généré le' : 'Generated on'} ${formatDateTimeUtc(now)}`;
   const dateWidth = doc.getTextWidth(dateText);
   doc.text(dateText, (pageWidth - dateWidth) / 2, 105);
 
-  y = 160;
-
-  y += 22;
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(12);
-  doc.setTextColor(80);
-  doc.text(t('certificate.subtitle'), margin, y);
-
-  y += 16;
-  doc.setDrawColor(220);
-  doc.line(margin, y, pageWidth - margin, y);
-
-  y += 30;
+  y = 180;
 
   // === RÉSULTAT VISUEL PROFESSIONNEL ===
   const boxHeight = 150;
@@ -198,19 +186,20 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
   doc.setLineWidth(2);
   doc.roundedRect(margin, boxY, contentWidth, boxHeight, 8, 8, 'FD');
 
-  // Emoji et titre
-  y += 35;
-  doc.setFontSize(40);
+  // Emoji et titre (centré)
+  y += 30;
+  doc.setFontSize(32);
+  doc.setFont('helvetica', 'bold');
   doc.setTextColor(...borderColors[result.level]);
   const titleWithEmoji = `${result.emoji} ${simpleMessage.title}`;
   const titleWidth = doc.getTextWidth(titleWithEmoji);
   doc.text(titleWithEmoji, (pageWidth - titleWidth) / 2, y);
 
   // Score visuel (barre de progression)
-  y += 35;
-  const barWidth = contentWidth - 80;
-  const barX = margin + 40;
-  const barHeight = 20;
+  y += 30;
+  const barWidth = contentWidth - 100;
+  const barX = margin + 50;
+  const barHeight = 18;
 
   // Fond de la barre (gris)
   doc.setFillColor(229, 231, 235); // gray-200
@@ -248,12 +237,14 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
   const labelAIWidth = doc.getTextWidth(labelAI);
   doc.text(labelAI, barX + barWidth - labelAIWidth, y);
 
-  // Explication simple
-  y += 20;
+  // Explication simple (centrée)
+  y += 22;
   doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
   doc.setTextColor(60);
-  const explanationLines = doc.splitTextToSize(simpleMessage.explanation, contentWidth - 80);
-  doc.text(explanationLines, margin + 40, y);
+  const explanationLines = doc.splitTextToSize(simpleMessage.explanation, contentWidth - 100);
+  const explanationX = margin + 50;
+  doc.text(explanationLines, explanationX, y);
 
   y = boxY + boxHeight + 30;
 
@@ -275,14 +266,14 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
   doc.setFillColor(238, 242, 255); // indigo-50
   doc.roundedRect(margin, techBoxY, contentWidth, 35, 8, 8, 'F');
 
-  y += 25;
-  doc.setFontSize(14);
+  y += 22;
+  doc.setFontSize(13);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(67, 56, 202); // indigo-700
   const techTitle = currentLanguage === 'fr' ? '📊 Analyse Technique Détaillée' : '📊 Detailed Technical Analysis';
-  doc.text(techTitle, margin + 20, y);
+  doc.text(techTitle, margin + 15, y);
 
-  y += 25;
+  y += 22;
   doc.setTextColor(30);
 
   const rows = [
@@ -315,22 +306,24 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
     rows.push([t('certificate.fields.topSignals'), signals.join(' • ')]);
   }
 
-  const labelWidth = 120;
-  const lineHeight = 16;
+  const labelWidth = 110;
+  const lineHeight = 15;
 
-  doc.setFontSize(10);
+  doc.setFontSize(9.5);
 
   for (const [label, value] of rows) {
     if (y > techBoxY + techBoxHeight - 30) break; // Éviter débordement
 
     doc.setFont('helvetica', 'bold');
-    doc.text(label, margin + 20, y);
+    doc.setTextColor(50);
+    doc.text(label, margin + 15, y);
 
     doc.setFont('helvetica', 'normal');
-    const valueX = margin + 20 + labelWidth;
+    doc.setTextColor(30);
+    const valueX = margin + 15 + labelWidth;
     const valueText = safeText(value) || '—';
 
-    const split = doc.splitTextToSize(valueText, contentWidth - labelWidth - 40);
+    const split = doc.splitTextToSize(valueText, contentWidth - labelWidth - 35);
     doc.text(split, valueX, y);
 
     y += Math.max(lineHeight, split.length * lineHeight);
@@ -353,14 +346,14 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
   doc.setLineWidth(1.5);
   doc.roundedRect(margin, verifyBoxY, contentWidth, verifyBoxHeight, 8, 8, 'FD');
   
-  y += 5;
+  y += 15;
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(22, 101, 52); // green-800
   const verifyTitle = currentLanguage === 'fr' ? '🔐 Certificat Authentique & Vérifiable' : '🔐 Authentic & Verifiable Certificate';
-  doc.text(verifyTitle, margin + 20, y);
+  doc.text(verifyTitle, margin + 15, y);
 
-  y += 20;
+  y += 18;
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(60);
@@ -372,19 +365,19 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
     [t('certificate.fields.fingerprint'), fingerprint]
   ];
 
-  const shortLabelWidth = 90;
+  const shortLabelWidth = 85;
 
   for (const [label, value] of verifyRows) {
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(22, 101, 52); // green-800
-    doc.text(label, margin + 20, y);
+    doc.text(label, margin + 15, y);
 
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(60);
-    const valueX = margin + 20 + shortLabelWidth;
+    const valueX = margin + 15 + shortLabelWidth;
     const valueText = safeText(value) || '—';
 
-    const split = doc.splitTextToSize(valueText, contentWidth - shortLabelWidth - 40);
+    const split = doc.splitTextToSize(valueText, contentWidth - shortLabelWidth - 35);
     doc.text(split, valueX, y);
 
     y += Math.max(lineHeight, split.length * lineHeight);
