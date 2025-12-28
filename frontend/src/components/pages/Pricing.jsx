@@ -6,6 +6,7 @@ import { plansApi, stripeApi } from '../../services/api';
 import useAuthStore from '../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import i18n from '../../i18n';
 
 export default function Pricing() {
   const { t } = useTranslation();
