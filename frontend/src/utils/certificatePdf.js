@@ -88,6 +88,11 @@ export async function downloadCertificatePdf({ t, analysis, user, file }) {
 
   const consensus = safeText(detailsObj?.consensus);
   const sources = Array.isArray(detailsObj?.sources) ? detailsObj.sources : [];
+  const framesAnalyzed = (() => {
+    const v = analysis?.framesAnalyzed ?? detailsObj?.framesAnalyzed;
+    const n = typeof v === 'number' ? v : Number(v);
+    return Number.isFinite(n) ? n : null;
+  })();
   const signals = (() => {
     const a = Array.isArray(detailsObj?.anomalies) ? detailsObj.anomalies : [];
     const i = Array.isArray(detailsObj?.indicators) ? detailsObj.indicators : [];
@@ -147,6 +152,7 @@ export async function downloadCertificatePdf({ t, analysis, user, file }) {
   ];
 
   if (provider) rows.push([t('certificate.fields.provider'), provider]);
+  if (framesAnalyzed !== null) rows.push([t('certificate.fields.framesAnalyzed'), String(Math.round(framesAnalyzed))]);
   if (consensus) rows.push([t('certificate.fields.consensus'), consensus]);
   if (sources.length) {
     const src = sources

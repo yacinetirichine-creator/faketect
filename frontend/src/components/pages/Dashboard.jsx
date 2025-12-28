@@ -37,6 +37,11 @@ export default function Dashboard() {
   const providerLabel = result?.provider ?? parsedDetails?.provider;
   const consensusLabel = parsedDetails?.consensus;
   const sources = Array.isArray(parsedDetails?.sources) ? parsedDetails.sources : [];
+  const framesAnalyzed = (() => {
+    const v = result?.framesAnalyzed ?? parsedDetails?.framesAnalyzed;
+    const n = typeof v === 'number' ? v : Number(v);
+    return Number.isFinite(n) ? n : null;
+  })();
   const signals = (() => {
     const a = Array.isArray(parsedDetails?.anomalies) ? parsedDetails.anomalies : [];
     const i = Array.isArray(parsedDetails?.indicators) ? parsedDetails.indicators : [];
@@ -77,7 +82,12 @@ export default function Dashboard() {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { 'image/*': ['.jpeg', '.jpg', '.png', '.webp'], 'application/pdf': ['.pdf'] },
+    accept: {
+      'image/*': ['.jpeg', '.jpg', '.png', '.webp'],
+      'video/*': ['.mp4', '.mov', '.avi', '.mpeg'],
+      'application/pdf': ['.pdf']
+    },
+    maxSize: 100 * 1024 * 1024,
     maxFiles: 1,
     disabled: analyzing
   });
@@ -233,6 +243,7 @@ export default function Dashboard() {
                     <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-400">
                       {providerLabel ? <div><span className="text-gray-500">{t('dashboard.provider')}:</span> {providerLabel}</div> : null}
                       {consensusLabel ? <div><span className="text-gray-500">{t('dashboard.consensus')}:</span> {consensusLabel}</div> : null}
+                      {framesAnalyzed !== null ? <div><span className="text-gray-500">{t('dashboard.framesAnalyzed')}:</span> {Math.round(framesAnalyzed)}</div> : null}
                       {sources.length ? (
                         <div>
                           <span className="text-gray-500">{t('dashboard.sources')}:</span>{' '}
