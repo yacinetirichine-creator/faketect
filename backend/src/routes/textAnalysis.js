@@ -4,6 +4,7 @@ const { auth, checkLimit } = require('../middleware/auth');
 const openai = require('../services/openai');
 const prisma = require('../config/db');
 const cache = require('../services/cache');
+const { sendLimitReachedEmail } = require('../services/email');
 const { v4: uuid } = require('uuid');
 
 const router = express.Router();
@@ -79,10 +80,18 @@ router.post('/analyze', auth, checkLimit, async (req, res) => {
     // Incrémenter les compteurs selon le plan
     if (req.user.plan === 'FREE') {
       // Plan FREE : incrémenter uniquement usedTotal
-      await prisma.user.update({
+      const updatedUser = await prisma.user.update({
         where: { id: req.user.id },
-        data: { usedTotal: { increment: 1 } }
+        data: { usedTotal: { increment: 1 } },
+        select: { usedTotal: true, email: true, name: true, language: true }
       });
+      
+      // Si limite atteinte (10/10), envoyer email d'alerte (non-bloquant)
+      if (updatedUser.usedTotal >= 10) {
+        sendLimitReachedEmail(updatedUser).catch(err => {
+          console.error('Failed to send limit reached email:', err.message);
+        });
+      }
     } else {
       // Plans payants : incrémenter usedToday et usedMonth comme avant
       await prisma.user.update({

@@ -66,6 +66,7 @@ const PORT = process.env.PORT || 3001;
 const { initializeStripeProducts } = require('./config/stripe-products');
 const { initCleanupJobs } = require('./services/cleanup');
 const { initRedis, disconnect: disconnectRedis } = require('./services/cache');
+const { initEmail } = require('./services/email');
 const prisma = require('./config/db');
 
 app.listen(PORT, async () => {
@@ -89,6 +90,13 @@ app.listen(PORT, async () => {
     initRedis();
   } catch (error) {
     console.error('⚠️ Redis initialization failed:', error.message);
+  }
+  
+  // Initialiser Email (non-bloquant)
+  try {
+    initEmail();
+  } catch (error) {
+    console.error('⚠️ Email initialization failed:', error.message);
   }
   
   // Initialiser Stripe si la clé est présente

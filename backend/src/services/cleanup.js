@@ -2,6 +2,54 @@ const prisma = require('../config/db');
 const fs = require('fs');
 const path = require('path');
 const cron = require('node-cron');
+const { sendDeletionWarningEmail } = require('./email');
+
+/**
+ * Envoie un email de rappel 7 jours avant suppression (23 jours après création)
+ */
+async function sendDeletionWarnings() {
+  try {
+    const twentyThreeDaysAgo = new Date();
+    twentyThreeDaysAgo.setDate(twentyThreeDaysAgo.getDate() - 23);
+    
+    const twentyFourDaysAgo = new Date();
+    twentyFourDaysAgo.setDate(twentyFourDaysAgo.getDate() - 24);
+
+    console.log(`📧 Envoi d'alertes de suppression (23 jours)...`);
+
+    // Comptes FREE créés il y a exactement 23 jours (7 jours avant suppression)
+    const usersToWarn = await prisma.user.findMany({
+      where: {
+        plan: 'FREE',
+        role: { not: 'ADMIN' },
+        createdAt: {
+          lte: twentyThreeDaysAgo,
+          gte: twentyFourDaysAgo
+        }
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        language: true
+      }
+    });
+
+    console.log(`📬 ${usersToWarn.length} utilisateurs à alerter`);
+
+    let sent = 0;
+    for (const user of usersToWarn) {
+      const success = await sendDeletionWarningEmail(user, 7);
+      if (success) sent++;
+    }
+
+    console.log(`✅ ${sent}/${usersToWarn.length} emails de rappel envoyés`);
+    return { warned: sent };
+  } catch (error) {
+    console.error('❌ Erreur envoi warnings:', error);
+    return { warned: 0 };
+  }
+}
 
 /**
  * Supprime les comptes FREE inactifs de plus de 30 jours
@@ -173,6 +221,7 @@ function initCleanupJobs() {
   cron.schedule('0 3 * * *', async () => {
     console.log('🕒 Exécution du nettoyage automatique quotidien');
     try {
+      await sendDeletionWarnings(); // Envoyer emails 7 jours avant suppression
       await cleanupOldAnalyses();
       await cleanupOrphanFiles();
       await cleanupInactiveFreeAccounts(); // Suppression des comptes FREE > 30 jours
@@ -188,5 +237,6 @@ module.exports = {
   cleanupOldAnalyses,
   cleanupOrphanFiles,
   cleanupInactiveFreeAccounts,
+  sendDeletionWarnings,
   initCleanupJobs
 };

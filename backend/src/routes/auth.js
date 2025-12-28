@@ -7,6 +7,7 @@ const { auth } = require('../middleware/auth');
 const { authLimiter } = require('../middleware/rateLimiter');
 const { registerValidation, loginValidation, profileUpdateValidation } = require('../middleware/validators');
 const logger = require('../config/logger');
+const { sendWelcomeEmail } = require('../services/email');
 
 const router = express.Router();
 
@@ -30,6 +31,11 @@ router.post('/register', authLimiter, registerValidation, async (req, res) => {
         phone: phone || null,
         acceptMarketing
       }
+    });
+    
+    // Envoyer l'email de bienvenue (non-bloquant)
+    sendWelcomeEmail(user).catch(err => {
+      logger.error('Failed to send welcome email', { userId: user.id, error: err.message });
     });
     
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
