@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { X, Send, MessageCircle, Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import api from '../services/api';
-import { useLanguageSync } from '../hooks/useLanguageSync';
 
 export default function Chatbot() {
-  const { language } = useLanguageSync();
+  const { i18n } = useTranslation();
+  const language = i18n.language || 'fr';
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
