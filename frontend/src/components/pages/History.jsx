@@ -21,10 +21,10 @@ export default function History() {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Supprimer ?')) return;
+    if (!confirm(t('common.confirmDelete'))) return;
     await analysisApi.delete(id);
     setAnalyses(analyses.filter(a => a.id !== id));
-    toast.success('Supprimé');
+    toast.success(t('common.deleted'));
   };
 
   if (loading) return <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-primary-500" size={32} /></div>;
@@ -36,7 +36,7 @@ export default function History() {
       {!analyses.length ? (
         <div className="card text-center py-12">
           <FileImage className="mx-auto text-surface-300 mb-4" size={48} />
-          <p className="text-surface-500">Aucune analyse</p>
+          <p className="text-surface-500">{t('dashboard.noHistory')}</p>
         </div>
       ) : (
         <>
@@ -44,11 +44,11 @@ export default function History() {
             <table className="w-full">
               <thead className="bg-surface-50 border-b">
                 <tr>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">Fichier</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">Type</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">Score</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">Date</th>
-                  <th className="px-6 py-3 text-right text-sm font-semibold">Actions</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('historyPage.table.file')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('historyPage.table.type')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('historyPage.table.score')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('historyPage.table.date')}</th>
+                  <th className="px-6 py-3 text-right text-sm font-semibold">{t('historyPage.table.actions')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
@@ -57,7 +57,7 @@ export default function History() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <FileImage className="text-surface-400" size={20} />
-                        <span className="font-medium truncate max-w-[200px]">{a.fileName || 'URL'}</span>
+                        <span className="font-medium truncate max-w-[200px]">{a.fileName || t('historyPage.url')}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4"><span className="badge-primary">{a.type}</span></td>

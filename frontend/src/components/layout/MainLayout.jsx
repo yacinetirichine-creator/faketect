@@ -114,7 +114,7 @@ export default function MainLayout() {
                 
                 {/* Language selector mobile */}
                 <div className="border-t border-white/10 pt-4">
-                  <p className="text-xs text-gray-500 mb-2">{t('settings.language', 'Langue')}</p>
+                  <p className="text-xs text-gray-500 mb-2">{t('settings.sections.language')}</p>
                   <div className="grid grid-cols-2 gap-2">
                     {languages.map(l => (
                       <button 
@@ -160,28 +160,28 @@ export default function MainLayout() {
                 <span className="font-display font-bold text-xl">FakeTect</span>
               </div>
               <p className="text-gray-400 max-w-sm">
-                Advanced AI-powered deepfake detection platform securing digital authenticity in the modern age.
+                {t('footer.description')}
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-4 text-white">Product</h3>
+              <h3 className="font-semibold mb-4 text-white">{t('footer.product')}</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><Link to="/pricing" className="hover:text-primary transition-colors">Pricing</Link></li>
-                <li><Link to="/features" className="hover:text-primary transition-colors">Features</Link></li>
-                <li><Link to="/api" className="hover:text-primary transition-colors">API</Link></li>
+                <li><Link to="/pricing" className="hover:text-primary transition-colors">{t('footer.links.pricing')}</Link></li>
+                <li><Link to="/features" className="hover:text-primary transition-colors">{t('footer.links.features')}</Link></li>
+                <li><Link to="/api" className="hover:text-primary transition-colors">{t('footer.links.api')}</Link></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4 text-white">Company</h3>
+              <h3 className="font-semibold mb-4 text-white">{t('footer.company')}</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><Link to="/about" className="hover:text-primary transition-colors">About</Link></li>
-                <li><Link to="/blog" className="hover:text-primary transition-colors">Blog</Link></li>
-                <li><Link to="/contact" className="hover:text-primary transition-colors">Contact</Link></li>
+                <li><Link to="/about" className="hover:text-primary transition-colors">{t('footer.links.about')}</Link></li>
+                <li><Link to="/blog" className="hover:text-primary transition-colors">{t('footer.links.blog')}</Link></li>
+                <li><Link to="/contact" className="hover:text-primary transition-colors">{t('footer.links.contact')}</Link></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-white/10 mt-12 pt-8 text-center text-gray-500 text-sm">
-            © 2025 FakeTect. All rights reserved.
+            {t('footer.rights')}
           </div>
         </div>
       </footer>

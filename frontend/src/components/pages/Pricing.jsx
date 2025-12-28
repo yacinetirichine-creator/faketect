@@ -35,7 +35,7 @@ export default function Pricing() {
       const { data } = await stripeApi.createCheckout(id, yearly ? 'yearly' : 'monthly', i18n.language);
       window.location.href = data.url;
     } catch (error) {
-      toast.error(error.response?.data?.error || 'Erreur lors de la création du checkout');
+      toast.error(error.response?.data?.error || t('pricing.checkoutError'));
       setCheckoutLoading(null);
     }
   };
@@ -75,7 +75,13 @@ export default function Pricing() {
                     <span className="text-4xl font-extrabold text-white">{price}€</span>
                     <span className="text-gray-400">{yearly ? t('pricing.perYear') : t('pricing.perMonth')}</span>
                   </div>
-                  <p className="text-sm text-gray-500 mt-1">{p.perMonth > 0 ? `${p.perMonth} analyses/mois` : p.perMonth === -1 ? 'Illimité' : `${p.perDay}/jour`}</p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {p.perMonth > 0
+                      ? `${p.perMonth} ${t('pricing.analysesPerMonth')}`
+                      : p.perMonth === -1
+                        ? t('pricing.unlimited')
+                        : `${p.perDay} ${t('pricing.analysesPerDay')}`}
+                  </p>
                 </div>
 
                 <ul className="space-y-2 mb-6">

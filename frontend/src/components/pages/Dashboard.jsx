@@ -27,7 +27,7 @@ export default function Dashboard() {
       })
       .catch((e) => {
         if (!mounted) return;
-        setLoadError(e.response?.data?.error || e.message || 'Erreur');
+        setLoadError(e.response?.data?.error || e.message || t('common.errorGeneric'));
         setLoading(false);
       });
     return () => { mounted = false; };
@@ -41,8 +41,8 @@ export default function Dashboard() {
       const { data } = await analysisApi.analyzeFile(files[0]);
       setResult(data.analysis);
       userApi.getDashboard().then(({ data }) => setData(data));
-      toast.success('Analyse terminée !');
-    } catch (e) { toast.error(e.response?.data?.error || 'Erreur'); }
+      toast.success(t('dashboard.analysisCompleted'));
+    } catch (e) { toast.error(e.response?.data?.error || t('common.errorGeneric')); }
     finally { setAnalyzing(false); }
   }, []);
 
@@ -66,7 +66,7 @@ export default function Dashboard() {
   };
 
   if (loading) return <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-primary" size={32} /></div>;
-  if (loadError) return <div className="card bg-red-50 border-red-200 text-red-700"><p>Erreur: {loadError}</p></div>;
+  if (loadError) return <div className="card bg-red-50 border-red-200 text-red-700"><p>{t('common.error')}: {loadError}</p></div>;
 
   // Backend returns { stats, limits, recentAnalyses }
   const stats = [
@@ -126,7 +126,7 @@ export default function Dashboard() {
                 {analyzing ? <Loader2 className="animate-spin text-primary" size={32} /> : <Upload className="text-primary" size={32} />}
               </div>
               <p className="text-lg font-medium text-white mb-2">{isDragActive ? t('dashboard.drop') : t('dashboard.drag')}</p>
-              <p className="text-sm text-gray-400">JPG, PNG, PDF (max 10MB)</p>
+              <p className="text-sm text-gray-400">{t('dashboard.uploadHint')}</p>
             </div>
           </div>
 
@@ -154,10 +154,10 @@ export default function Dashboard() {
                       </div>
                     </div>
                     <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                      <div className="text-sm text-gray-400 mb-1">Processing Time</div>
+                      <div className="text-sm text-gray-400 mb-1">{t('dashboard.processingTime')}</div>
                       <div className="text-2xl font-bold text-white">1.2s</div>
                       <div className="flex items-center gap-1 text-xs text-green-400 mt-2">
-                        <Zap size={12} /> Ultra Fast
+                        <Zap size={12} /> {t('dashboard.ultraFast')}
                       </div>
                     </div>
                   </div>
@@ -188,7 +188,7 @@ export default function Dashboard() {
                     <FileImage size={20} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-white truncate">{item.fileName || 'Fichier'}</p>
+                    <p className="font-medium text-white truncate">{item.fileName || t('dashboard.fileFallback')}</p>
                     <p className="text-xs text-gray-500 flex items-center gap-1">
                       <Clock size={10} /> {new Date(item.createdAt).toLocaleDateString()}
                     </p>

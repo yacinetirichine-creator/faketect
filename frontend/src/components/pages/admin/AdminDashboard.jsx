@@ -24,7 +24,7 @@ export default function AdminDashboard() {
       })
       .catch((err) => {
         console.error('Admin metrics error:', err);
-        setError(err.response?.data?.error || 'Erreur de chargement');
+        setError(err.response?.data?.error || t('common.loadError'));
         setLoading(false);
       });
   }, []);
@@ -41,7 +41,7 @@ export default function AdminDashboard() {
       })
       .catch((err) => {
         console.error('Admin analyses error:', err);
-        setAnalysesError(err.response?.data?.error || 'Erreur de chargement');
+        setAnalysesError(err.response?.data?.error || t('common.loadError'));
         setAnalysesLoading(false);
       });
   }, [analysesPage]);
@@ -80,7 +80,7 @@ export default function AdminDashboard() {
 
   if (loading) return <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-primary" size={32} /></div>;
   
-  if (error) return <div className="card bg-red-50 border-red-200 text-red-600"><p>Erreur: {error}</p></div>;
+  if (error) return <div className="card bg-red-50 border-red-200 text-red-600"><p>{t('common.error')}: {error}</p></div>;
 
   const stats = [
     { icon: Users, label: t('admin.totalUsers'), value: metrics?.users?.total || 0, color: 'text-primary-600 bg-primary-100' },
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
 
       <div className="grid md:grid-cols-2 gap-6">
         <div className="card">
-          <h2 className="text-xl font-semibold mb-4">Utilisateurs par plan</h2>
+          <h2 className="text-xl font-semibold mb-4">{t('admin.usersByPlan')}</h2>
           <div className="space-y-3">
             {Object.entries(metrics?.users?.byPlan || {}).map(([plan, count]) => (
               <div key={plan} className="flex items-center justify-between p-3 bg-surface-50 rounded-xl">
@@ -117,10 +117,10 @@ export default function AdminDashboard() {
         </div>
 
         <div className="card">
-          <h2 className="text-xl font-semibold mb-4">Analyses aujourd'hui</h2>
+          <h2 className="text-xl font-semibold mb-4">{t('admin.analysesToday')}</h2>
           <div className="text-center py-8">
             <p className="text-5xl font-bold text-primary-600">{metrics?.analyses?.today || 0}</p>
-            <p className="text-surface-500 mt-2">analyses effectuées</p>
+            <p className="text-surface-500 mt-2">{t('admin.analysesPerformed')}</p>
           </div>
         </div>
       </div>
@@ -133,19 +133,19 @@ export default function AdminDashboard() {
         {analysesLoading ? (
           <div className="flex items-center justify-center h-48"><Loader2 className="animate-spin text-primary" size={28} /></div>
         ) : analysesError ? (
-          <div className="p-6 text-red-600">Erreur: {analysesError}</div>
+          <div className="p-6 text-red-600">{t('common.error')}: {analysesError}</div>
         ) : (
           <>
             <table className="w-full">
               <thead className="bg-surface-50 border-b">
                 <tr>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">Date</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">Utilisateur</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">Fichier</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">Type</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">Score</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">Verdict</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">Provider</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.analysesTable.date')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.analysesTable.user')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.analysesTable.file')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.analysesTable.type')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.analysesTable.score')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.analysesTable.verdict')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.analysesTable.provider')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
@@ -173,7 +173,7 @@ export default function AdminDashboard() {
                 ))}
                 {parsedAnalyses.length === 0 && (
                   <tr>
-                    <td className="px-6 py-6 text-center text-surface-500" colSpan={7}>Aucune analyse</td>
+                    <td className="px-6 py-6 text-center text-surface-500" colSpan={7}>{t('admin.noAnalyses')}</td>
                   </tr>
                 )}
               </tbody>

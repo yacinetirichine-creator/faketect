@@ -20,8 +20,8 @@ export default function Settings() {
     try {
       const { data } = await api.put('/auth/profile', { name });
       updateUser(data.user);
-      toast.success('Enregistré');
-    } catch { toast.error('Erreur'); }
+      toast.success(t('common.saved'));
+    } catch { toast.error(t('common.errorGeneric')); }
     finally { setLoading(false); }
   };
 
@@ -37,7 +37,7 @@ export default function Settings() {
       const { data } = await stripeApi.getCustomerPortal();
       window.location.href = data.url;
     } catch (error) {
-      toast.error(error.response?.data?.error || 'Erreur');
+      toast.error(error.response?.data?.error || t('common.errorGeneric'));
       setPortalLoading(false);
     }
   };
@@ -50,15 +50,15 @@ export default function Settings() {
         <div className="card bg-surface/50 border-white/10">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center"><ShieldCheck className="text-accent" size={20} /></div>
-            <h2 className="text-xl font-semibold text-white">Admin</h2>
+            <h2 className="text-xl font-semibold text-white">{t('settings.sections.admin')}</h2>
           </div>
 
           <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
             <div>
-              <p className="font-semibold text-white">Accès administrateur</p>
-              <p className="text-sm text-gray-400">Ouvrir le dashboard admin et gérer les utilisateurs</p>
+              <p className="font-semibold text-white">{t('settings.admin.accessTitle')}</p>
+              <p className="text-sm text-gray-400">{t('settings.admin.accessDesc')}</p>
             </div>
-            <a href="/admin" className="btn-primary">Ouvrir</a>
+            <a href="/admin" className="btn-primary">{t('settings.admin.open')}</a>
           </div>
         </div>
       )}
@@ -66,12 +66,12 @@ export default function Settings() {
       <div className="card bg-surface/50 border-white/10">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center"><User className="text-primary" size={20} /></div>
-          <h2 className="text-xl font-semibold text-white">Profil</h2>
+          <h2 className="text-xl font-semibold text-white">{t('settings.sections.profile')}</h2>
         </div>
 
         <form onSubmit={handleSave} className="space-y-4 max-w-md">
           <div>
-            <label className="label">Email</label>
+            <label className="label">{t('auth.email')}</label>
             <input type="email" value={user?.email || ''} disabled className="input bg-white/5 cursor-not-allowed" />
           </div>
           <div>
@@ -85,7 +85,7 @@ export default function Settings() {
       <div className="card bg-surface/50 border-white/10">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center"><Globe className="text-accent" size={20} /></div>
-          <h2 className="text-xl font-semibold text-white">Langue</h2>
+          <h2 className="text-xl font-semibold text-white">{t('settings.sections.language')}</h2>
         </div>
 
         <div className="grid grid-cols-3 md:grid-cols-5 gap-3 max-w-2xl">
@@ -101,13 +101,13 @@ export default function Settings() {
       <div className="card bg-surface/50 border-white/10">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center"><CreditCard className="text-green-400" size={20} /></div>
-          <h2 className="text-xl font-semibold text-white">Abonnement</h2>
+          <h2 className="text-xl font-semibold text-white">{t('settings.sections.subscription')}</h2>
         </div>
 
         <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
           <div>
-            <p className="font-semibold text-white">Plan {user?.plan}</p>
-            <p className="text-sm text-gray-400">{user?.plan === 'FREE' ? '3 analyses/jour' : 'Abonnement actif'}</p>
+            <p className="font-semibold text-white">{t('settings.subscription.plan', { plan: user?.plan })}</p>
+            <p className="text-sm text-gray-400">{user?.plan === 'FREE' ? t('settings.freeQuotaHint') : t('settings.activeSubscription')}</p>
           </div>
           <div className="flex gap-3">
             {user?.plan !== 'FREE' && (
@@ -117,11 +117,11 @@ export default function Settings() {
                 className="btn-outline flex items-center gap-2"
               >
                 {portalLoading ? <Loader2 className="animate-spin" size={16} /> : <ExternalLink size={16} />}
-                Gérer l'abonnement
+                {t('settings.subscription.manage')}
               </button>
             )}
             <a href="/pricing" className="btn-primary">
-              {user?.plan === 'FREE' ? 'Upgrade' : 'Changer'}
+              {user?.plan === 'FREE' ? t('settings.subscription.upgrade') : t('settings.subscription.change')}
             </a>
           </div>
         </div>

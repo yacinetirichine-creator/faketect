@@ -23,16 +23,16 @@ export default function AdminUsers() {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Supprimer cet utilisateur ?')) return;
+    if (!confirm(t('admin.confirmDeleteUser'))) return;
     await adminApi.deleteUser(id);
     setUsers(users.filter(u => u.id !== id));
-    toast.success('Supprimé');
+    toast.success(t('common.deleted'));
   };
 
   const handlePlanChange = async (id, plan) => {
     await adminApi.updateUser(id, { plan });
     setUsers(users.map(u => u.id === id ? { ...u, plan } : u));
-    toast.success('Plan modifié');
+    toast.success(t('admin.planUpdated'));
   };
 
   return (
@@ -41,7 +41,7 @@ export default function AdminUsers() {
         <h1 className="text-3xl font-bold">{t('admin.users')}</h1>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-400" size={20} />
-          <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Rechercher..." className="input pl-10 w-64" />
+          <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t('common.searchPlaceholder')} className="input pl-10 w-64" />
         </div>
       </div>
 
@@ -53,12 +53,12 @@ export default function AdminUsers() {
             <table className="w-full">
               <thead className="bg-surface-50 border-b">
                 <tr>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">Email</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">Nom</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">Plan</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">Rôle</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold">Inscrit</th>
-                  <th className="px-6 py-3 text-right text-sm font-semibold">Actions</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.usersTable.email')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.usersTable.name')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.usersTable.plan')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.usersTable.role')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold">{t('admin.usersTable.createdAt')}</th>
+                  <th className="px-6 py-3 text-right text-sm font-semibold">{t('admin.usersTable.actions')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
