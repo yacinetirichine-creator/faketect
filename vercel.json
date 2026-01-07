@@ -7,7 +7,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://faketect.onrender.com/api/:path*"
+      "destination": "https://faketect-api.onrender.com/api/:path*"
     }
   ],
   "headers": [
