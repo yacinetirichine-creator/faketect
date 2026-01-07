@@ -108,7 +108,9 @@ const { startEmailAutomationCron } = require('./services/emailCron');
 const { initEmail } = require('./services/email');
 const prisma = require('./config/db');
 
-app.listen(PORT, async () => {
+const server = app.listen(PORT, async () => {
+  // Expose server globally for graceful shutdown
+  global.server = server;
   console.log(`🚀 FakeTect API: http://localhost:${PORT}`);
   logger.info('Server started', { port: PORT, environment: process.env.NODE_ENV || 'development' });
   

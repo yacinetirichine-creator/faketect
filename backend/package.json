@@ -2,7 +2,8 @@
   "name": "faketect-backend",
   "version": "1.0.0",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node src/cluster.js",
+    "start:single": "node src/index.js",
     "dev": "node --watch src/index.js"
   },
   "dependencies": {

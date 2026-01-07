@@ -93,13 +93,14 @@ class DetectionService {
     formData.append('api_user', process.env.ILLUMINARTY_USER);
     formData.append('api_secret', process.env.ILLUMINARTY_SECRET);
 
+    // Timeout 30s pour images (éviter workers bloqués)
     const res = await this.fetchWithTimeout('https://api.illuminarty.ai/v1/analyze', {
       method: 'POST',
       headers: {
         'X-API-Key': process.env.ILLUMINARTY_API_KEY
       },
       body: formData
-    }, 15_000);
+    }, 30_000);
 
     if (!res.ok) {
       throw new Error(`Illuminarty API error: ${res.status}`);
@@ -129,10 +130,11 @@ class DetectionService {
     formData.append('api_user', process.env.SIGHTENGINE_API_USER);
     formData.append('api_secret', process.env.SIGHTENGINE_API_SECRET);
 
+    // Timeout 30s pour images
     const res = await this.fetchWithTimeout('https://api.sightengine.com/1.0/check.json', { 
       method: 'POST', 
       body: formData 
-    }, 15_000);
+    }, 30_000);
     
     const data = await res.json();
     
@@ -168,10 +170,11 @@ class DetectionService {
       formData.append('max_duration', maxDuration);
     }
 
+    // Timeout 60s pour vidéos (plus long que images)
     const res = await this.fetchWithTimeout('https://api.sightengine.com/1.0/video/check.json', { 
       method: 'POST', 
       body: formData 
-    }, 45_000);
+    }, 60_000);
     
     const data = await res.json();
     
