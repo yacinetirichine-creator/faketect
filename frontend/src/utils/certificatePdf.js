@@ -129,152 +129,195 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
 
   let y = margin;
 
-  // === EN-TÊTE MODERNE AVEC DÉGRADÉ ===
-  // Background header bleu
-  doc.setFillColor(99, 102, 241); // Indigo-500
-  doc.rect(0, 0, pageWidth, 140, 'F');
+  // === EN-TÊTE PREMIUM AVEC GRADIENT SUBTIL ===
+  // Gradient visuel (dégradé bleu)
+  doc.setFillColor(67, 56, 202); // indigo-700
+  doc.rect(0, 0, pageWidth, 160, 'F');
   
-  // Logo FakeTect (grand et centré)
+  // Bande décorative supérieure
+  doc.setFillColor(99, 102, 241); // indigo-500
+  doc.rect(0, 0, pageWidth, 6, 'F');
+  
+  // Badge "Certifié" (coin supérieur droit)
+  const badgeX = pageWidth - margin - 80;
+  doc.setFillColor(16, 185, 129); // emerald-500
+  doc.roundedRect(badgeX, 20, 80, 28, 4, 4, 'F');
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(42);
+  doc.setTextColor(255, 255, 255);
+  const badgeText = '✓ CERTIFIÉ';
+  const badgeTextWidth = doc.getTextWidth(badgeText);
+  doc.text(badgeText, badgeX + (80 - badgeTextWidth) / 2, 38);
+  
+  // Logo FakeTect (grand et élégant)
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(48);
   doc.setTextColor(255, 255, 255);
   const logoText = 'FakeTect';
   const logoWidth = doc.getTextWidth(logoText);
-  doc.text(logoText, (pageWidth - logoWidth) / 2, 60);
+  doc.text(logoText, (pageWidth - logoWidth) / 2, 70);
   
-  // Sous-titre
+  // Trait décoratif sous le logo
+  doc.setDrawColor(139, 92, 246); // violet-500
+  doc.setLineWidth(3);
+  const lineWidth = 100;
+  doc.line((pageWidth - lineWidth) / 2, 80, (pageWidth + lineWidth) / 2, 80);
+  
+  // Sous-titre élégant
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(14);
-  doc.setTextColor(220, 220, 255);
+  doc.setFontSize(16);
+  doc.setTextColor(224, 231, 255); // indigo-100
   const subText = currentLanguage === 'fr' ? 'Certificat d\'Analyse d\'Authenticité' : 'Authenticity Analysis Certificate';
   const subWidth = doc.getTextWidth(subText);
-  doc.text(subText, (pageWidth - subWidth) / 2, 85);
+  doc.text(subText, (pageWidth - subWidth) / 2, 105);
   
-  // Date de génération
-  doc.setFontSize(10);
-  doc.setTextColor(200, 200, 255);
-  const dateText = `${currentLanguage === 'fr' ? 'Généré le' : 'Generated on'} ${formatDateTimeUtc(now)}`;
+  // Date et ID (plus discrets)
+  doc.setFontSize(9);
+  doc.setTextColor(165, 180, 252); // indigo-300
+  const dateText = `${formatDateTimeUtc(now)}`;
   const dateWidth = doc.getTextWidth(dateText);
-  doc.text(dateText, (pageWidth - dateWidth) / 2, 105);
+  doc.text(dateText, (pageWidth - dateWidth) / 2, 125);
+  
+  // ID d'analyse en petit
+  if (analysisId) {
+    doc.setFontSize(8);
+    doc.setTextColor(129, 140, 248); // indigo-400
+    const idText = `ID: ${analysisId.substring(0, 18)}...`;
+    const idWidth = doc.getTextWidth(idText);
+    doc.text(idText, (pageWidth - idWidth) / 2, 140);
+  }
 
-  y = 180;
+  y = 200;
 
-  // === RÉSULTAT VISUEL PROFESSIONNEL ===
-  const boxHeight = 150;
+  // === RÉSULTAT PREMIUM AVEC EFFET 3D ===
+  const boxHeight = 170;
   const boxY = y;
 
-  // Fond coloré selon le résultat avec gradient visuel
+  // Fond coloré selon le résultat
   const bgColors = {
-    real: [220, 252, 231],    // green-100
-    uncertain: [254, 243, 199], // amber-100
-    fake: [254, 226, 226]      // red-100
+    real: [236, 253, 245],    // emerald-50
+    uncertain: [255, 251, 235], // amber-50
+    fake: [254, 242, 242]      // red-50
   };
-  const borderColors = {
-    real: [34, 197, 94],       // green-500
+  const accentColors = {
+    real: [16, 185, 129],       // emerald-500
     uncertain: [245, 158, 11],  // amber-500
     fake: [239, 68, 68]        // red-500
   };
+  const darkColors = {
+    real: [6, 95, 70],         // emerald-900
+    uncertain: [120, 53, 15],   // amber-900
+    fake: [127, 29, 29]        // red-900
+  };
 
-  // Ombre légère pour effet de profondeur
+  // Ombre portée pour effet 3D
   doc.setFillColor(200, 200, 200);
-  doc.setDrawColor(200, 200, 200);
-  doc.roundedRect(margin + 2, boxY + 2, contentWidth, boxHeight, 8, 8, 'F');
+  doc.roundedRect(margin + 4, boxY + 4, contentWidth, boxHeight, 12, 12, 'F');
 
-  // Carte principale
+  // Carte principale avec bordure colorée épaisse
   doc.setFillColor(...bgColors[result.level]);
-  doc.setDrawColor(...borderColors[result.level]);
-  doc.setLineWidth(2);
-  doc.roundedRect(margin, boxY, contentWidth, boxHeight, 8, 8, 'FD');
+  doc.setDrawColor(...accentColors[result.level]);
+  doc.setLineWidth(3);
+  doc.roundedRect(margin, boxY, contentWidth, boxHeight, 12, 12, 'FD');
 
-  // Emoji et titre (centré)
-  y += 30;
-  doc.setFontSize(32);
+  // Badge de verdict (coin supérieur gauche)
+  const badgeY = boxY + 15;
+  doc.setFillColor(...accentColors[result.level]);
+  doc.roundedRect(margin + 20, badgeY, 100, 32, 6, 6, 'F');
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...borderColors[result.level]);
-  const titleWithEmoji = `${result.emoji} ${simpleMessage.title}`;
-  const titleWidth = doc.getTextWidth(titleWithEmoji);
-  doc.text(titleWithEmoji, (pageWidth - titleWidth) / 2, y);
+  doc.setTextColor(255, 255, 255);
+  const verdictText = verdictLabel.toUpperCase();
+  const verdictWidth = doc.getTextWidth(verdictText);
+  doc.text(verdictText, margin + 20 + (100 - verdictWidth) / 2, badgeY + 20);
 
-  // Score visuel (barre de progression)
-  y += 30;
-  const barWidth = contentWidth - 100;
-  const barX = margin + 50;
-  const barHeight = 18;
+  // Emoji géant et titre centré
+  y = boxY + 65;
+  doc.setFontSize(36);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...darkColors[result.level]);
+  const titleText = `${result.emoji}  ${simpleMessage.title}`;
+  const titleWidth = doc.getTextWidth(titleText);
+  doc.text(titleText, (pageWidth - titleWidth) / 2, y);
 
-  // Fond de la barre (gris)
-  doc.setFillColor(229, 231, 235); // gray-200
+  // Barre de progression moderne
+  y += 35;
+  const barWidth = contentWidth - 120;
+  const barX = margin + 60;
+  const barHeight = 20;
+
+  // Fond de la barre avec ombre interne
+  doc.setFillColor(243, 244, 246); // gray-100
   doc.setDrawColor(209, 213, 219); // gray-300
   doc.setLineWidth(1);
-  doc.roundedRect(barX, y, barWidth, barHeight, 4, 4, 'FD');
+  doc.roundedRect(barX, y, barWidth, barHeight, 10, 10, 'FD');
 
-  // Barre de progression colorée
+  // Barre de progression avec dégradé simulé
   const progressWidth = (barWidth * result.realPercentage) / 100;
-  const gradientColors = {
-    real: [34, 197, 94],      // green-500
-    uncertain: [245, 158, 11], // amber-500
-    fake: [239, 68, 68]       // red-500
-  };
-  doc.setFillColor(...gradientColors[result.level]);
-  doc.roundedRect(barX, y, progressWidth, barHeight, 4, 4, 'F');
+  doc.setFillColor(...accentColors[result.level]);
+  doc.roundedRect(barX, y, progressWidth, barHeight, 10, 10, 'F');
 
-  // Pourcentage au centre
-  y += 14;
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(30);
-  const percentText = `${result.realPercentage}% ${currentLanguage === 'fr' ? 'RÉEL' : 'REAL'}`;
-  const percentWidth = doc.getTextWidth(percentText);
-  doc.text(percentText, (pageWidth - percentWidth) / 2, y);
+  // Indicateur de pourcentage sur la barre
+  if (progressWidth > 50) {
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(255, 255, 255);
+    const pctText = `${result.realPercentage}%`;
+    const pctWidth = doc.getTextWidth(pctText);
+    doc.text(pctText, barX + progressWidth - pctWidth - 10, y + 14);
+  }
 
-  // Labels gauche/droite
-  y += 20;
+  // Labels élégants gauche/droite
+  y += 32;
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(100);
-  const labelReal = currentLanguage === 'fr' ? '100% Réel' : '100% Real';
-  const labelAI = currentLanguage === 'fr' ? '100% IA' : '100% AI';
-  doc.text(labelReal, barX, y);
-  const labelAIWidth = doc.getTextWidth(labelAI);
-  doc.text(labelAI, barX + barWidth - labelAIWidth, y);
+  doc.setTextColor(107, 114, 128); // gray-500
+  doc.text('100% RÉEL', barX, y);
+  const labelAIWidth = doc.getTextWidth('100% IA');
+  doc.text('100% IA', barX + barWidth - labelAIWidth, y);
 
-  // Explication simple (centrée)
+  // Explication avec icône
   y += 22;
   doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(60);
-  const explanationLines = doc.splitTextToSize(simpleMessage.explanation, contentWidth - 100);
-  const explanationX = margin + 50;
-  doc.text(explanationLines, explanationX, y);
+  doc.setTextColor(75, 85, 99); // gray-600
+  const explanationLines = doc.splitTextToSize(simpleMessage.explanation, contentWidth - 80);
+  doc.text(explanationLines, (pageWidth - doc.getTextWidth(explanationLines[0])) / 2, y);
 
-  y = boxY + boxHeight + 30;
+  y = boxY + boxHeight + 35;
 
-  // === SECTION TECHNIQUE PROFESSIONNELLE ===
-  // Ombre pour effet de profondeur
-  doc.setFillColor(220, 220, 220);
-  doc.setDrawColor(220, 220, 220);
+  // === SECTION TECHNIQUE PREMIUM ===
   const techBoxY = y;
   const techBoxHeight = 200;
-  doc.roundedRect(margin + 2, techBoxY + 2, contentWidth, techBoxHeight, 8, 8, 'F');
   
-  // Carte principale avec bordure indigo
+  // Ombre 3D
+  doc.setFillColor(209, 213, 219);
+  doc.roundedRect(margin + 4, techBoxY + 4, contentWidth, techBoxHeight, 12, 12, 'F');
+  
+  // Carte principale élégante
+  doc.setFillColor(255, 255, 255);
+  doc.setDrawColor(229, 231, 235); // gray-200
+  doc.setLineWidth(1);
+  doc.roundedRect(margin, techBoxY, contentWidth, techBoxHeight, 12, 12, 'FD');
+
+  // Barre de titre avec gradient
   doc.setFillColor(249, 250, 251); // gray-50
+  doc.roundedRect(margin, techBoxY, contentWidth, 40, 12, 12, 'F');
+  
+  // Ligne d'accent indigo
   doc.setDrawColor(99, 102, 241); // indigo-500
-  doc.setLineWidth(1.5);
-  doc.roundedRect(margin, techBoxY, contentWidth, techBoxHeight, 8, 8, 'FD');
+  doc.setLineWidth(4);
+  doc.line(margin + 15, techBoxY + 40, margin + contentWidth - 15, techBoxY + 40);
 
-  // Bande de titre avec fond indigo léger
-  doc.setFillColor(238, 242, 255); // indigo-50
-  doc.roundedRect(margin, techBoxY, contentWidth, 35, 8, 8, 'F');
-
-  y += 22;
-  doc.setFontSize(13);
+  y = techBoxY + 25;
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(67, 56, 202); // indigo-700
-  const techTitle = currentLanguage === 'fr' ? '📊 Analyse Technique Détaillée' : '📊 Detailed Technical Analysis';
-  doc.text(techTitle, margin + 15, y);
+  const techTitle = currentLanguage === 'fr' ? '📊  Analyse Technique' : '📊  Technical Analysis';
+  doc.text(techTitle, margin + 20, y);
 
-  y += 22;
-  doc.setTextColor(30);
+  y = techBoxY + 60;
+  doc.setTextColor(31, 41, 55); // gray-800
 
   const rows = [
     [t('certificate.fields.analysisId'), analysisId],
@@ -307,56 +350,71 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
   }
 
   const labelWidth = 110;
-  const lineHeight = 15;
+  const lineHeight = 16;
 
-  doc.setFontSize(9.5);
+  doc.setFontSize(10);
 
   for (const [label, value] of rows) {
-    if (y > techBoxY + techBoxHeight - 30) break; // Éviter débordement
+    if (y > techBoxY + techBoxHeight - 25) break;
 
+    // Label avec point décoratif
+    doc.setFillColor(99, 102, 241); // indigo-500
+    doc.circle(margin + 20, y - 3, 2, 'F');
+    
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(50);
-    doc.text(label, margin + 15, y);
+    doc.setTextColor(75, 85, 99); // gray-600
+    doc.text(label, margin + 28, y);
 
     doc.setFont('helvetica', 'normal');
-    doc.setTextColor(30);
-    const valueX = margin + 15 + labelWidth;
+    doc.setTextColor(31, 41, 55); // gray-800
+    const valueX = margin + 28 + labelWidth;
     const valueText = safeText(value) || '—';
 
-    const split = doc.splitTextToSize(valueText, contentWidth - labelWidth - 35);
+    const split = doc.splitTextToSize(valueText, contentWidth - labelWidth - 50);
     doc.text(split, valueX, y);
 
     y += Math.max(lineHeight, split.length * lineHeight);
   }
 
-  y = techBoxY + techBoxHeight + 30;
+  y = techBoxY + techBoxHeight + 35;
 
-  // === INFORMATIONS DE VÉRIFICATION ===
-  // Encadré sécurité avec bordure verte
-  const verifyBoxY = y - 10;
-  const verifyBoxHeight = 110;
+  // === SECTION VÉRIFICATION SÉCURISÉE ===
+  const verifyBoxY = y;
+  const verifyBoxHeight = 115;
   
-  // Ombre
-  doc.setFillColor(220, 220, 220);
-  doc.roundedRect(margin + 2, verifyBoxY + 2, contentWidth, verifyBoxHeight, 8, 8, 'F');
+  // Ombre 3D
+  doc.setFillColor(209, 213, 219);
+  doc.roundedRect(margin + 4, verifyBoxY + 4, contentWidth, verifyBoxHeight, 12, 12, 'F');
   
-  // Fond avec bordure verte pour authenticité
-  doc.setFillColor(240, 253, 244); // green-50
-  doc.setDrawColor(34, 197, 94); // green-500
-  doc.setLineWidth(1.5);
-  doc.roundedRect(margin, verifyBoxY, contentWidth, verifyBoxHeight, 8, 8, 'FD');
+  // Carte avec bordure verte épaisse (sécurité)
+  doc.setFillColor(255, 255, 255);
+  doc.setDrawColor(16, 185, 129); // emerald-500
+  doc.setLineWidth(2.5);
+  doc.roundedRect(margin, verifyBoxY, contentWidth, verifyBoxHeight, 12, 12, 'FD');
   
-  y += 15;
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(22, 101, 52); // green-800
-  const verifyTitle = currentLanguage === 'fr' ? '🔐 Certificat Authentique & Vérifiable' : '🔐 Authentic & Verifiable Certificate';
-  doc.text(verifyTitle, margin + 15, y);
-
-  y += 18;
+  // Badge "Vérifié" dans le coin
+  const verifyBadgeX = pageWidth - margin - 85;
+  const verifyBadgeY = verifyBoxY + 15;
+  doc.setFillColor(16, 185, 129); // emerald-500
+  doc.roundedRect(verifyBadgeX, verifyBadgeY, 75, 26, 5, 5, 'F');
   doc.setFontSize(9);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(255, 255, 255);
+  const verifiedText = '✓ VÉRIFIÉ';
+  const verifiedWidth = doc.getTextWidth(verifiedText);
+  doc.text(verifiedText, verifyBadgeX + (75 - verifiedWidth) / 2, verifyBadgeY + 17);
+  
+  y = verifyBoxY + 30;
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(6, 95, 70); // emerald-900
+  const verifyTitle = currentLanguage === 'fr' ? '🔐  Informations de Vérification' : '🔐  Verification Details';
+  doc.text(verifyTitle, margin + 20, y);
+
+  y += 25;
+  doc.setFontSize(9.5);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(60);
+  doc.setTextColor(55, 65, 81); // gray-700
 
   const verifyRows = [
     [t('certificate.fields.user'), userName],
@@ -365,70 +423,87 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
     [t('certificate.fields.fingerprint'), fingerprint]
   ];
 
-  const shortLabelWidth = 85;
+  const shortLabelWidth = 90;
+  const verifyLineHeight = 14;
 
   for (const [label, value] of verifyRows) {
+    // Icône bullet point
+    doc.setFillColor(16, 185, 129); // emerald-500
+    doc.circle(margin + 22, y - 2, 1.5, 'F');
+    
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(22, 101, 52); // green-800
-    doc.text(label, margin + 15, y);
+    doc.setTextColor(6, 95, 70); // emerald-900
+    doc.text(label, margin + 28, y);
 
     doc.setFont('helvetica', 'normal');
-    doc.setTextColor(60);
-    const valueX = margin + 15 + shortLabelWidth;
+    doc.setTextColor(55, 65, 81);
+    const valueX = margin + 28 + shortLabelWidth;
     const valueText = safeText(value) || '—';
 
-    const split = doc.splitTextToSize(valueText, contentWidth - shortLabelWidth - 35);
+    const split = doc.splitTextToSize(valueText, contentWidth - shortLabelWidth - 50);
     doc.text(split, valueX, y);
 
-    y += Math.max(lineHeight, split.length * lineHeight);
+    y += Math.max(verifyLineHeight, split.length * verifyLineHeight);
 
-    if (y > doc.internal.pageSize.getHeight() - margin - 60) {
+    if (y > doc.internal.pageSize.getHeight() - margin - 80) {
       doc.addPage();
       y = margin;
     }
   }
 
-  // === EXPLICATION CONFIANCE (si disponible) ===
+  // === NOTE DE CONFIANCE ===
   if (confidenceMsg) {
-    y += 20;
+    y = verifyBoxY + verifyBoxHeight + 20;
+    
+    // Encadré discret avec icône
+    doc.setFillColor(249, 250, 251); // gray-50
+    doc.setDrawColor(229, 231, 235); // gray-200
+    doc.setLineWidth(1);
+    doc.roundedRect(margin, y, contentWidth, 35, 8, 8, 'FD');
+    
     doc.setFontSize(10);
     doc.setFont('helvetica', 'italic');
-    doc.setTextColor(100);
-    const confLines = doc.splitTextToSize(confidenceMsg, contentWidth);
-    doc.text(confLines, margin, y);
+    doc.setTextColor(107, 114, 128); // gray-500
+    const confLines = doc.splitTextToSize('💡 ' + confidenceMsg, contentWidth - 30);
+    doc.text(confLines, margin + 15, y + 15);
   }
 
-  // === FOOTER PROFESSIONNEL ===
-  const footerY = doc.internal.pageSize.getHeight() - 40;
+  // === FOOTER PREMIUM ET MODERNE ===
+  const footerY = doc.internal.pageSize.getHeight() - 50;
   
-  // Bande de footer avec fond indigo
-  doc.setFillColor(99, 102, 241); // indigo-500
-  doc.rect(0, footerY, pageWidth, 40, 'F');
+  // Bande de footer avec dégradé
+  doc.setFillColor(67, 56, 202); // indigo-700
+  doc.rect(0, footerY, pageWidth, 50, 'F');
   
-  // Logo FakeTect en blanc
+  // Ligne décorative supérieure
+  doc.setDrawColor(139, 92, 246); // violet-500
+  doc.setLineWidth(2);
+  doc.line(0, footerY, pageWidth, footerY);
+  
+  // Logo FakeTect élégant
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(12);
+  doc.setFontSize(14);
   doc.setTextColor(255, 255, 255);
-  const footerLogo = 'FakeTect';
+  const footerLogo = 'FakeTect™';
   const footerLogoWidth = doc.getTextWidth(footerLogo);
-  doc.text(footerLogo, (pageWidth - footerLogoWidth) / 2, footerY + 15);
+  doc.text(footerLogo, (pageWidth - footerLogoWidth) / 2, footerY + 20);
   
-  // Slogan
+  // Slogan moderne
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8);
-  doc.setTextColor(200, 200, 255);
+  doc.setFontSize(9);
+  doc.setTextColor(224, 231, 255); // indigo-100
   const slogan = currentLanguage === 'fr' 
-    ? 'Détection IA & Deepfakes en temps réel • www.faketect.com'
-    : 'Real-time AI & Deepfake Detection • www.faketect.com';
+    ? 'Détection IA & Deepfakes en temps réel  •  www.faketect.com'
+    : 'Real-time AI & Deepfake Detection  •  www.faketect.com';
   const sloganWidth = doc.getTextWidth(slogan);
-  doc.text(slogan, (pageWidth - sloganWidth) / 2, footerY + 25);
+  doc.text(slogan, (pageWidth - sloganWidth) / 2, footerY + 32);
   
-  // Note de validation
-  doc.setFontSize(7);
-  doc.setTextColor(180, 180, 255);
+  // Note de validation discrète
+  doc.setFontSize(7.5);
+  doc.setTextColor(165, 180, 252); // indigo-300
   const validation = t('certificate.verificationHint');
   const validationWidth = doc.getTextWidth(validation);
-  doc.text(validation, (pageWidth - validationWidth) / 2, footerY + 33);
+  doc.text(validation, (pageWidth - validationWidth) / 2, footerY + 42);
 
   const filename = analysisId ? `faketect-certificate-${analysisId}.pdf` : 'faketect-certificate.pdf';
   doc.save(filename);
