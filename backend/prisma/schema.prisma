@@ -8,63 +8,63 @@ datasource db {
 }
 
 model User {
-  id                    String              @id @default(uuid())
-  email                 String              @unique
-  password              String
-  name                  String?
-  phone                 String?
-  acceptMarketing       Boolean             @default(false)
-  role                  String              @default("USER")
-  plan                  String              @default("FREE")
-  language              String              @default("fr")
-  stripeCustomerId      String?
-  stripeSubscriptionId  String?
-  usedToday             Int                 @default(0)
-  usedMonth             Int                 @default(0)
-  usedTotal             Int                 @default(0)
-  lastReset             DateTime            @default(now())
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @updatedAt
-  analyses              Analysis[]
-  chatConversations     ChatConversation[]
-  adminMessages         ChatMessage[]       @relation("AdminMessages")
+  id                   String             @id @default(uuid())
+  email                String             @unique
+  password             String
+  name                 String?
+  phone                String?
+  acceptMarketing      Boolean            @default(false)
+  role                 String             @default("USER")
+  plan                 String             @default("FREE")
+  language             String             @default("fr")
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  usedToday            Int                @default(0)
+  usedMonth            Int                @default(0)
+  usedTotal            Int                @default(0)
+  lastReset            DateTime           @default(now())
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  analyses             Analysis[]
+  chatConversations    ChatConversation[]
+  adminMessages        ChatMessage[]      @relation("AdminMessages")
 }
 
 model Analysis {
-  id          String   @id @default(uuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type        String   @default("IMAGE")
-  fileName    String?
-  fileUrl     String?
-  aiScore     Float?
-  isAi        Boolean?
-  confidence  Float?
-  details     String?
-  createdAt   DateTime @default(now())
+  id         String   @id @default(uuid())
+  userId     String
+  type       String   @default("IMAGE")
+  fileName   String?
+  fileUrl    String?
+  aiScore    Float?
+  isAi       Boolean?
+  confidence Float?
+  details    String?
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model ChatConversation {
   id        String        @id @default(uuid())
   userId    String?
-  user      User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
   language  String        @default("fr")
-  status    String        @default("active") // active, pending, resolved, archived
+  status    String        @default("active")
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
+  user      User?         @relation(fields: [userId], references: [id])
   messages  ChatMessage[]
 }
 
 model ChatMessage {
   id             String           @id @default(uuid())
   conversationId String
-  conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  role           String           // user, assistant, admin
-  content        String           @db.Text
+  role           String
+  content        String
   language       String           @default("fr")
   adminId        String?
-  admin          User?            @relation("AdminMessages", fields: [adminId], references: [id], onDelete: SetNull)
   createdAt      DateTime         @default(now())
+  admin          User?            @relation("AdminMessages", fields: [adminId], references: [id])
+  conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 }
 
 model NewsletterSubscriber {
@@ -72,9 +72,9 @@ model NewsletterSubscriber {
   email          String    @unique
   name           String?
   language       String    @default("fr")
-  source         String    @default("website") // 'website', 'dashboard', 'registration'
+  source         String    @default("website")
   isActive       Boolean   @default(true)
-  interests      String[]  @default([]) // ['product_updates', 'case_studies', 'statistics']
+  interests      String[]  @default([])
   confirmedAt    DateTime?
   unsubscribedAt DateTime?
   createdAt      DateTime  @default(now())
@@ -84,9 +84,9 @@ model NewsletterSubscriber {
 model NewsletterCampaign {
   id          String    @id @default(uuid())
   subject     String
-  content     String    @db.Text
+  content     String
   language    String    @default("fr")
-  type        String    // 'product_update', 'case_study', 'monthly_stats', 'promotional'
+  type        String
   sentTo      Int       @default(0)
   openRate    Float     @default(0)
   clickRate   Float     @default(0)
@@ -94,4 +94,10 @@ model NewsletterCampaign {
   sentAt      DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
+
+model playing_with_neon {
+  id    Int    @id @default(autoincrement())
+  name  String
+  value Float? @db.Real
 }
