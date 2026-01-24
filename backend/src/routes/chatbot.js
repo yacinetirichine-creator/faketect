@@ -6,6 +6,27 @@ const logger = require('../config/logger');
 
 const router = express.Router();
 
+function normalizeLanguage(language) {
+  if (!language || typeof language !== 'string') return 'fr';
+  const base = language.toLowerCase().trim().split(/[-_]/)[0];
+  const supported = new Set(['fr', 'en', 'es', 'de', 'it', 'pt']);
+  return supported.has(base) ? base : 'fr';
+}
+
+function detectRequestedLanguage(message) {
+  if (!message || typeof message !== 'string') return null;
+  const m = message.toLowerCase();
+
+  if (/(en\s+anglais|in\s+english|\benglish\b)/i.test(m)) return 'en';
+  if (/(en\s+fran[cç]ais|in\s+french|\bfrench\b|\bfran[cç]ais\b)/i.test(m)) return 'fr';
+  if (/(en\s+espagnol|in\s+spanish|\bspanish\b|espa[nñ]ol)/i.test(m)) return 'es';
+  if (/(en\s+allemand|in\s+german|\bgerman\b|\bdeutsch\b)/i.test(m)) return 'de';
+  if (/(en\s+italien|in\s+italian|\bitalian\b|\bitaliano\b)/i.test(m)) return 'it';
+  if (/(en\s+portugais|in\s+portuguese|\bportuguese\b|\bportugu[eê]s\b)/i.test(m)) return 'pt';
+
+  return null;
+}
+
 /**
  * POST /api/chatbot/message
  * Envoyer un message au chatbot (PUBLIC - pas d'authentification requise)
@@ -18,6 +39,10 @@ router.post('/message', async (req, res) => {
     if (!message || message.trim().length === 0) {
       return res.status(400).json({ error: 'Message requis' });
     }
+
+    // Langue effective: normalisation + demande explicite dans le message
+    const requestedLanguage = detectRequestedLanguage(message);
+    const normalizedLanguage = normalizeLanguage(requestedLanguage || language);
 
     // Créer ou récupérer la conversation
     let conversation;
@@ -32,10 +57,17 @@ router.post('/message', async (req, res) => {
       conversation = await prisma.chatConversation.create({
         data: {
           userId,
-          language,
+          language: normalizedLanguage,
           status: 'active',
         },
         include: { messages: true },
+      });
+    } else if (conversation.language !== normalizedLanguage) {
+      // Mettre à jour la langue si l'utilisateur demande explicitement un changement
+      conversation = await prisma.chatConversation.update({
+        where: { id: conversation.id },
+        data: { language: normalizedLanguage },
+        include: { messages: { orderBy: { createdAt: 'asc' }, take: 10 } },
       });
     }
 
@@ -45,7 +77,7 @@ router.post('/message', async (req, res) => {
         conversationId: conversation.id,
         role: 'user',
         content: message,
-        language,
+        language: normalizedLanguage,
       },
     });
 
@@ -57,7 +89,7 @@ router.post('/message', async (req, res) => {
     conversationHistory.push({ role: 'user', content: message });
 
     // Obtenir la réponse IA
-    const aiResponse = await openaiService.chatWithUser(conversationHistory, language);
+    const aiResponse = await openaiService.chatWithUser(conversationHistory, normalizedLanguage);
 
     // Sauvegarder la réponse IA
     const _botMessage = await prisma.chatMessage.create({
@@ -65,14 +97,14 @@ router.post('/message', async (req, res) => {
         conversationId: conversation.id,
         role: 'assistant',
         content: aiResponse,
-        language,
+        language: normalizedLanguage,
       },
     });
 
     logger.info('Chatbot conversation', {
       conversationId: conversation.id,
       userId,
-      language,
+      language: normalizedLanguage,
       messageLength: message.length,
     });
 

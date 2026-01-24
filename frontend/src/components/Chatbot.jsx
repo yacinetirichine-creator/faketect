@@ -5,7 +5,7 @@ import api from '../services/api';
 
 export default function Chatbot() {
   const { i18n } = useTranslation();
-  const language = i18n.language || 'fr';
+  const language = (i18n.language || 'fr').split(/[-_]/)[0];
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');

@@ -18,6 +18,27 @@ class OpenAIService {
     }
   }
 
+  _normalizeLanguage(language) {
+    if (!language || typeof language !== 'string') return 'fr';
+    const base = language.toLowerCase().trim().split(/[-_]/)[0];
+    const supported = new Set(['fr', 'en', 'es', 'de', 'it', 'pt']);
+    return supported.has(base) ? base : 'fr';
+  }
+
+  _detectRequestedLanguage(message) {
+    if (!message || typeof message !== 'string') return null;
+    const m = message.toLowerCase();
+
+    if (/(en\s+anglais|in\s+english|\benglish\b)/i.test(m)) return 'en';
+    if (/(en\s+fran[cç]ais|in\s+french|\bfrench\b|\bfran[cç]ais\b)/i.test(m)) return 'fr';
+    if (/(en\s+espagnol|in\s+spanish|\bspanish\b|espa[nñ]ol)/i.test(m)) return 'es';
+    if (/(en\s+allemand|in\s+german|\bgerman\b|\bdeutsch\b)/i.test(m)) return 'de';
+    if (/(en\s+italien|in\s+italian|\bitalian\b|\bitaliano\b)/i.test(m)) return 'it';
+    if (/(en\s+portugais|in\s+portuguese|\bportuguese\b|\bportugu[eê]s\b)/i.test(m)) return 'pt';
+
+    return null;
+  }
+
   _sanitizeOpenAiErrorBody(text) {
     if (!text) {
       return undefined;
@@ -193,9 +214,11 @@ class OpenAIService {
   }
 
   async getChatResponse(conversationHistory, language = 'fr') {
+    const normalizedLanguage = this._normalizeLanguage(language);
+
     // Mode fallback intelligent si pas de clé API ou runtime incompatible
     if (!this.canCallApi) {
-      return this.getSmartFallbackResponse(conversationHistory, language);
+      return this.getSmartFallbackResponse(conversationHistory, normalizedLanguage);
     }
 
     const systemPrompts = {
@@ -253,7 +276,7 @@ Se não puder responder ou for complexo, termine com [HUMAN_SUPPORT] para alerta
       const messages = [
         {
           role: 'system',
-          content: systemPrompts[language] || systemPrompts.fr,
+          content: systemPrompts[normalizedLanguage] || systemPrompts.fr,
         },
         ...conversationHistory,
       ];
@@ -299,7 +322,9 @@ Se não puder responder ou for complexo, termine com [HUMAN_SUPPORT] para alerta
       });
 
       const lastUserMessage = conversationHistory?.[conversationHistory.length - 1]?.content;
-      const smart = this.getSmartFallbackResponse(conversationHistory, language);
+      const requested = this._detectRequestedLanguage(lastUserMessage);
+      const fallbackLanguage = requested || normalizedLanguage;
+      const smart = this.getSmartFallbackResponse(conversationHistory, fallbackLanguage);
 
       // Si c'est un sujet sensible/complexe (paiement/compte/bug), on peut demander un humain
       if (this._shouldEscalateToHuman(lastUserMessage) && !smart.includes('[HUMAN_SUPPORT]')) {
@@ -326,7 +351,9 @@ Se não puder responder ou for complexo, termine com [HUMAN_SUPPORT] para alerta
    * Mode fallback intelligent basé sur des mots-clés (sans OpenAI)
    */
   getSmartFallbackResponse(conversationHistory, language = 'fr') {
-    const lastMessage = conversationHistory[conversationHistory.length - 1]?.content?.toLowerCase() || '';
+    const normalizedLanguage = this._normalizeLanguage(language);
+    const lastMessageRaw = conversationHistory[conversationHistory.length - 1]?.content || '';
+    const lastMessage = lastMessageRaw.toLowerCase();
 
     const responses = {
       fr: {
@@ -373,7 +400,14 @@ Se não puder responder ou for complexo, termine com [HUMAN_SUPPORT] para alerta
       },
     };
 
-    const langResponses = responses[language] || responses.fr;
+    const langResponses = responses[normalizedLanguage] || responses.fr;
+
+    // Changement explicite de langue
+    const requested = this._detectRequestedLanguage(lastMessageRaw);
+    if (requested) {
+      const requestedResponses = responses[requested] || responses.fr;
+      return requestedResponses.help;
+    }
 
     // Détection de mots-clés
     if (/(plan|price|pricing|tarif|precio|preis|prezzo|preço|abonnement|subscription)/i.test(lastMessage)) {
