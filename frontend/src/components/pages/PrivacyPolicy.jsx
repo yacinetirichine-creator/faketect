@@ -11,7 +11,7 @@ const PrivacyPolicy = () => {
         <div className="text-center mb-12">
           <Shield className="w-16 h-16 text-blue-600 mx-auto mb-4" />
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            {t('legal.privacy.title', 'Politique de Confidentialité')}
+            {t('legal.privacy.title')}
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
             Dernière mise à jour : 28 décembre 2024
@@ -27,10 +27,10 @@ const PrivacyPolicy = () => {
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
             <p className="font-semibold mb-2">JARVIS</p>
             <p className="text-sm text-gray-700 dark:text-gray-300">
-              Société par actions simplifiée au capital de 100 EUR<br />
-              Siège social : 128 Rue la Boétie, 75008 PARIS<br />
+              Société par actions simplifiée au capital de 1 000 EUR<br />
+              Siège social : 64 Avenue Marinville, 94100 Saint-Maur-des-Fossés<br />
               SIREN : 928 499 166<br />
-              RCS Paris
+              RCS Créteil
             </p>
             <div className="mt-4 pt-4 border-t border-blue-200 dark:border-blue-800">
               <p className="text-sm">
@@ -188,7 +188,7 @@ const PrivacyPolicy = () => {
                 </a>
               </p>
               <p>
-                <strong>Courrier :</strong> JARVIS - DPO, 128 Rue la Boétie, 75008 PARIS
+                <strong>Courrier :</strong> JARVIS - DPO, 64 Avenue Marinville, 94100 Saint-Maur-des-Fossés
               </p>
             </div>
             <div className="mt-4 pt-4 border-t border-gray-300 dark:border-gray-600">

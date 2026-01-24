@@ -3,16 +3,71 @@
   "hero": { "title": "Détectez les faux", "highlight": "en quelques secondes", "subtitle": "FakeTect utilise l'IA avancée pour détecter les images générées par IA et les deepfakes.", "cta": "Commencer gratuitement", "cta2": "Voir les tarifs" },
   "features": { "title": "Fonctionnalités", "subtitle": "Tout pour détecter les contenus IA" },
   "pricing": { "title": "Tarifs simples", "subtitle": "Économisez 30% en annuel", "monthly": "Mensuel", "yearly": "Annuel", "perMonth": "/mois", "perYear": "/an", "popular": "Populaire", "choose": "Choisir", "current": "Actuel", "free": "Gratuit", "save": "Économisez", "checkoutError": "Erreur lors de la création du checkout", "analysesPerMonth": "analyses/mois", "analysesPerDay": "analyses/jour", "unlimited": "Illimité" },
-  "auth": { "loginTitle": "Bon retour !", "loginSub": "Connectez-vous à votre compte", "registerTitle": "Créer un compte", "registerSub": "Commencez avec 10 tests gratuits", "email": "Email", "password": "Mot de passe", "confirm": "Confirmer", "name": "Nom complet", "phone": "Téléphone", "phoneHint": "Optionnel - pour recevoir des infos sur nos nouveaux produits", "marketingConsent": "J'accepte de recevoir des communications marketing via WhatsApp pour découvrir nos futurs produits", "privacyPolicy": "Politique de confidentialité", "loginBtn": "Se connecter", "registerBtn": "Créer mon compte", "login": "Connexion", "register": "Inscription", "noAccount": "Pas de compte ?", "hasAccount": "Déjà un compte ?", "loginLink": "Se connecter", "registerLink": "S'inscrire", "loginSuccess": "Connexion réussie !", "registerSuccess": "Compte créé !", "placeholders": { "name": "John Doe", "email": "email@example.com", "phone": "+33 6 12 34 56 78" } },
-  "dashboard": { "welcome": "Bienvenue", "overview": "Vue d'ensemble", "history": "Historique", "settings": "Paramètres", "total": "Total", "aiDetected": "IA détectée", "real": "Réel", "remaining": "Restantes", "quick": "Analyse rapide", "dropzone": "Glissez ou cliquez", "formats": "JPG, PNG, WebP, PDF", "analyzing": "Analyse...", "result": "Résultat", "score": "Score IA", "confidence": "Confiance", "verdict": "Verdict", "subtitle": "Détection IA avancée à portée de main", "newAnalysis": "Nouvelle Analyse", "drag": "Glissez-déposez votre fichier ici", "drop": "Déposez votre fichier maintenant", "recent": "Analyses Récentes", "noHistory": "Aucune analyse pour le moment", "analysisCompleted": "Analyse terminée !", "uploadHint": "JPG, PNG, WebP, PDF, MP4/MOV/AVI (max 100MB)", "processingTime": "Temps de traitement", "ultraFast": "Ultra rapide", "fileFallback": "Fichier", "explainabilityTitle": "Explicabilité", "explainabilitySubtitle": "Les éléments ci-dessous sont utilisés pour générer le certificat.", "explainabilityUnavailable": "Explications indisponibles pour cette analyse.", "provider": "Fournisseur", "consensus": "Consensus", "sources": "Sources", "framesAnalyzed": "Frames analysées", "topSignals": "Signaux principaux", "scoreShort": "Score", "confidenceShort": "Conf." },
+  "auth": { "loginTitle": "Bon retour !", "loginSub": "Connectez-vous à votre compte", "registerTitle": "Créer un compte", "registerSub": "Commencez avec 10 tests gratuits", "email": "Email", "password": "Mot de passe", "confirm": "Confirmer", "name": "Nom complet", "phone": "Téléphone", "phoneHint": "Optionnel - pour recevoir des infos sur nos nouveaux produits", "aiProcessingConsent": "J'accepte que mes fichiers soient traités par nos algorithmes d'IA (OpenAI) pour détecter les contenus générés par IA. Voir notre", "aiConsentRequired": "Vous devez accepter le traitement IA pour utiliser le service", "marketingConsent": "J'accepte de recevoir des communications marketing via WhatsApp pour découvrir nos futurs produits", "privacyPolicy": "Politique de confidentialité", "loginBtn": "Se connecter", "registerBtn": "Créer mon compte", "login": "Connexion", "register": "Inscription", "noAccount": "Pas de compte ?", "hasAccount": "Déjà un compte ?", "loginLink": "Se connecter", "registerLink": "S'inscrire", "loginSuccess": "Connexion réussie !", "registerSuccess": "Compte créé !", "placeholders": { "name": "John Doe", "email": "email@example.com", "phone": "+33 6 12 34 56 78" } },
+  "dashboard": {
+    "welcome": "Bienvenue",
+    "overview": "Vue d'ensemble",
+    "history": "Historique",
+    "settings": "Paramètres",
+    "total": "Total",
+    "aiDetected": "IA détectée",
+    "real": "Réel",
+    "remaining": "Restantes",
+    "quick": "Analyse rapide",
+    "dropzone": "Glissez ou cliquez",
+    "formats": "JPG, PNG, WebP, PDF",
+    "analyzing": "Analyse...",
+    "result": "Résultat",
+    "score": "Score IA",
+    "confidence": "Confiance",
+    "verdict": "Verdict",
+    "subtitle": "Détection IA avancée à portée de main",
+    "newAnalysis": "Nouvelle Analyse",
+    "drag": "Glissez-déposez votre fichier ici",
+    "drop": "Déposez votre fichier maintenant",
+    "recent": "Analyses Récentes",
+    "noHistory": "Aucune analyse pour le moment",
+    "analysisCompleted": "Analyse terminée !",
+    "uploadHint": "JPG, PNG, WebP, PDF, MP4/MOV/AVI (max 100MB)",
+    "processingTime": "Temps de traitement",
+    "ultraFast": "Ultra rapide",
+    "fileFallback": "Fichier",
+    "explainabilityTitle": "Explicabilité",
+    "explainabilitySubtitle": "Les éléments ci-dessous sont utilisés pour générer le certificat.",
+    "explainabilityUnavailable": "Explications indisponibles pour cette analyse.",
+    "provider": "Fournisseur",
+    "consensus": "Consensus",
+    "sources": "Sources",
+    "framesAnalyzed": "Frames analysées",
+    "topSignals": "Signaux principaux",
+    "scoreShort": "Score",
+    "confidenceShort": "Conf.",
+    "tutorial": "Tutoriel",
+    "resultLabel": "Résultat",
+    "realLabel": "RÉEL",
+    "aiLabel": "IA",
+    "uncertainLabel": "INCERTAIN",
+    "moreReal": "← Plus réel",
+    "moreAi": "Plus IA →",
+    "scale100Real": "100% Réel",
+    "scale50": "50%",
+    "scale100Ai": "100% IA",
+    "technicalDetails": "📊 Voir les détails techniques",
+    "partialVideoAnalysis": "Analyse partielle de vidéo",
+    "partialVideoDesc": "Votre vidéo dure {{total}}s. Pour optimiser les coûts, nous avons analysé les {{analyzed}} premières secondes.",
+    "rawAiScore": "Score IA brut",
+    "signalsDetected": "Signaux détectés",
+    "downloadCertificate": "Télécharger le certificat",
+    "certificateProof": "Certificat PDF avec preuve d'analyse"
+  },
   "certificate": { "download": "Télécharger le certificat", "downloadError": "Impossible de générer le certificat", "basedOnExplainability": "Certificat basé sur le score, la confiance et les signaux ci-dessous.", "title": "Certificat d'analyse", "subtitle": "Généré par FakeTect", "fields": { "analysisId": "ID d'analyse", "user": "Utilisateur", "date": "Date", "file": "Fichier", "fileHash": "Empreinte du fichier (SHA-256)", "score": "Score IA", "verdict": "Verdict", "confidence": "Confiance", "provider": "Fournisseur", "framesAnalyzed": "Frames analysées", "consensus": "Consensus", "sources": "Sources", "topSignals": "Signaux principaux", "fingerprint": "Empreinte du certificat", "scoreShort": "Score", "confidenceShort": "Conf." }, "generatedAt": "Généré le {{date}}", "verificationHint": "Vérification : comparez l’ID d’analyse dans l’application" },
   "verdicts": { "ai_generated": "IA", "likely_ai": "Prob. IA", "possibly_ai": "Peut-être IA", "possibly_real": "Peut-être réel", "likely_real": "Prob. réel" },
   "admin": { "title": "Admin", "metrics": "Métriques", "users": "Utilisateurs", "totalUsers": "Total", "newToday": "Nouveaux", "totalAnalyses": "Analyses", "mrr": "MRR", "usersByPlan": "Utilisateurs par plan", "analysesToday": "Analyses aujourd'hui", "analysesPerformed": "analyses effectuées", "noAnalyses": "Aucune analyse", "confirmDeleteUser": "Supprimer cet utilisateur ?", "planUpdated": "Plan modifié", "usersTable": { "email": "Email", "name": "Nom", "plan": "Plan", "role": "Rôle", "createdAt": "Inscrit", "actions": "Actions" }, "analysesTable": { "date": "Date", "user": "Utilisateur", "file": "Fichier", "type": "Type", "score": "Score", "verdict": "Verdict", "provider": "Provider" } },
-  "common": { "loading": "Chargement...", "save": "Enregistrer", "cancel": "Annuler", "delete": "Supprimer", "deleted": "Supprimé", "confirmDelete": "Supprimer ?", "searchPlaceholder": "Rechercher...", "error": "Erreur", "loadError": "Erreur de chargement", "errorGeneric": "Erreur", "saved": "Enregistré", "id": "ID" },
+  "common": { "loading": "Chargement...", "save": "Enregistrer", "cancel": "Annuler", "delete": "Supprimer", "deleted": "Supprimé", "confirmDelete": "Supprimer ?", "searchPlaceholder": "Rechercher...", "error": "Erreur", "loadError": "Erreur de chargement", "errorGeneric": "Erreur", "saved": "Enregistré", "id": "ID", "optional": "optionnel" },
   "errorBoundary": { "title": "Erreur d’affichage", "description": "Une erreur JavaScript empêche cette page de s’afficher.", "reload": "Recharger", "retry": "Réessayer" },
   "historyPage": { "url": "URL", "table": { "file": "Fichier", "type": "Type", "score": "Score", "date": "Date", "actions": "Actions" } },
   "settings": { "sections": { "admin": "Admin", "profile": "Profil", "language": "Langue", "subscription": "Abonnement" }, "admin": { "accessTitle": "Accès administrateur", "accessDesc": "Ouvrir le dashboard admin et gérer les utilisateurs", "open": "Ouvrir" }, "freeQuotaHint": "10 tests gratuits offerts (valable 30 jours)", "activeSubscription": "Abonnement actif", "subscription": { "plan": "Plan {{plan}}", "manage": "Gérer l'abonnement", "upgrade": "Upgrade", "change": "Changer" } },
-  "footer": { "description": "Détection IA avancée pour vos contenus.", "product": "Produit", "company": "Entreprise", "links": { "pricing": "Tarifs", "features": "Fonctionnalités", "api": "API", "about": "À propos", "blog": "Blog", "contact": "Contact" }, "rights": "© 2025 FakeTect. Tous droits réservés." },
+  "footer": { "description": "Détection IA avancée pour vos contenus.", "product": "Produit", "company": "Entreprise", "legal": "Mentions légales", "links": { "pricing": "Tarifs", "features": "Fonctionnalités", "api": "API", "about": "À propos", "blog": "Blog", "contact": "Contact", "terms": "CGU", "sales": "CGV" }, "rights": "© 2025 FakeTect. Tous droits réservés." },
   "newsletter": {
     "title": "Newsletter",
     "subtitle": "Recevez les dernières nouveautés et cas d'usage",
@@ -62,6 +117,115 @@
       "case_study": "Cas d'usage",
       "monthly_stats": "Statistiques mensuelles",
       "promotional": "Promotion"
+    }
+  },
+  "demo": {
+    "badge": "Exemples en direct",
+    "title": "Voyez FakeTect en action",
+    "subtitle": "Découvrez comment notre IA détecte les contenus générés. Cliquez sur un exemple pour voir le résultat détaillé.",
+    "image": "Image",
+    "video": "Vidéo",
+    "score": "Score IA",
+    "confidence": "Confiance",
+    "tryNow": "Essayer maintenant",
+    "cta": "Prêt à tester avec vos propres fichiers ?",
+    "getStarted": "Commencer gratuitement",
+    "example1": {
+      "title": "Photo réelle",
+      "result": "Image RÉELLE",
+      "desc": "Photo prise avec un smartphone, aucun signe de génération IA détecté."
+    },
+    "example2": {
+      "title": "Portrait IA",
+      "result": "Généré par IA",
+      "desc": "Portrait créé avec Midjourney. Artefacts IA détectés dans les yeux et les cheveux."
+    },
+    "example3": {
+      "title": "Vidéo authentique",
+      "result": "Vidéo RÉELLE",
+      "desc": "Vidéo capturée avec une caméra. Mouvement naturel et cohérence temporelle."
+    },
+    "example4": {
+      "title": "Deepfake",
+      "result": "Deepfake détecté",
+      "desc": "Vidéo générée par IA. Incohérences dans les expressions faciales détectées."
+    },
+    "example5": {
+      "title": "Contenu mixte",
+      "result": "INCERTAIN",
+      "desc": "Photo retouchée avec IA. Mélange de contenu réel et généré."
+    },
+    "example6": {
+      "title": "Paysage IA",
+      "result": "Généré par IA",
+      "desc": "Paysage créé avec DALL-E. Structures impossibles et textures artificielles."
+    }
+  },
+  "tutorial": {
+    "welcome": {
+      "title": "Bienvenue sur FakeTect !",
+      "desc": "Détectez en quelques secondes si une image ou vidéo a été générée par IA. Voici comment ça marche."
+    },
+    "upload": {
+      "title": "Étape 1 : Upload",
+      "desc": "Glissez-déposez ou cliquez pour uploader votre fichier. Images (JPG, PNG, WEBP) ou vidéos (MP4, MOV) jusqu'à 100 MB.",
+      "tip": "Astuce : Les vidéos longues sont analysées sur les 60 premières secondes pour optimiser les coûts."
+    },
+    "analyze": {
+      "title": "Étape 2 : Analyse",
+      "desc": "Notre IA analyse votre fichier en quelques secondes. Nous utilisons plusieurs modèles pour une précision maximale.",
+      "tip": "Plusieurs sources : Sightengine, Illuminarty, et OpenAI pour un résultat fiable."
+    },
+    "result": {
+      "title": "Étape 3 : Résultat",
+      "desc": "Obtenez un score de confiance et un verdict clair : RÉEL, IA, ou INCERTAIN. Téléchargez un certificat PDF pour prouver l'authenticité.",
+      "tip": "Le certificat PDF inclut un QR code et est idéal pour les documents officiels."
+    },
+    "ready": {
+      "title": "Vous êtes prêt !",
+      "desc": "Plan GRATUIT : 10 analyses sur 30 jours. Passez à un plan payant pour plus d'analyses et des fonctionnalités avancées."
+    },
+    "previous": "Précédent",
+    "next": "Suivant",
+    "start": "Commencer",
+    "skip": "Passer le tutoriel"
+  },
+  "cookies": {
+    "banner": {
+      "title": "Gestion des Cookies",
+      "description": "Nous utilisons des cookies pour améliorer votre expérience, analyser le trafic et personnaliser le contenu. Les cookies strictement nécessaires sont toujours activés. Vous pouvez gérer vos préférences ci-dessous.",
+      "learnMore": "En savoir plus sur notre Politique de Cookies →",
+      "customize": "Personnaliser",
+      "rejectAll": "Refuser tout",
+      "acceptAll": "Accepter tout"
+    },
+    "settings": {
+      "title": "Préférences de Cookies",
+      "necessary": {
+        "title": "🔒 Cookies strictement nécessaires",
+        "description": "Indispensables au fonctionnement du site (authentification, sécurité, panier).",
+        "alwaysEnabled": "Toujours activé"
+      },
+      "preferences": {
+        "title": "⚙️ Cookies de préférences",
+        "description": "Mémorisent vos préférences (langue, thème d'affichage, paramètres)."
+      },
+      "analytics": {
+        "title": "📊 Cookies analytiques",
+        "description": "Nous aident à comprendre comment les visiteurs utilisent le site (Google Analytics avec IP anonymisée)."
+      },
+      "functional": {
+        "title": "⭐ Cookies fonctionnels",
+        "description": "Permettent des fonctionnalités avancées et personnalisées (historique, préférences d'affichage)."
+      },
+      "validityInfo": "Durée de validité du consentement : 13 mois (conforme CNIL)",
+      "modifyInfo": "Vous pouvez modifier vos préférences à tout moment via le lien \"Gérer les cookies\" dans le footer.",
+      "savePreferences": "Enregistrer mes préférences"
+    }
+  },
+  "legal": {
+    "privacy": {
+      "title": "Politique de Confidentialité"
     }
   },
   "landing": {

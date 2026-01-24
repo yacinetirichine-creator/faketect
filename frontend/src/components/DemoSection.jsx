@@ -15,104 +15,104 @@ export default function DemoSection() {
     {
       id: 'photo-real',
       type: 'image',
-      title: t('demo.example1.title', 'Photo réelle'),
+      title: t('demo.example1.title'),
       thumbnail: '📷',
       result: {
         verdict: 'real',
         aiScore: 12,
         confidence: 92,
-        label: t('demo.example1.result', 'Image RÉELLE'),
+        label: t('demo.example1.result'),
         color: 'text-green-400',
         bg: 'bg-green-500/10',
         border: 'border-green-500/20',
         icon: CheckCircle2
       },
-      description: t('demo.example1.desc', 'Photo prise avec un smartphone, aucun signe de génération IA détecté.')
+      description: t('demo.example1.desc')
     },
     {
       id: 'ai-portrait',
       type: 'image',
-      title: t('demo.example2.title', 'Portrait IA'),
+      title: t('demo.example2.title'),
       thumbnail: '🤖',
       result: {
         verdict: 'ai',
         aiScore: 94,
         confidence: 88,
-        label: t('demo.example2.result', 'Généré par IA'),
+        label: t('demo.example2.result'),
         color: 'text-red-400',
         bg: 'bg-red-500/10',
         border: 'border-red-500/20',
         icon: XCircle
       },
-      description: t('demo.example2.desc', 'Portrait créé avec Midjourney. Artefacts IA détectés dans les yeux et les cheveux.')
+      description: t('demo.example2.desc')
     },
     {
       id: 'video-real',
       type: 'video',
-      title: t('demo.example3.title', 'Vidéo authentique'),
+      title: t('demo.example3.title'),
       thumbnail: '🎥',
       result: {
         verdict: 'real',
         aiScore: 8,
         confidence: 95,
-        label: t('demo.example3.result', 'Vidéo RÉELLE'),
+        label: t('demo.example3.result'),
         color: 'text-green-400',
         bg: 'bg-green-500/10',
         border: 'border-green-500/20',
         icon: CheckCircle2
       },
-      description: t('demo.example3.desc', 'Vidéo capturée avec une caméra. Mouvement naturel et cohérence temporelle.')
+      description: t('demo.example3.desc')
     },
     {
       id: 'ai-deepfake',
       type: 'video',
-      title: t('demo.example4.title', 'Deepfake'),
+      title: t('demo.example4.title'),
       thumbnail: '👤',
       result: {
         verdict: 'ai',
         aiScore: 89,
         confidence: 81,
-        label: t('demo.example4.result', 'Deepfake détecté'),
+        label: t('demo.example4.result'),
         color: 'text-red-400',
         bg: 'bg-red-500/10',
         border: 'border-red-500/20',
         icon: XCircle
       },
-      description: t('demo.example4.desc', 'Vidéo générée par IA. Incohérences dans les expressions faciales détectées.')
+      description: t('demo.example4.desc')
     },
     {
       id: 'mixed-content',
       type: 'image',
-      title: t('demo.example5.title', 'Contenu mixte'),
+      title: t('demo.example5.title'),
       thumbnail: '🎨',
       result: {
         verdict: 'uncertain',
         aiScore: 52,
         confidence: 64,
-        label: t('demo.example5.result', 'INCERTAIN'),
+        label: t('demo.example5.result'),
         color: 'text-yellow-400',
         bg: 'bg-yellow-500/10',
         border: 'border-yellow-500/20',
         icon: HelpCircle
       },
-      description: t('demo.example5.desc', 'Photo retouchée avec IA. Mélange de contenu réel et généré.')
+      description: t('demo.example5.desc')
     },
     {
       id: 'ai-landscape',
       type: 'image',
-      title: t('demo.example6.title', 'Paysage IA'),
+      title: t('demo.example6.title'),
       thumbnail: '🏔️',
       result: {
         verdict: 'ai',
         aiScore: 97,
         confidence: 93,
-        label: t('demo.example6.result', 'Généré par IA'),
+        label: t('demo.example6.result'),
         color: 'text-red-400',
         bg: 'bg-red-500/10',
         border: 'border-red-500/20',
         icon: XCircle
       },
-      description: t('demo.example6.desc', 'Paysage créé avec DALL-E. Structures impossibles et textures artificielles.')
+      description: t('demo.example6.desc')
     }
   ];
 
@@ -134,13 +134,13 @@ export default function DemoSection() {
             viewport={{ once: true }}
           >
             <span className="inline-block px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold mb-4">
-              {t('demo.badge', 'Exemples en direct')}
+              {t('demo.badge')}
             </span>
             <h2 className="text-4xl md:text-5xl font-black mb-6 bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
-              {t('demo.title', 'Voyez FakeTect en action')}
+              {t('demo.title')}
             </h2>
             <p className="text-xl text-white/60 max-w-2xl mx-auto">
-              {t('demo.subtitle', 'Découvrez comment notre IA détecte les contenus générés. Cliquez sur un exemple pour voir le résultat détaillé.')}
+              {t('demo.subtitle')}
             </p>
           </motion.div>
         </div>
@@ -176,7 +176,7 @@ export default function DemoSection() {
                   <Video size={16} className="text-purple-400" />
                 )}
                 <span className="text-xs text-white/40 uppercase">
-                  {example.type === 'image' ? t('demo.image', 'Image') : t('demo.video', 'Vidéo')}
+                  {example.type === 'image' ? t('demo.image') : t('demo.video')}
                 </span>
               </div>
 
@@ -234,11 +234,11 @@ export default function DemoSection() {
                 <div className="space-y-4 mb-6">
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm text-white/60">{t('demo.score', 'Score IA')}</span>
+                      <span className="text-sm text-white/60">{t('demo.score')}</span>
                       <span className="text-lg font-bold text-white">{selectedDemo.result.aiScore}%</span>
                     </div>
                     <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                      <div 
+                      <div
                         className={`h-full ${selectedDemo.result.verdict === 'ai' ? 'bg-red-500' : 'bg-green-500'}`}
                         style={{ width: `${selectedDemo.result.aiScore}%` }}
                       />
@@ -247,11 +247,11 @@ export default function DemoSection() {
 
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm text-white/60">{t('demo.confidence', 'Confiance')}</span>
+                      <span className="text-sm text-white/60">{t('demo.confidence')}</span>
                       <span className="text-lg font-bold text-white">{selectedDemo.result.confidence}%</span>
                     </div>
                     <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                      <div 
+                      <div
                         className="h-full bg-primary"
                         style={{ width: `${selectedDemo.result.confidence}%` }}
                       />
@@ -263,7 +263,7 @@ export default function DemoSection() {
                 <div className="flex gap-3">
                   <button className="flex-1 px-4 py-3 rounded-lg bg-gradient-to-r from-primary to-accent text-white font-semibold hover:shadow-lg hover:shadow-primary/50 transition-all flex items-center justify-center gap-2">
                     <Eye size={18} />
-                    {t('demo.tryNow', 'Essayer maintenant')}
+                    {t('demo.tryNow')}
                   </button>
                   <button className="px-4 py-3 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors">
                     <Download size={18} />
@@ -277,13 +277,13 @@ export default function DemoSection() {
         {/* Bottom CTA */}
         <div className="text-center mt-16">
           <p className="text-white/60 mb-4">
-            {t('demo.cta', 'Prêt à tester avec vos propres fichiers ?')}
+            {t('demo.cta')}
           </p>
-          <a 
-            href="/register" 
+          <a
+            href="/register"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-gradient-to-r from-primary to-accent text-white font-bold text-lg hover:shadow-2xl hover:shadow-primary/50 transition-all"
           >
-            {t('demo.getStarted', 'Commencer gratuitement')}
+            {t('demo.getStarted')}
             <motion.span
               animate={{ x: [0, 5, 0] }}
               transition={{ repeat: Infinity, duration: 1.5 }}

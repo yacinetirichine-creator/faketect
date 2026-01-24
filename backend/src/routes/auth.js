@@ -14,23 +14,29 @@ const router = express.Router();
 
 router.post('/register', registerLimiter, registerValidation, async (req, res) => {
   try {
-    const { email, password, name, language = 'fr', phone, acceptMarketing = false } = req.body;
-    
+    const { email, password, name, language = 'fr', phone, acceptMarketing = false, aiProcessingConsent = false } = req.body;
+
+    // RGPD: Le consentement IA est obligatoire pour utiliser le service
+    if (!aiProcessingConsent) {
+      return res.status(400).json({ error: 'Le consentement au traitement IA est requis pour utiliser le service' });
+    }
+
     const exists = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
     if (exists) {
       logger.logAuth('register', email, false, 'Email already exists');
       return res.status(400).json({ error: 'Email déjà utilisé' });
     }
-    
+
     const user = await prisma.user.create({
-      data: { 
-        id: uuid(), 
-        email: email.toLowerCase(), 
-        password: await bcrypt.hash(password, 12), 
-        name, 
+      data: {
+        id: uuid(),
+        email: email.toLowerCase(),
+        password: await bcrypt.hash(password, 12),
+        name,
         language,
         phone: phone || null,
-        acceptMarketing
+        acceptMarketing,
+        aiProcessingConsent // RGPD: Consentement explicite pour traitement IA
       }
     });
     

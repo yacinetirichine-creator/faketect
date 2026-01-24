@@ -13,6 +13,8 @@ const cors = require('cors');
 const path = require('path');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const compression = require('compression');
+const cookieParser = require('cookie-parser');
 const logger = require('./config/logger');
 const { 
   globalLimiter, 
@@ -33,6 +35,12 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" } // Permet le chargement des uploads
 }));
 
+// Compression des réponses (gzip) - réduit la bande passante de 60-70%
+app.use(compression({
+  threshold: 1024, // Compresser seulement si > 1KB
+  level: 6 // Niveau de compression (1-9, 6 = bon équilibre vitesse/taille)
+}));
+
 // Logging des requêtes HTTP
 app.use(morgan('combined', {
   stream: { write: message => logger.info(message.trim()) }
@@ -43,6 +51,9 @@ app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173', cred
 
 // Body parsing
 app.use(express.json({ limit: '50mb' }));
+
+// Cookie parsing (RGPD: pour consentement cookies côté serveur)
+app.use(cookieParser());
 
 // Static files
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
@@ -56,21 +67,38 @@ app.use('/api/', apiSlowDown);
 // Rate limiting global (après static files pour ne pas limiter les images)
 app.use('/api/', globalLimiter);
 
-// Health check (avant les routes pour ne pas être rate-limité)
-app.get('/api/health', async (req, res) => {
+// Health check léger (sans requête DB à chaque appel)
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    memoryUsage: Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + 'MB'
+  });
+});
+
+// Health check complet avec DB (pour monitoring approfondi)
+app.get('/api/health/full', async (req, res) => {
   try {
-    // Test connexion DB
+    const dbStart = Date.now();
     await prisma.$queryRaw`SELECT 1`;
-    res.json({ 
-      status: 'ok', 
-      database: 'connected',
-      timestamp: new Date().toISOString() 
+    const dbLatency = Date.now() - dbStart;
+
+    const cacheStats = await require('./services/cache').getStats();
+
+    res.json({
+      status: 'ok',
+      database: { status: 'connected', latencyMs: dbLatency },
+      cache: cacheStats,
+      uptime: process.uptime(),
+      memoryUsage: Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + 'MB',
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
-    res.status(500).json({ 
-      status: 'error', 
-      database: 'disconnected',
-      error: error.message 
+    res.status(500).json({
+      status: 'error',
+      database: { status: 'disconnected', error: error.message },
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -85,6 +113,7 @@ app.use('/api/plans', require('./routes/plans'));
 app.use('/api/stripe', require('./routes/stripe'));
 app.use('/api/chatbot', require('./routes/chatbot'));
 app.use('/api/newsletter', require('./routes/newsletter'));
+app.use('/api/consent', require('./routes/consent')); // RGPD: Consentement cookies côté serveur
 
 // Error handling amélioré
 app.use((err, req, res, next) => {

@@ -1,8 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Search, Trash2, Loader2 } from 'lucide-react';
 import { adminApi } from '../../../services/api';
 import toast from 'react-hot-toast';
+
+// Hook de debounce pour éviter les appels API excessifs
+function useDebounce(value, delay = 300) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 
 export default function AdminUsers() {
   const { t } = useTranslation();
@@ -12,28 +24,47 @@ export default function AdminUsers() {
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState(null);
 
-  useEffect(() => { load(); }, [page, search]);
+  // Debounce la recherche pour éviter les appels API à chaque frappe
+  const debouncedSearch = useDebounce(search, 300);
 
-  const load = async () => {
+  useEffect(() => { load(); }, [page, debouncedSearch]);
+
+  const load = useCallback(async () => {
     setLoading(true);
-    const { data } = await adminApi.getUsers({ page, limit: 20, search });
-    setUsers(data.users);
-    setPagination(data.pagination);
-    setLoading(false);
-  };
+    try {
+      const { data } = await adminApi.getUsers({ page, limit: 20, search: debouncedSearch });
+      setUsers(data.users);
+      setPagination(data.pagination);
+    } catch (err) {
+      console.error('Load users error:', err);
+      toast.error(t('common.loadError'));
+    } finally {
+      setLoading(false);
+    }
+  }, [page, debouncedSearch, t]);
 
-  const handleDelete = async (id) => {
+  const handleDelete = useCallback(async (id) => {
     if (!confirm(t('admin.confirmDeleteUser'))) return;
-    await adminApi.deleteUser(id);
-    setUsers(users.filter(u => u.id !== id));
-    toast.success(t('common.deleted'));
-  };
+    try {
+      await adminApi.deleteUser(id);
+      setUsers(prev => prev.filter(u => u.id !== id));
+      toast.success(t('common.deleted'));
+    } catch (err) {
+      console.error('Delete user error:', err);
+      toast.error(t('common.error'));
+    }
+  }, [t]);
 
-  const handlePlanChange = async (id, plan) => {
-    await adminApi.updateUser(id, { plan });
-    setUsers(users.map(u => u.id === id ? { ...u, plan } : u));
-    toast.success(t('admin.planUpdated'));
-  };
+  const handlePlanChange = useCallback(async (id, plan) => {
+    try {
+      await adminApi.updateUser(id, { plan });
+      setUsers(prev => prev.map(u => u.id === id ? { ...u, plan } : u));
+      toast.success(t('admin.planUpdated'));
+    } catch (err) {
+      console.error('Update plan error:', err);
+      toast.error(t('common.error'));
+    }
+  }, [t]);
 
   return (
     <div className="space-y-6">

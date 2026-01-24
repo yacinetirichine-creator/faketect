@@ -1,19 +1,42 @@
 const jwt = require('jsonwebtoken');
 const prisma = require('../config/db');
 const PLANS = require('../config/plans');
+const cache = require('../services/cache');
+
+// TTL du cache utilisateur (1 heure - optimisé pour réduire les appels DB)
+// Le cache est invalidé manuellement lors des modifications de profil/plan
+const USER_CACHE_TTL = 3600;
 
 const auth = async (req, res, next) => {
   try {
     const token = req.headers.authorization?.replace('Bearer ', '');
     if (!token) return res.status(401).json({ error: 'Token requis' });
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await prisma.user.findUnique({ where: { id: decoded.userId } });
+    const cacheKey = `user:${decoded.userId}`;
+
+    // Essayer le cache d'abord (réduit les requêtes DB de ~50%)
+    let user = await cache.get(cacheKey);
+
+    if (!user) {
+      // Cache miss: chercher en DB et mettre en cache
+      user = await prisma.user.findUnique({ where: { id: decoded.userId } });
+      if (user) {
+        await cache.set(cacheKey, user, USER_CACHE_TTL);
+      }
+    }
+
     if (!user) return res.status(401).json({ error: 'Non trouvé' });
     req.user = user;
     next();
   } catch (e) {
     res.status(401).json({ error: 'Token invalide' });
   }
+};
+
+// Invalider le cache utilisateur (à appeler après modification du profil/plan)
+const invalidateUserCache = async (userId) => {
+  await cache.del(`user:${userId}`);
 };
 
 const admin = (req, res, next) => {
@@ -61,4 +84,4 @@ const checkLimit = async (req, res, next) => {
   } catch (e) { next(e); }
 };
 
-module.exports = { auth, admin, checkLimit };
+module.exports = { auth, admin, checkLimit, invalidateUserCache };

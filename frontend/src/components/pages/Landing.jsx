@@ -265,11 +265,11 @@ export default function Landing() {
               </p>
               <div className="text-xs text-gray-500 space-y-1">
                 <p className="font-semibold text-gray-400">JARVIS</p>
-                <p>SAS au capital de 100 EUR</p>
+                <p>SAS au capital de 1 000 EUR</p>
                 <p>SIREN: 928 499 166</p>
-                <p>RCS Paris</p>
-                <p>128 Rue la Boétie</p>
-                <p>75008 PARIS, France</p>
+                <p>RCS Créteil</p>
+                <p>64 Avenue Marinville</p>
+                <p>94100 Saint-Maur-des-Fossés, France</p>
               </div>
             </div>
 
@@ -306,8 +306,8 @@ export default function Landing() {
                 <li><Link to="/legal/cookies" className="text-gray-400 hover:text-primary transition-colors flex items-center gap-2">
                   <Cookie size={14} /> {t('landing.footer.cookies')}
                 </Link></li>
-                <li><Link to="/legal/terms" className="text-gray-400 hover:text-primary transition-colors">CGU</Link></li>
-                <li><Link to="/legal/sales" className="text-gray-400 hover:text-primary transition-colors">CGV</Link></li>
+                <li><Link to="/legal/terms" className="text-gray-400 hover:text-primary transition-colors">{t('footer.links.terms')}</Link></li>
+                <li><Link to="/legal/sales" className="text-gray-400 hover:text-primary transition-colors">{t('footer.links.sales')}</Link></li>
                 <li>
                   <button 
                     onClick={() => {

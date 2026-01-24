@@ -23,43 +23,43 @@ export default function Tutorial({ onClose, autoShow = true }) {
   const steps = [
     {
       icon: Sparkles,
-      title: t('tutorial.welcome.title', 'Bienvenue sur FakeTect !'),
-      description: t('tutorial.welcome.desc', 'Détectez en quelques secondes si une image ou vidéo a été générée par IA. Voici comment ça marche.'),
+      title: t('tutorial.welcome.title'),
+      description: t('tutorial.welcome.desc'),
       image: '🎉',
       color: 'text-primary',
       bg: 'bg-primary/10'
     },
     {
       icon: Upload,
-      title: t('tutorial.upload.title', 'Étape 1 : Upload'),
-      description: t('tutorial.upload.desc', 'Glissez-déposez ou cliquez pour uploader votre fichier. Images (JPG, PNG, WEBP) ou vidéos (MP4, MOV) jusqu\'à 100 MB.'),
+      title: t('tutorial.upload.title'),
+      description: t('tutorial.upload.desc'),
       image: '📤',
       color: 'text-blue-400',
       bg: 'bg-blue-400/10',
-      tip: t('tutorial.upload.tip', 'Astuce : Les vidéos longues sont analysées sur les 60 premières secondes pour optimiser les coûts.')
+      tip: t('tutorial.upload.tip')
     },
     {
       icon: Eye,
-      title: t('tutorial.analyze.title', 'Étape 2 : Analyse'),
-      description: t('tutorial.analyze.desc', 'Notre IA analyse votre fichier en quelques secondes. Nous utilisons plusieurs modèles pour une précision maximale.'),
+      title: t('tutorial.analyze.title'),
+      description: t('tutorial.analyze.desc'),
       image: '🔍',
       color: 'text-purple-400',
       bg: 'bg-purple-400/10',
-      tip: t('tutorial.analyze.tip', 'Plusieurs sources : Sightengine, Illuminarty, et OpenAI pour un résultat fiable.')
+      tip: t('tutorial.analyze.tip')
     },
     {
       icon: CheckCircle2,
-      title: t('tutorial.result.title', 'Étape 3 : Résultat'),
-      description: t('tutorial.result.desc', 'Obtenez un score de confiance et un verdict clair : RÉEL, IA, ou INCERTAIN. Téléchargez un certificat PDF pour prouver l\'authenticité.'),
+      title: t('tutorial.result.title'),
+      description: t('tutorial.result.desc'),
       image: '✅',
       color: 'text-green-400',
       bg: 'bg-green-400/10',
-      tip: t('tutorial.result.tip', 'Le certificat PDF inclut un QR code et est idéal pour les documents officiels.')
+      tip: t('tutorial.result.tip')
     },
     {
       icon: Download,
-      title: t('tutorial.ready.title', 'Vous êtes prêt !'),
-      description: t('tutorial.ready.desc', 'Plan GRATUIT : 10 analyses sur 30 jours. Passez à un plan payant pour plus d\'analyses et des fonctionnalités avancées.'),
+      title: t('tutorial.ready.title'),
+      description: t('tutorial.ready.desc'),
       image: '🚀',
       color: 'text-orange-400',
       bg: 'bg-orange-400/10'
@@ -185,7 +185,7 @@ export default function Tutorial({ onClose, autoShow = true }) {
                   onClick={handlePrev}
                   className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors"
                 >
-                  {t('tutorial.previous', 'Précédent')}
+                  {t('tutorial.previous')}
                 </button>
               )}
               <button
@@ -195,11 +195,11 @@ export default function Tutorial({ onClose, autoShow = true }) {
                 {currentStep === steps.length - 1 ? (
                   <>
                     <CheckCircle2 size={18} />
-                    {t('tutorial.start', 'Commencer')}
+                    {t('tutorial.start')}
                   </>
                 ) : (
                   <>
-                    {t('tutorial.next', 'Suivant')}
+                    {t('tutorial.next')}
                     <ArrowRight size={18} />
                   </>
                 )}
@@ -213,7 +213,7 @@ export default function Tutorial({ onClose, autoShow = true }) {
               onClick={handleClose}
               className="text-sm text-white/40 hover:text-white/60 transition-colors"
             >
-              {t('tutorial.skip', 'Passer le tutoriel')}
+              {t('tutorial.skip')}
             </button>
           </div>
         </motion.div>

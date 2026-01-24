@@ -1,76 +1,156 @@
-import { useState } from 'react';
+import { useState, useCallback, memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Cookie, Settings, X, Check } from 'lucide-react';
+import api from '../services/api';
 
-const CookieConsent = () => {
+// Générer un sessionId unique pour les visiteurs non-connectés
+const getOrCreateSessionId = () => {
+  let sessionId = localStorage.getItem('faketect_session_id');
+  if (!sessionId) {
+    sessionId = 'sess_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
+    localStorage.setItem('faketect_session_id', sessionId);
+  }
+  return sessionId;
+};
+
+const CookieConsent = memo(() => {
   const { t } = useTranslation();
-  const [showBanner, setShowBanner] = useState(() => {
-    return !localStorage.getItem('cookie_consent');
-  });
+  const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [preferences, setPreferences] = useState({
-    necessary: true, // Toujours activé
+    necessary: true,
     preferences: false,
     analytics: false,
     functional: false,
   });
 
-  const handleAcceptAll = () => {
+  // Vérifier le consentement au chargement (serveur + localStorage fallback)
+  useEffect(() => {
+    const checkConsent = async () => {
+      try {
+        const sessionId = getOrCreateSessionId();
+        const { data } = await api.get(`/consent/cookies?sessionId=${sessionId}`);
+
+        if (data.hasConsent) {
+          setPreferences({
+            necessary: true,
+            preferences: data.consent.preferences,
+            analytics: data.consent.analytics,
+            functional: data.consent.functional,
+          });
+          setShowBanner(false);
+
+          // Mettre à jour Google Analytics selon le consentement serveur
+          if (window.gtag) {
+            window.gtag('consent', 'update', {
+              analytics_storage: data.consent.analytics ? 'granted' : 'denied',
+            });
+          }
+        } else {
+          // Pas de consentement serveur, vérifier localStorage (migration)
+          const localConsent = localStorage.getItem('cookie_consent');
+          if (localConsent) {
+            const parsed = JSON.parse(localConsent);
+            // Migrer vers le serveur
+            await saveConsentToServer(parsed);
+            setShowBanner(false);
+          } else {
+            setShowBanner(true);
+          }
+        }
+      } catch (error) {
+        // En cas d'erreur réseau, utiliser localStorage comme fallback
+        const localConsent = localStorage.getItem('cookie_consent');
+        if (localConsent) {
+          setShowBanner(false);
+        } else {
+          setShowBanner(true);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkConsent();
+  }, []);
+
+  // Sauvegarder le consentement sur le serveur
+  const saveConsentToServer = async (consent) => {
+    try {
+      const sessionId = getOrCreateSessionId();
+      await api.post('/consent/cookies', {
+        ...consent,
+        sessionId,
+      });
+      // Backup local pour offline
+      localStorage.setItem('cookie_consent', JSON.stringify({
+        ...consent,
+        timestamp: new Date().toISOString(),
+      }));
+    } catch (error) {
+      // Fallback localStorage si erreur serveur
+      localStorage.setItem('cookie_consent', JSON.stringify({
+        ...consent,
+        timestamp: new Date().toISOString(),
+      }));
+    }
+  };
+
+  const handleAcceptAll = useCallback(async () => {
     const consent = {
       necessary: true,
       preferences: true,
       analytics: true,
       functional: true,
-      timestamp: new Date().toISOString(),
     };
-    localStorage.setItem('cookie_consent', JSON.stringify(consent));
+
+    await saveConsentToServer(consent);
     setShowBanner(false);
-    
-    // Activer Google Analytics si accepté
-    if (consent.analytics && window.gtag) {
+
+    if (window.gtag) {
       window.gtag('consent', 'update', {
         analytics_storage: 'granted',
       });
     }
-  };
+  }, []);
 
-  const handleRejectAll = () => {
+  const handleRejectAll = useCallback(async () => {
     const consent = {
       necessary: true,
       preferences: false,
       analytics: false,
       functional: false,
-      timestamp: new Date().toISOString(),
     };
-    localStorage.setItem('cookie_consent', JSON.stringify(consent));
+
+    await saveConsentToServer(consent);
     setShowBanner(false);
-    
-    // Désactiver Google Analytics
+    setShowSettings(false);
+
     if (window.gtag) {
       window.gtag('consent', 'update', {
         analytics_storage: 'denied',
       });
     }
-  };
+  }, []);
 
-  const handleSavePreferences = () => {
-    const consent = {
-      ...preferences,
-      timestamp: new Date().toISOString(),
-    };
-    localStorage.setItem('cookie_consent', JSON.stringify(consent));
+  const handleSavePreferences = useCallback(async () => {
+    await saveConsentToServer(preferences);
     setShowBanner(false);
     setShowSettings(false);
-    
-    // Mettre à jour Google Analytics selon les préférences
+
     if (window.gtag) {
       window.gtag('consent', 'update', {
         analytics_storage: preferences.analytics ? 'granted' : 'denied',
       });
     }
-  };
+  }, [preferences]);
 
-  if (!showBanner) return null;
+  const openSettings = useCallback(() => setShowSettings(true), []);
+  const closeSettings = useCallback(() => setShowSettings(false), []);
+
+  // Ne pas afficher pendant le chargement ou si consentement déjà donné
+  if (isLoading || !showBanner) return null;
 
   return (
     <>
@@ -83,17 +163,16 @@ const CookieConsent = () => {
               <Cookie className="w-12 h-12 text-blue-600 flex-shrink-0" />
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  {t('cookies.banner.title', 'Gestion des Cookies')}
+                  {t('cookies.banner.title')}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Nous utilisons des cookies pour améliorer votre expérience, analyser le trafic et personnaliser le contenu. 
-                  Les cookies strictement nécessaires sont toujours activés. Vous pouvez gérer vos préférences ci-dessous.
+                  {t('cookies.banner.description')}
                 </p>
-                <a 
-                  href="/legal/cookies" 
+                <a
+                  href="/legal/cookies"
                   className="text-sm text-blue-600 hover:underline inline-block mt-2"
                 >
-                  En savoir plus sur notre Politique de Cookies →
+                  {t('cookies.banner.learnMore')}
                 </a>
               </div>
             </div>
@@ -101,24 +180,24 @@ const CookieConsent = () => {
             {/* Boutons d'action */}
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
               <button
-                onClick={() => setShowSettings(true)}
+                onClick={openSettings}
                 className="px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
               >
                 <Settings className="w-4 h-4 mr-2" />
-                Personnaliser
+                {t('cookies.banner.customize')}
               </button>
               <button
                 onClick={handleRejectAll}
                 className="px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
-                Refuser tout
+                {t('cookies.banner.rejectAll')}
               </button>
               <button
                 onClick={handleAcceptAll}
                 className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
               >
                 <Check className="w-4 h-4 mr-2" />
-                Accepter tout
+                {t('cookies.banner.acceptAll')}
               </button>
             </div>
           </div>
@@ -132,10 +211,10 @@ const CookieConsent = () => {
             {/* Header */}
             <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Préférences de Cookies
+                {t('cookies.settings.title')}
               </h2>
               <button
-                onClick={() => setShowSettings(false)}
+                onClick={closeSettings}
                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5" />
@@ -149,20 +228,20 @@ const CookieConsent = () => {
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">
-                      🔒 Cookies strictement nécessaires
+                      {t('cookies.settings.necessary.title')}
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Indispensables au fonctionnement du site (authentification, sécurité, panier).
+                      {t('cookies.settings.necessary.description')}
                     </p>
                   </div>
                   <div className="ml-4">
                     <div className="bg-gray-200 dark:bg-gray-600 rounded-full px-3 py-1 text-xs font-semibold">
-                      Toujours activé
+                      {t('cookies.settings.necessary.alwaysEnabled')}
                     </div>
                   </div>
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                  Cookies : auth_token, session_id, csrf_token, cookie_consent
+                  Cookies : auth_token, session_id, csrf_token, consent_id
                 </div>
               </div>
 
@@ -171,10 +250,10 @@ const CookieConsent = () => {
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">
-                      ⚙️ Cookies de préférences
+                      {t('cookies.settings.preferences.title')}
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Mémorisent vos préférences (langue, thème d'affichage, paramètres).
+                      {t('cookies.settings.preferences.description')}
                     </p>
                   </div>
                   <div className="ml-4">
@@ -199,10 +278,10 @@ const CookieConsent = () => {
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">
-                      📊 Cookies analytiques
+                      {t('cookies.settings.analytics.title')}
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Nous aident à comprendre comment les visiteurs utilisent le site (Google Analytics avec IP anonymisée).
+                      {t('cookies.settings.analytics.description')}
                     </p>
                   </div>
                   <div className="ml-4">
@@ -227,10 +306,10 @@ const CookieConsent = () => {
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">
-                      ⭐ Cookies fonctionnels
+                      {t('cookies.settings.functional.title')}
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Permettent des fonctionnalités avancées et personnalisées (historique, préférences d'affichage).
+                      {t('cookies.settings.functional.description')}
                     </p>
                   </div>
                   <div className="ml-4">
@@ -253,10 +332,10 @@ const CookieConsent = () => {
               {/* Informations complémentaires */}
               <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
                 <p className="text-sm text-gray-700 dark:text-gray-300">
-                  <strong>Durée de validité du consentement :</strong> 13 mois (conforme CNIL)
+                  <strong>{t('cookies.settings.validityInfo')}</strong>
                 </p>
                 <p className="text-sm text-gray-700 dark:text-gray-300 mt-2">
-                  Vous pouvez modifier vos préférences à tout moment via le lien "Gérer les cookies" dans le footer.
+                  {t('cookies.settings.modifyInfo')}
                 </p>
               </div>
             </div>
@@ -267,13 +346,13 @@ const CookieConsent = () => {
                 onClick={handleRejectAll}
                 className="px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
-                Refuser tout
+                {t('cookies.banner.rejectAll')}
               </button>
               <button
                 onClick={handleSavePreferences}
                 className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Enregistrer mes préférences
+                {t('cookies.settings.savePreferences')}
               </button>
             </div>
           </div>
@@ -281,6 +360,8 @@ const CookieConsent = () => {
       )}
     </>
   );
-};
+});
+
+CookieConsent.displayName = 'CookieConsent';
 
 export default CookieConsent;

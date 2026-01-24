@@ -14,6 +14,7 @@ model User {
   name                 String?
   phone                String?
   acceptMarketing      Boolean            @default(false)
+  aiProcessingConsent  Boolean            @default(false)  // RGPD: Consentement explicite pour traitement IA
   role                 String             @default("USER")
   plan                 String             @default("FREE")
   language             String             @default("fr")
@@ -28,6 +29,13 @@ model User {
   analyses             Analysis[]
   chatConversations    ChatConversation[]
   adminMessages        ChatMessage[]      @relation("AdminMessages")
+  cookieConsent        CookieConsent?
+  adminAuditLogs       AdminAuditLog[]    @relation("AdminActions")
+
+  // Indexes pour optimiser les requêtes fréquentes
+  @@index([plan])
+  @@index([createdAt])
+  @@index([role])
 }
 
 model Analysis {
@@ -42,6 +50,12 @@ model Analysis {
   details    String?
   createdAt  DateTime @default(now())
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Indexes pour optimiser les requêtes fréquentes
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([isAi])
+  @@index([fileUrl])
+  @@index([createdAt])
 }
 
 model ChatConversation {
@@ -53,6 +67,11 @@ model ChatConversation {
   updatedAt DateTime      @updatedAt
   user      User?         @relation(fields: [userId], references: [id])
   messages  ChatMessage[]
+
+  // Indexes pour optimiser les requêtes fréquentes
+  @@index([userId])
+  @@index([status, updatedAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
 }
 
 model ChatMessage {
@@ -65,6 +84,11 @@ model ChatMessage {
   createdAt      DateTime         @default(now())
   admin          User?            @relation("AdminMessages", fields: [adminId], references: [id])
   conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  // Indexes pour optimiser les requêtes fréquentes
+  @@index([conversationId, createdAt(sort: Desc)])
+  @@index([adminId])
+  @@index([role])
 }
 
 model NewsletterSubscriber {
@@ -79,6 +103,10 @@ model NewsletterSubscriber {
   unsubscribedAt DateTime?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+
+  // Indexes pour optimiser les requêtes fréquentes
+  @@index([isActive, language])
+  @@index([createdAt(sort: Desc)])
 }
 
 model NewsletterCampaign {
@@ -100,4 +128,42 @@ model playing_with_neon {
   id    Int    @id @default(autoincrement())
   name  String
   value Float? @db.Real
+}
+
+// RGPD: Stockage côté serveur du consentement cookies (remplace localStorage)
+model CookieConsent {
+  id          String   @id @default(uuid())
+  userId      String?  @unique
+  sessionId   String?  // Pour visiteurs non connectés
+  necessary   Boolean  @default(true)
+  preferences Boolean  @default(false)
+  analytics   Boolean  @default(false)
+  functional  Boolean  @default(false)
+  ipAddress   String?  // Pour preuve de consentement
+  userAgent   String?  // Pour preuve de consentement
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([createdAt])
+}
+
+// RGPD: Journal d'audit des actions admin (Art. 5 - Responsabilité)
+model AdminAuditLog {
+  id          String   @id @default(uuid())
+  adminId     String
+  action      String   // VIEW_USER, UPDATE_USER, DELETE_USER, VIEW_ANALYSES, etc.
+  targetType  String   // USER, ANALYSIS, CONVERSATION, etc.
+  targetId    String?
+  details     String?  // JSON des détails de l'action
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+  admin       User     @relation("AdminActions", fields: [adminId], references: [id])
+
+  @@index([adminId])
+  @@index([action])
+  @@index([targetType, targetId])
+  @@index([createdAt(sort: Desc)])
 }

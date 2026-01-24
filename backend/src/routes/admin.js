@@ -2,12 +2,14 @@ const express = require('express');
 const prisma = require('../config/db');
 const { auth, admin } = require('../middleware/auth');
 const { adminLimiter } = require('../middleware/rateLimiter');
+const { adminAudit } = require('../middleware/adminAudit');
 const { cleanupOldAnalyses, cleanupOrphanFiles } = require('../services/cleanup');
 const cache = require('../services/cache');
 const PLANS = require('../config/plans');
 
 const router = express.Router();
-router.use(auth, admin, adminLimiter);
+// RGPD: Audit de toutes les actions admin
+router.use(auth, admin, adminLimiter, adminAudit);
 
 router.get('/metrics', async (req, res) => {
   const now = new Date();
@@ -126,6 +128,38 @@ router.post('/cache/clear', async (req, res) => {
       success: true, 
       message: `${count} clé(s) supprimée(s)`,
       pattern: targetPattern
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Route pour consulter les logs d'audit (RGPD compliance)
+router.get('/audit-logs', async (req, res) => {
+  try {
+    const { page = 1, limit = 50, action, adminId, targetType } = req.query;
+
+    const where = {};
+    if (action) where.action = action;
+    if (adminId) where.adminId = adminId;
+    if (targetType) where.targetType = targetType;
+
+    const [logs, total] = await Promise.all([
+      prisma.adminAuditLog.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: +limit,
+        include: {
+          admin: { select: { id: true, email: true, name: true } }
+        }
+      }),
+      prisma.adminAuditLog.count({ where })
+    ]);
+
+    res.json({
+      logs,
+      pagination: { page: +page, limit: +limit, total, pages: Math.ceil(total / limit) }
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
