@@ -18,14 +18,14 @@ const globalLimiter = rateLimit({
   handler: (req, res) => {
     logger.warn('Rate limit exceeded', {
       ip: req.ip,
-      url: req.originalUrl
+      url: req.originalUrl,
     });
-    res.status(429).json({ 
+    res.status(429).json({
       error: 'RATE_LIMIT_EXCEEDED',
       message: 'Trop de requêtes, veuillez réessayer dans 15 minutes',
-      retryAfter: '15 minutes'
+      retryAfter: '15 minutes',
     });
-  }
+  },
 });
 
 // Rate limiter strict pour l'authentification (prévention brute force)
@@ -37,13 +37,13 @@ const authLimiter = rateLimit({
   handler: (req, res) => {
     logger.warn('Auth rate limit exceeded', {
       ip: req.ip,
-      email: req.body?.email || 'unknown'
+      email: req.body?.email || 'unknown',
     });
-    res.status(429).json({ 
+    res.status(429).json({
       error: 'AUTH_RATE_LIMIT',
-      message: 'Trop de tentatives de connexion, réessayez dans 15 minutes' 
+      message: 'Trop de tentatives de connexion, réessayez dans 15 minutes',
     });
-  }
+  },
 });
 
 // Protection pour création de comptes (anti-spam signups)
@@ -54,13 +54,13 @@ const registerLimiter = rateLimit({
   handler: (req, res) => {
     logger.warn('Registration rate limit exceeded', {
       ip: req.ip,
-      email: req.body?.email || 'unknown'
+      email: req.body?.email || 'unknown',
     });
-    res.status(429).json({ 
+    res.status(429).json({
       error: 'REGISTER_RATE_LIMIT',
-      message: 'Trop d\'inscriptions depuis cette adresse IP. Réessayez dans 1 heure.' 
+      message: 'Trop d\'inscriptions depuis cette adresse IP. Réessayez dans 1 heure.',
     });
-  }
+  },
 });
 
 // Rate limiter pour les analyses (prévention abus)
@@ -71,13 +71,13 @@ const analysisLimiter = rateLimit({
   handler: (req, res) => {
     logger.warn('Analysis rate limit exceeded', {
       ip: req.ip,
-      userId: req.user?.id
+      userId: req.user?.id,
     });
-    res.status(429).json({ 
+    res.status(429).json({
       error: 'ANALYSIS_RATE_LIMIT',
-      message: 'Trop d\'analyses, réessayez dans 1 minute' 
+      message: 'Trop d\'analyses, réessayez dans 1 minute',
     });
-  }
+  },
 });
 
 // Rate limiter pour les uploads (protection serveur)
@@ -88,13 +88,13 @@ const uploadLimiter = rateLimit({
   handler: (req, res) => {
     logger.warn('Upload rate limit exceeded', {
       ip: req.ip,
-      userId: req.user?.id
+      userId: req.user?.id,
     });
-    res.status(429).json({ 
+    res.status(429).json({
       error: 'UPLOAD_RATE_LIMIT',
-      message: 'Trop de fichiers uploadés, réessayez dans 1 minute' 
+      message: 'Trop de fichiers uploadés, réessayez dans 1 minute',
     });
-  }
+  },
 });
 
 // Protection routes admin (accès restreint)
@@ -106,13 +106,13 @@ const adminLimiter = rateLimit({
     logger.warn('Admin rate limit exceeded', {
       ip: req.ip,
       userId: req.user?.id,
-      path: req.originalUrl
+      path: req.originalUrl,
     });
-    res.status(429).json({ 
+    res.status(429).json({
       error: 'ADMIN_RATE_LIMIT',
-      message: 'Trop de requêtes admin. Réessayez dans 15 minutes.' 
+      message: 'Trop de requêtes admin. Réessayez dans 15 minutes.',
     });
-  }
+  },
 });
 
 // Protection paiements Stripe (anti-fraude)
@@ -123,13 +123,13 @@ const paymentLimiter = rateLimit({
   handler: (req, res) => {
     logger.warn('Payment rate limit exceeded', {
       ip: req.ip,
-      userId: req.user?.id
+      userId: req.user?.id,
     });
-    res.status(429).json({ 
+    res.status(429).json({
       error: 'PAYMENT_RATE_LIMIT',
-      message: 'Trop de tentatives de paiement. Contactez le support si besoin.' 
+      message: 'Trop de tentatives de paiement. Contactez le support si besoin.',
     });
-  }
+  },
 });
 
 // Protection webhooks Stripe (flood protection)
@@ -140,13 +140,13 @@ const webhookLimiter = rateLimit({
   handler: (req, res) => {
     logger.warn('Webhook rate limit exceeded', {
       ip: req.ip,
-      type: req.headers['stripe-signature'] ? 'stripe' : 'unknown'
+      type: req.headers['stripe-signature'] ? 'stripe' : 'unknown',
     });
-    res.status(429).json({ 
+    res.status(429).json({
       error: 'WEBHOOK_RATE_LIMIT',
-      message: 'Trop de webhooks reçus' 
+      message: 'Trop de webhooks reçus',
     });
-  }
+  },
 });
 
 // Protection reset password (anti-spam)
@@ -157,13 +157,13 @@ const passwordResetLimiter = rateLimit({
   handler: (req, res) => {
     logger.warn('Password reset rate limit exceeded', {
       ip: req.ip,
-      email: req.body?.email || 'unknown'
+      email: req.body?.email || 'unknown',
     });
-    res.status(429).json({ 
+    res.status(429).json({
       error: 'PASSWORD_RESET_RATE_LIMIT',
-      message: 'Trop de demandes de réinitialisation. Réessayez dans 1 heure.' 
+      message: 'Trop de demandes de réinitialisation. Réessayez dans 1 heure.',
     });
-  }
+  },
 });
 
 // Protection DDoS ultra-stricte (dernier rempart)
@@ -175,13 +175,13 @@ const ddosProtection = rateLimit({
     logger.error('Possible DDoS attack detected', {
       ip: req.ip,
       url: req.originalUrl,
-      userAgent: req.headers['user-agent']
+      userAgent: req.headers['user-agent'],
     });
-    res.status(429).json({ 
+    res.status(429).json({
       error: 'DDOS_PROTECTION',
-      message: 'Activité suspecte détectée. Accès temporairement bloqué.' 
+      message: 'Activité suspecte détectée. Accès temporairement bloqué.',
     });
-  }
+  },
 });
 
 // Slow-down middleware (ralentit progressivement avant hard limit)
@@ -191,7 +191,7 @@ const apiSlowDown = slowDown({
   delayMs: (hits) => hits * 100, // +100ms par requête supplémentaire
   maxDelayMs: 5000, // Max 5s de délai
   skipSuccessfulRequests: false,
-  skipFailedRequests: false
+  skipFailedRequests: false,
 });
 
 module.exports = {
@@ -205,5 +205,5 @@ module.exports = {
   webhookLimiter,
   passwordResetLimiter,
   ddosProtection,
-  apiSlowDown
+  apiSlowDown,
 };

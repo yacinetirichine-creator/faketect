@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { v4: uuid } = require('uuid');
 const prisma = require('../config/db');
 const { auth } = require('../middleware/auth');
-const { authLimiter, registerLimiter, passwordResetLimiter } = require('../middleware/rateLimiter');
+const { authLimiter, registerLimiter, passwordResetLimiter: _passwordResetLimiter } = require('../middleware/rateLimiter');
 const { registerValidation, loginValidation, profileUpdateValidation } = require('../middleware/validators');
 const logger = require('../config/logger');
 const { sendWelcomeEmail } = require('../services/email');
@@ -36,20 +36,20 @@ router.post('/register', registerLimiter, registerValidation, async (req, res) =
         language,
         phone: phone || null,
         acceptMarketing,
-        aiProcessingConsent // RGPD: Consentement explicite pour traitement IA
-      }
+        aiProcessingConsent, // RGPD: Consentement explicite pour traitement IA
+      },
     });
-    
+
     // Envoyer l'email de bienvenue (non-bloquant)
     sendWelcomeEmail(user).catch(err => {
       logger.error('Failed to send welcome email', { userId: user.id, error: err.message });
     });
-    
+
     // Envoyer l'email de bienvenue automation (séquence J0)
     sendAutomationWelcome(user).catch(err => {
       logger.error('Failed to send automation welcome email', { userId: user.id, error: err.message });
     });
-    
+
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
     logger.logAuth('register', email, true);
     res.status(201).json({ token, user: { id: user.id, email: user.email, name: user.name, plan: user.plan, role: user.role, language: user.language } });

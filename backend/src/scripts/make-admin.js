@@ -12,7 +12,7 @@ if (!email) {
 async function makeAdmin() {
   try {
     const user = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
-    
+
     if (!user) {
       console.error(`❌ Utilisateur ${email} non trouvé`);
       process.exit(1);
@@ -25,7 +25,7 @@ async function makeAdmin() {
 
     await prisma.user.update({
       where: { email: email.toLowerCase() },
-      data: { role: 'ADMIN' }
+      data: { role: 'ADMIN' },
     });
 
     console.log(`✅ ${email} est maintenant ADMIN`);

@@ -22,22 +22,22 @@ class OpenAIService {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           model: 'gpt-4',
           messages: [
             {
               role: 'system',
-              content: 'You are an AI text detection expert. Analyze if the given text was likely written by AI. Return a JSON with: aiProbability (0-100), indicators (array of clues), confidence (0-100).'
+              content: 'You are an AI text detection expert. Analyze if the given text was likely written by AI. Return a JSON with: aiProbability (0-100), indicators (array of clues), confidence (0-100).',
             },
             {
               role: 'user',
-              content: `Analyze this text:\n\n${text}`
-            }
+              content: `Analyze this text:\n\n${text}`,
+            },
           ],
-          response_format: { type: 'json_object' }
-        })
+          response_format: { type: 'json_object' },
+        }),
       });
 
       if (!response.ok) {
@@ -52,7 +52,7 @@ class OpenAIService {
         isAi: (result.aiProbability || 0) >= 50,
         confidence: result.confidence || 80,
         indicators: result.indicators || [],
-        provider: 'openai'
+        provider: 'openai',
       };
     } catch (error) {
       console.error('OpenAI text analysis error:', error);
@@ -73,34 +73,34 @@ class OpenAIService {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           model: 'gpt-4-vision-preview',
           messages: [
             {
               role: 'system',
-              content: 'You are an expert in detecting AI-generated images. Look for artifacts, inconsistencies, unnatural patterns, impossible lighting, distorted details, and other signs of AI generation.'
+              content: 'You are an expert in detecting AI-generated images. Look for artifacts, inconsistencies, unnatural patterns, impossible lighting, distorted details, and other signs of AI generation.',
             },
             {
               role: 'user',
               content: [
                 {
                   type: 'text',
-                  text: 'Analyze this image for signs of AI generation. Return JSON with: aiProbability (0-100), anomalies (array), confidence (0-100), reasoning (brief explanation).'
+                  text: 'Analyze this image for signs of AI generation. Return JSON with: aiProbability (0-100), anomalies (array), confidence (0-100), reasoning (brief explanation).',
                 },
                 {
                   type: 'image_url',
                   image_url: {
-                    url: `data:image/jpeg;base64,${base64Image}`
-                  }
-                }
-              ]
-            }
+                    url: `data:image/jpeg;base64,${base64Image}`,
+                  },
+                },
+              ],
+            },
           ],
           max_tokens: 500,
-          response_format: { type: 'json_object' }
-        })
+          response_format: { type: 'json_object' },
+        }),
       });
 
       if (!response.ok) {
@@ -116,7 +116,7 @@ class OpenAIService {
         confidence: result.confidence || 75,
         anomalies: result.anomalies || [],
         reasoning: result.reasoning || '',
-        provider: 'openai-vision'
+        provider: 'openai-vision',
       };
     } catch (error) {
       console.error('OpenAI vision analysis error:', error);
@@ -137,22 +137,22 @@ class OpenAIService {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           model: 'gpt-3.5-turbo',
           messages: [
             {
               role: 'system',
-              content: 'You are an AI detection expert. Explain analysis results in simple, clear French. Be concise (max 100 words).'
+              content: 'You are an AI detection expert. Explain analysis results in simple, clear French. Be concise (max 100 words).',
             },
             {
               role: 'user',
-              content: `Explain this AI detection result:\nScore: ${analysisResult.aiScore}%\nConfidence: ${analysisResult.confidence}%\nProvider: ${analysisResult.provider}`
-            }
+              content: `Explain this AI detection result:\nScore: ${analysisResult.aiScore}%\nConfidence: ${analysisResult.confidence}%\nProvider: ${analysisResult.provider}`,
+            },
           ],
-          max_tokens: 150
-        })
+          max_tokens: 150,
+        }),
       });
 
       const data = await response.json();
@@ -219,30 +219,30 @@ Você ajuda os usuários com:
 - Explicações de resultados de análise
 - Problemas de pagamento Stripe
 Seja conciso (max 150 palavras), profissional e útil.
-Se não puder responder ou for complexo, termine com [HUMAN_SUPPORT] para alertar um admin.`
+Se não puder responder ou for complexo, termine com [HUMAN_SUPPORT] para alertar um admin.`,
     };
 
     try {
       const messages = [
         {
           role: 'system',
-          content: systemPrompts[language] || systemPrompts.fr
+          content: systemPrompts[language] || systemPrompts.fr,
         },
-        ...conversationHistory
+        ...conversationHistory,
       ];
 
       const response = await fetch(`${this.baseUrl}/chat/completions`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           model: 'gpt-3.5-turbo',
           messages,
           max_tokens: 250,
-          temperature: 0.7
-        })
+          temperature: 0.7,
+        }),
       });
 
       if (!response.ok) {
@@ -265,7 +265,7 @@ Se não puder responder ou for complexo, termine com [HUMAN_SUPPORT] para alerta
       es: "Lo siento, tengo un problema técnico. Un administrador responderá pronto. [HUMAN_SUPPORT]",
       de: "Entschuldigung, ich habe ein technisches Problem. Ein Administrator wird bald antworten. [HUMAN_SUPPORT]",
       it: "Scusa, ho un problema tecnico. Un amministratore risponderà presto. [HUMAN_SUPPORT]",
-      pt: "Desculpe, estou com um problema técnico. Um administrador responderá em breve. [HUMAN_SUPPORT]"
+      pt: "Desculpe, estou com um problema técnico. Um administrador responderá em breve. [HUMAN_SUPPORT]",
     };
     return fallbacks[language] || fallbacks.fr;
   }

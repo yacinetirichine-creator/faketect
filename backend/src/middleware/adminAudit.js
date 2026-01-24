@@ -15,7 +15,7 @@ const routeActionMap = {
   'POST /api/admin/cleanup': { action: 'RUN_CLEANUP', targetType: 'SYSTEM' },
   'POST /api/admin/cache/clear': { action: 'CLEAR_CACHE', targetType: 'SYSTEM' },
   'GET /api/admin/metrics': { action: 'VIEW_METRICS', targetType: 'SYSTEM' },
-  'GET /api/admin/cache/stats': { action: 'VIEW_CACHE_STATS', targetType: 'SYSTEM' }
+  'GET /api/admin/cache/stats': { action: 'VIEW_CACHE_STATS', targetType: 'SYSTEM' },
 };
 
 /**
@@ -55,7 +55,7 @@ const adminAudit = async (req, res, next) => {
       const targetId = extractTargetId(req.originalUrl || req.url);
 
       // Construire les détails de l'action
-      let details = {};
+      const details = {};
 
       if (req.method === 'PUT' || req.method === 'POST') {
         // Pour les modifications, logger les changements (sans données sensibles)
@@ -78,14 +78,14 @@ const adminAudit = async (req, res, next) => {
           targetId,
           details: Object.keys(details).length > 0 ? JSON.stringify(details) : null,
           ipAddress: req.headers['x-forwarded-for']?.split(',')[0] || req.ip || 'unknown',
-          userAgent: (req.headers['user-agent'] || 'unknown').substring(0, 500)
-        }
+          userAgent: (req.headers['user-agent'] || 'unknown').substring(0, 500),
+        },
       }).then(() => {
         logger.info('Admin audit log created', {
           adminId: req.user.id,
           action,
           targetType,
-          targetId
+          targetId,
         });
       }).catch(err => {
         logger.error('Failed to create admin audit log', err);
@@ -113,8 +113,8 @@ const logAdminAction = async (adminId, action, targetType, targetId = null, deta
         targetId,
         details: details ? JSON.stringify(details) : null,
         ipAddress: req?.headers?.['x-forwarded-for']?.split(',')[0] || req?.ip || 'unknown',
-        userAgent: (req?.headers?.['user-agent'] || 'unknown').substring(0, 500)
-      }
+        userAgent: (req?.headers?.['user-agent'] || 'unknown').substring(0, 500),
+      },
     });
     logger.info('Admin audit log created manually', { adminId, action, targetType, targetId });
   } catch (error) {

@@ -42,22 +42,22 @@ See the Error Codes section for all possible codes.
       contact: {
         name: 'FakeTect Support',
         email: 'support@faketect.com',
-        url: 'https://faketect.com'
+        url: 'https://faketect.com',
       },
       license: {
         name: 'Proprietary',
-        url: 'https://faketect.com/legal/terms'
-      }
+        url: 'https://faketect.com/legal/terms',
+      },
     },
     servers: [
       {
         url: 'https://api.faketect.app',
-        description: 'Production server'
+        description: 'Production server',
       },
       {
         url: 'http://localhost:3001',
-        description: 'Development server'
-      }
+        description: 'Development server',
+      },
     ],
     tags: [
       { name: 'Authentication', description: 'User authentication and registration' },
@@ -65,7 +65,7 @@ See the Error Codes section for all possible codes.
       { name: 'User', description: 'User profile and settings' },
       { name: 'Subscription', description: 'Stripe payments and subscriptions' },
       { name: 'Admin', description: 'Admin-only endpoints (requires ADMIN role)' },
-      { name: 'Health', description: 'API health and status' }
+      { name: 'Health', description: 'API health and status' },
     ],
     components: {
       securitySchemes: {
@@ -73,8 +73,8 @@ See the Error Codes section for all possible codes.
           type: 'http',
           scheme: 'bearer',
           bearerFormat: 'JWT',
-          description: 'JWT token obtained from /api/auth/login'
-        }
+          description: 'JWT token obtained from /api/auth/login',
+        },
       },
       schemas: {
         Error: {
@@ -85,10 +85,10 @@ See the Error Codes section for all possible codes.
               type: 'object',
               properties: {
                 code: { type: 'string', example: 'AUTH_001' },
-                message: { type: 'string', example: 'Invalid email or password' }
-              }
-            }
-          }
+                message: { type: 'string', example: 'Invalid email or password' },
+              },
+            },
+          },
         },
         User: {
           type: 'object',
@@ -101,8 +101,8 @@ See the Error Codes section for all possible codes.
             language: { type: 'string', enum: ['fr', 'en', 'es', 'de', 'it', 'pt'] },
             usedToday: { type: 'integer' },
             usedMonth: { type: 'integer' },
-            createdAt: { type: 'string', format: 'date-time' }
-          }
+            createdAt: { type: 'string', format: 'date-time' },
+          },
         },
         Analysis: {
           type: 'object',
@@ -114,8 +114,8 @@ See the Error Codes section for all possible codes.
             isAi: { type: 'boolean' },
             confidence: { type: 'number', minimum: 0, maximum: 100 },
             details: { type: 'string', description: 'JSON string with provider details' },
-            createdAt: { type: 'string', format: 'date-time' }
-          }
+            createdAt: { type: 'string', format: 'date-time' },
+          },
         },
         AnalysisResult: {
           type: 'object',
@@ -128,18 +128,18 @@ See the Error Codes section for all possible codes.
                 provider: { type: 'string' },
                 consensus: { type: 'string' },
                 sources: { type: 'array', items: { type: 'string' } },
-                topSignals: { type: 'array', items: { type: 'string' } }
-              }
-            }
-          }
+                topSignals: { type: 'array', items: { type: 'string' } },
+              },
+            },
+          },
         },
         LoginRequest: {
           type: 'object',
           required: ['email', 'password'],
           properties: {
             email: { type: 'string', format: 'email' },
-            password: { type: 'string', minLength: 8 }
-          }
+            password: { type: 'string', minLength: 8 },
+          },
         },
         RegisterRequest: {
           type: 'object',
@@ -150,15 +150,15 @@ See the Error Codes section for all possible codes.
             name: { type: 'string' },
             phone: { type: 'string' },
             aiProcessingConsent: { type: 'boolean', description: 'GDPR: Required consent for AI processing' },
-            acceptMarketing: { type: 'boolean', default: false }
-          }
+            acceptMarketing: { type: 'boolean', default: false },
+          },
         },
         AuthResponse: {
           type: 'object',
           properties: {
             token: { type: 'string' },
-            user: { $ref: '#/components/schemas/User' }
-          }
+            user: { $ref: '#/components/schemas/User' },
+          },
         },
         Plan: {
           type: 'object',
@@ -168,9 +168,9 @@ See the Error Codes section for all possible codes.
             price: { type: 'number' },
             dailyLimit: { type: 'integer' },
             monthlyLimit: { type: 'integer' },
-            features: { type: 'array', items: { type: 'string' } }
-          }
-        }
+            features: { type: 'array', items: { type: 'string' } },
+          },
+        },
       },
       responses: {
         UnauthorizedError: {
@@ -180,10 +180,10 @@ See the Error Codes section for all possible codes.
               schema: { $ref: '#/components/schemas/Error' },
               example: {
                 success: false,
-                error: { code: 'AUTH_003', message: 'Invalid token' }
-              }
-            }
-          }
+                error: { code: 'AUTH_003', message: 'Invalid token' },
+              },
+            },
+          },
         },
         RateLimitError: {
           description: 'Rate limit exceeded',
@@ -192,10 +192,10 @@ See the Error Codes section for all possible codes.
               schema: { $ref: '#/components/schemas/Error' },
               example: {
                 success: false,
-                error: { code: 'RATE_001', message: 'Too many requests' }
-              }
-            }
-          }
+                error: { code: 'RATE_001', message: 'Too many requests' },
+              },
+            },
+          },
         },
         QuotaExceededError: {
           description: 'Analysis quota exceeded',
@@ -204,16 +204,16 @@ See the Error Codes section for all possible codes.
               schema: { $ref: '#/components/schemas/Error' },
               example: {
                 success: false,
-                error: { code: 'QUOTA_001', message: 'Daily quota reached' }
-              }
-            }
-          }
-        }
-      }
+                error: { code: 'QUOTA_001', message: 'Daily quota reached' },
+              },
+            },
+          },
+        },
+      },
     },
-    security: [{ bearerAuth: [] }]
+    security: [{ bearerAuth: [] }],
   },
-  apis: ['./src/routes/*.js']
+  apis: ['./src/routes/*.js'],
 };
 
 export const swaggerSpec = swaggerJsdoc(options);

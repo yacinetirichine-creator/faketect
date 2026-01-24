@@ -20,12 +20,12 @@ const {
   globalLimiter,
   apiSlowDown,
   ddosProtection,
-  authLimiter,
-  registerLimiter,
-  adminLimiter,
-  paymentLimiter,
-  webhookLimiter,
-  passwordResetLimiter
+  authLimiter: _authLimiter,
+  registerLimiter: _registerLimiter,
+  adminLimiter: _adminLimiter,
+  paymentLimiter: _paymentLimiter,
+  webhookLimiter: _webhookLimiter,
+  passwordResetLimiter: _passwordResetLimiter,
 } = require('./middleware/rateLimiter');
 const { requestId } = require('./middleware/requestId');
 
@@ -50,14 +50,14 @@ app.use(helmet({
       objectSrc: ["'none'"],
       mediaSrc: ["'self'"],
       frameSrc: ["https://js.stripe.com", "https://hooks.stripe.com"],
-      upgradeInsecureRequests: []
-    }
+      upgradeInsecureRequests: [],
+    },
   },
   hsts: {
     maxAge: 31536000,
     includeSubDomains: true,
-    preload: true
-  }
+    preload: true,
+  },
 }));
 
 // Headers de sécurité additionnels
@@ -72,12 +72,12 @@ app.use((req, res, next) => {
 // Compression des réponses (gzip) - réduit la bande passante de 60-70%
 app.use(compression({
   threshold: 1024, // Compresser seulement si > 1KB
-  level: 6 // Niveau de compression (1-9, 6 = bon équilibre vitesse/taille)
+  level: 6, // Niveau de compression (1-9, 6 = bon équilibre vitesse/taille)
 }));
 
 // Logging des requêtes HTTP
 app.use(morgan('combined', {
-  stream: { write: message => logger.info(message.trim()) }
+  stream: { write: message => logger.info(message.trim()) },
 }));
 
 // CORS
@@ -107,7 +107,7 @@ app.get('/api/health', (req, res) => {
     status: 'ok',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    memoryUsage: Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + 'MB'
+    memoryUsage: Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + 'MB',
   });
 });
 
@@ -126,13 +126,13 @@ app.get('/api/health/full', async (req, res) => {
       cache: cacheStats,
       uptime: process.uptime(),
       memoryUsage: Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + 'MB',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     res.status(500).json({
       status: 'error',
       database: { status: 'disconnected', error: error.message },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
@@ -150,14 +150,14 @@ app.use('/api/newsletter', require('./routes/newsletter'));
 app.use('/api/consent', require('./routes/consent')); // RGPD: Consentement cookies côté serveur
 
 // Error handling amélioré
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
   logger.logError(err, req);
-  
+
   // Ne pas exposer les détails des erreurs en production
   const isDev = process.env.NODE_ENV !== 'production';
-  res.status(err.status || 500).json({ 
+  res.status(err.status || 500).json({
     error: err.message || 'Erreur serveur',
-    ...(isDev && { stack: err.stack })
+    ...(isDev && { stack: err.stack }),
   });
 });
 
@@ -176,7 +176,7 @@ const server = app.listen(PORT, async () => {
   global.server = server;
   console.log(`🚀 FakeTect API: http://localhost:${PORT}`);
   logger.info('Server started', { port: PORT, environment: process.env.NODE_ENV || 'development' });
-  
+
   // Tester la connexion à la base de données (non-bloquant)
   try {
     await prisma.$connect();
@@ -188,28 +188,28 @@ const server = app.listen(PORT, async () => {
     logger.error('Database connection failed', { error: error.message });
     console.log('⚠️ App will continue but database features will not work');
   }
-  
+
   // Initialiser Redis Cache (non-bloquant)
   try {
     initRedis();
   } catch (error) {
     console.error('⚠️ Redis initialization failed:', error.message);
   }
-  
+
   // Initialiser Email (non-bloquant)
   try {
     initEmail();
   } catch (error) {
     console.error('⚠️ Email initialization failed:', error.message);
   }
-  
+
   // Démarrer CRON email automation (non-bloquant)
   try {
     startEmailAutomationCron();
   } catch (error) {
     console.error('⚠️ Email automation cron failed:', error.message);
   }
-  
+
   // Initialiser Stripe si la clé est présente
   if (process.env.STRIPE_SECRET_KEY) {
     try {
@@ -220,7 +220,7 @@ const server = app.listen(PORT, async () => {
   } else {
     console.log('⚠️ STRIPE_SECRET_KEY not found - Stripe features disabled');
   }
-  
+
   // Initialiser les tâches de nettoyage automatique (90 jours)
   initCleanupJobs();
 });

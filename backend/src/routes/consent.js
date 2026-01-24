@@ -12,7 +12,7 @@ const router = express.Router();
  */
 router.post('/cookies', async (req, res) => {
   try {
-    const { necessary = true, preferences = false, analytics = false, functional = false, sessionId } = req.body;
+    const { preferences = false, analytics = false, functional = false, sessionId } = req.body;
 
     // Récupérer les infos de preuve de consentement
     const ipAddress = req.headers['x-forwarded-for']?.split(',')[0] || req.ip || 'unknown';
@@ -33,12 +33,12 @@ router.post('/cookies', async (req, res) => {
     }
 
     const consentData = {
-      necessary: true, // Toujours true
+      necessary: true, // Toujours true pour RGPD
       preferences,
       analytics,
       functional,
       ipAddress,
-      userAgent: userAgent.substring(0, 500) // Limiter la taille
+      userAgent: userAgent.substring(0, 500), // Limiter la taille
     };
 
     let consent;
@@ -48,28 +48,28 @@ router.post('/cookies', async (req, res) => {
       consent = await prisma.cookieConsent.upsert({
         where: { userId },
         update: { ...consentData, updatedAt: new Date() },
-        create: { userId, ...consentData }
+        create: { userId, ...consentData },
       });
     } else if (sessionId) {
       // Visiteur non-connecté: upsert par sessionId
       const existing = await prisma.cookieConsent.findFirst({
-        where: { sessionId, userId: null }
+        where: { sessionId, userId: null },
       });
 
       if (existing) {
         consent = await prisma.cookieConsent.update({
           where: { id: existing.id },
-          data: { ...consentData, updatedAt: new Date() }
+          data: { ...consentData, updatedAt: new Date() },
         });
       } else {
         consent = await prisma.cookieConsent.create({
-          data: { sessionId, ...consentData }
+          data: { sessionId, ...consentData },
         });
       }
     } else {
       // Pas d'identifiant, créer un nouveau consentement
       consent = await prisma.cookieConsent.create({
-        data: consentData
+        data: consentData,
       });
     }
 
@@ -78,7 +78,7 @@ router.post('/cookies', async (req, res) => {
       sessionId,
       analytics,
       preferences,
-      functional
+      functional,
     });
 
     // Définir un cookie HTTP-only avec l'ID du consentement
@@ -86,7 +86,7 @@ router.post('/cookies', async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 365 * 24 * 60 * 60 * 1000 // 1 an
+      maxAge: 365 * 24 * 60 * 60 * 1000, // 1 an
     });
 
     res.json({
@@ -96,8 +96,8 @@ router.post('/cookies', async (req, res) => {
         necessary: consent.necessary,
         preferences: consent.preferences,
         analytics: consent.analytics,
-        functional: consent.functional
-      }
+        functional: consent.functional,
+      },
     });
 
   } catch (error) {
@@ -138,7 +138,7 @@ router.get('/cookies', async (req, res) => {
       consent = await prisma.cookieConsent.findUnique({ where: { id: consentId } });
     } else if (sessionId) {
       consent = await prisma.cookieConsent.findFirst({
-        where: { sessionId, userId: null }
+        where: { sessionId, userId: null },
       });
     }
 
@@ -153,8 +153,8 @@ router.get('/cookies', async (req, res) => {
         preferences: consent.preferences,
         analytics: consent.analytics,
         functional: consent.functional,
-        updatedAt: consent.updatedAt
-      }
+        updatedAt: consent.updatedAt,
+      },
     });
 
   } catch (error) {
@@ -172,7 +172,7 @@ router.delete('/cookies', auth, async (req, res) => {
     const userId = req.user.id;
 
     await prisma.cookieConsent.deleteMany({
-      where: { userId }
+      where: { userId },
     });
 
     // Supprimer le cookie

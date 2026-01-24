@@ -2,7 +2,7 @@
  * Migration des anciens noms de plans vers les nouveaux
  * STARTER → STANDARD
  * PRO → PROFESSIONAL
- * 
+ *
  * À exécuter UNE SEULE FOIS après le déploiement
  */
 
@@ -30,7 +30,7 @@ async function migratePlans() {
     if (starterCount > 0) {
       const result1 = await prisma.user.updateMany({
         where: { plan: 'STARTER' },
-        data: { plan: 'STANDARD' }
+        data: { plan: 'STANDARD' },
       });
       console.log(`✅ STARTER → STANDARD : ${result1.count} utilisateurs migrés`);
     }
@@ -39,7 +39,7 @@ async function migratePlans() {
     if (proCount > 0) {
       const result2 = await prisma.user.updateMany({
         where: { plan: 'PRO' },
-        data: { plan: 'PROFESSIONAL' }
+        data: { plan: 'PROFESSIONAL' },
       });
       console.log(`✅ PRO → PROFESSIONAL : ${result2.count} utilisateurs migrés`);
     }
@@ -61,7 +61,7 @@ async function migratePlans() {
     // 5. Afficher la répartition actuelle
     const distribution = await prisma.user.groupBy({
       by: ['plan'],
-      _count: true
+      _count: true,
     });
 
     console.log(`\n📊 Distribution actuelle des plans :`);

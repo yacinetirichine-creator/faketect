@@ -4,7 +4,7 @@ class DetectionService {
     // - analyze(buffer, mimeType)
     // - analyze(streamOrBuffer, mimeType, filename)
     const isVideo = String(mimeType || '').startsWith('video/');
-    
+
     // Pour les vidéos, utiliser uniquement Sightengine (support vidéo)
     if (isVideo) {
       if (process.env.SIGHTENGINE_API_USER && process.env.SIGHTENGINE_API_SECRET) {
@@ -17,7 +17,7 @@ class DetectionService {
       }
       return this.demoAnalysis('video');
     }
-    
+
     // Pour les images : analyse combinée pour plus de précision
     const jobs = [];
 
@@ -26,7 +26,7 @@ class DetectionService {
         this.analyzeWithIlluminarty(input, mimeType, filename).catch((e) => {
           console.error('Illuminarty API error:', e);
           return null;
-        })
+        }),
       );
     }
 
@@ -35,18 +35,18 @@ class DetectionService {
         this.analyzeWithSightengine(input, mimeType, filename).catch((e) => {
           console.error('Sightengine API error:', e);
           return null;
-        })
+        }),
       );
     }
 
     const settled = await Promise.all(jobs);
     const results = settled.filter(Boolean);
-    
+
     // Si au moins une API a fonctionné, combiner les résultats
     if (results.length > 0) {
       return this.combineResults(results);
     }
-    
+
     // Mode démo si aucune API disponible
     return this.demoAnalysis('image');
   }
@@ -58,15 +58,15 @@ class DetectionService {
     // Moyenne pondérée des scores
     const totalScore = results.reduce((sum, r) => sum + r.aiScore, 0);
     const avgScore = totalScore / results.length;
-    
+
     // Moyenne des confiances
     const totalConfidence = results.reduce((sum, r) => sum + r.confidence, 0);
     const avgConfidence = totalConfidence / results.length;
-    
+
     // Consensus : majorité détermine isAi
     const aiCount = results.filter(r => r.isAi).length;
     const isAi = aiCount > results.length / 2;
-    
+
     return {
       aiScore: Math.round(avgScore * 100) / 100,
       isAi,
@@ -76,19 +76,19 @@ class DetectionService {
       sources: results.map(r => ({
         provider: r.provider,
         score: r.aiScore,
-        confidence: r.confidence
+        confidence: r.confidence,
       })),
-      consensus: `${aiCount}/${results.length} APIs détectent de l'IA`
+      consensus: `${aiCount}/${results.length} APIs détectent de l'IA`,
     };
   }
 
   async analyzeWithIlluminarty(input, mimeType, filename = 'image.jpg') {
     const FormData = require('form-data');
     const formData = new FormData();
-    
-    formData.append('image', input, { 
-      filename: filename || 'image.jpg', 
-      contentType: mimeType 
+
+    formData.append('image', input, {
+      filename: filename || 'image.jpg',
+      contentType: mimeType,
     });
     formData.append('api_user', process.env.ILLUMINARTY_USER);
     formData.append('api_secret', process.env.ILLUMINARTY_SECRET);
@@ -97,9 +97,9 @@ class DetectionService {
     const res = await this.fetchWithTimeout('https://api.illuminarty.ai/v1/analyze', {
       method: 'POST',
       headers: {
-        'X-API-Key': process.env.ILLUMINARTY_API_KEY
+        'X-API-Key': process.env.ILLUMINARTY_API_KEY,
       },
-      body: formData
+      body: formData,
     }, 30_000);
 
     if (!res.ok) {
@@ -107,94 +107,94 @@ class DetectionService {
     }
 
     const data = await res.json();
-    
+
     const score = (data.ai_probability || data.score || 0) * 100;
     const confidence = (data.confidence || 85);
-    
+
     return {
       aiScore: Math.round(score * 100) / 100,
       isAi: score >= 50,
       confidence,
       verdict: this.getVerdict(score),
       provider: 'illuminarty',
-      details: data
+      details: data,
     };
   }
 
   async analyzeWithSightengine(input, mimeType, filename = 'image.jpg') {
     const FormData = require('form-data');
     const formData = new FormData();
-    
+
     formData.append('media', input, { filename: filename || 'image.jpg', contentType: mimeType });
     formData.append('models', 'genai');
     formData.append('api_user', process.env.SIGHTENGINE_API_USER);
     formData.append('api_secret', process.env.SIGHTENGINE_API_SECRET);
 
     // Timeout 30s pour images
-    const res = await this.fetchWithTimeout('https://api.sightengine.com/1.0/check.json', { 
-      method: 'POST', 
-      body: formData 
+    const res = await this.fetchWithTimeout('https://api.sightengine.com/1.0/check.json', {
+      method: 'POST',
+      body: formData,
     }, 30_000);
-    
+
     const data = await res.json();
-    
+
     if (data.status === 'success') {
       const score = (data.type?.ai_generated || 0) * 100;
-      return { 
-        aiScore: score, 
-        isAi: score >= 50, 
-        confidence: 85, 
+      return {
+        aiScore: score,
+        isAi: score >= 50,
+        confidence: 85,
         verdict: this.getVerdict(score),
         provider: 'sightengine',
-        details: data
+        details: data,
       };
     }
-    
+
     throw new Error('Sightengine API returned error');
   }
 
   async analyzeVideoWithSightengine(input, mimeType, filename = 'video.mp4', maxDuration = 60) {
     const FormData = require('form-data');
     const formData = new FormData();
-    
-    formData.append('media', input, { 
-      filename: filename || 'video.mp4', 
-      contentType: mimeType 
+
+    formData.append('media', input, {
+      filename: filename || 'video.mp4',
+      contentType: mimeType,
     });
     formData.append('models', 'genai');
     formData.append('api_user', process.env.SIGHTENGINE_API_USER);
     formData.append('api_secret', process.env.SIGHTENGINE_API_SECRET);
-    
+
     // Limiter l'analyse aux N premières secondes (économie de coûts)
     if (maxDuration && maxDuration > 0) {
       formData.append('max_duration', maxDuration);
     }
 
     // Timeout 60s pour vidéos (plus long que images)
-    const res = await this.fetchWithTimeout('https://api.sightengine.com/1.0/video/check.json', { 
-      method: 'POST', 
-      body: formData 
+    const res = await this.fetchWithTimeout('https://api.sightengine.com/1.0/video/check.json', {
+      method: 'POST',
+      body: formData,
     }, 60_000);
-    
+
     const data = await res.json();
-    
+
     if (data.status === 'success') {
       // Pour les vidéos, Sightengine analyse plusieurs frames
       const frames = data.data?.frames || [];
-      if (!frames.length) throw new Error('Sightengine video: no frames returned');
+      if (!frames.length) {throw new Error('Sightengine video: no frames returned');}
       const avgScore = frames.reduce((sum, f) => sum + (f.genai?.prob || 0), 0) / frames.length * 100;
-      
-      return { 
-        aiScore: Math.round(avgScore * 100) / 100, 
-        isAi: avgScore >= 50, 
-        confidence: 80, 
+
+      return {
+        aiScore: Math.round(avgScore * 100) / 100,
+        isAi: avgScore >= 50,
+        confidence: 80,
         verdict: this.getVerdict(avgScore),
         provider: 'sightengine-video',
         framesAnalyzed: frames.length,
-        details: data
+        details: data,
       };
     }
-    
+
     throw new Error('Sightengine video API returned error');
   }
 
@@ -206,15 +206,15 @@ class DetectionService {
       confidence: 70,
       verdict: this.getVerdict(score),
       demo: true,
-      provider: `demo-${type}`
+      provider: `demo-${type}`,
     };
   }
 
   getVerdict(score) {
-    if (score >= 90) return { key: 'ai_generated', color: 'red' };
-    if (score >= 70) return { key: 'likely_ai', color: 'orange' };
-    if (score >= 50) return { key: 'possibly_ai', color: 'yellow' };
-    if (score >= 30) return { key: 'possibly_real', color: 'lime' };
+    if (score >= 90) {return { key: 'ai_generated', color: 'red' };}
+    if (score >= 70) {return { key: 'likely_ai', color: 'orange' };}
+    if (score >= 50) {return { key: 'possibly_ai', color: 'yellow' };}
+    if (score >= 30) {return { key: 'possibly_real', color: 'lime' };}
     return { key: 'likely_real', color: 'green' };
   }
 

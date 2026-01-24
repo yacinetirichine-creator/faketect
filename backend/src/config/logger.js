@@ -7,24 +7,24 @@ const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     winston.format.errors({ stack: true }),
-    winston.format.json()
+    winston.format.json(),
   ),
   defaultMeta: { service: 'faketect-api' },
   transports: [
     // Logs d'erreur dans un fichier séparé
-    new winston.transports.File({ 
-      filename: path.join(__dirname, '../../logs/error.log'), 
+    new winston.transports.File({
+      filename: path.join(__dirname, '../../logs/error.log'),
       level: 'error',
       maxsize: 5242880, // 5MB
-      maxFiles: 5
+      maxFiles: 5,
     }),
     // Tous les logs dans combined.log
-    new winston.transports.File({ 
+    new winston.transports.File({
       filename: path.join(__dirname, '../../logs/combined.log'),
       maxsize: 5242880,
-      maxFiles: 5
-    })
-  ]
+      maxFiles: 5,
+    }),
+  ],
 });
 
 // En développement, afficher aussi dans la console
@@ -32,8 +32,8 @@ if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console({
     format: winston.format.combine(
       winston.format.colorize(),
-      winston.format.simple()
-    )
+      winston.format.simple(),
+    ),
   }));
 }
 
@@ -43,7 +43,7 @@ logger.logRequest = (req, message = 'Request') => {
     method: req.method,
     url: req.originalUrl,
     ip: req.ip,
-    userId: req.user?.id
+    userId: req.user?.id,
   });
 };
 
@@ -55,8 +55,8 @@ logger.logError = (error, req = null) => {
       method: req.method,
       url: req.originalUrl,
       ip: req.ip,
-      userId: req.user?.id
-    })
+      userId: req.user?.id,
+    }),
   });
 };
 
@@ -65,7 +65,7 @@ logger.logAuth = (event, email, success, reason = null) => {
     event, // 'login', 'register', 'logout'
     email,
     success,
-    reason
+    reason,
   });
 };
 
