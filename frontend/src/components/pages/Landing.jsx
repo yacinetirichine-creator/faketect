@@ -309,9 +309,9 @@ export default function Landing() {
                 <li><Link to="/legal/terms" className="text-gray-400 hover:text-primary transition-colors">{t('footer.links.terms')}</Link></li>
                 <li><Link to="/legal/sales" className="text-gray-400 hover:text-primary transition-colors">{t('footer.links.sales')}</Link></li>
                 <li>
-                  <button 
+                  <button
                     onClick={() => {
-                      localStorage.removeItem('cookieConsent');
+                      localStorage.removeItem('cookie_consent');
                       window.location.reload();
                     }}
                     className="text-gray-400 hover:text-primary transition-colors text-left flex items-center gap-2"
@@ -327,7 +327,7 @@ export default function Landing() {
           <div className="pt-8 border-t border-white/5">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-sm text-gray-500">
-                © 2024 JARVIS - {t('landing.footer.rights')}
+                © {new Date().getFullYear()} JARVIS - {t('landing.footer.rights')}
               </p>
               <div className="flex items-center gap-6 text-xs text-gray-500">
                 <span className="flex items-center gap-2">
