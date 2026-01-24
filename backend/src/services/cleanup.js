@@ -11,7 +11,7 @@ async function sendDeletionWarnings() {
   try {
     const twentyThreeDaysAgo = new Date();
     twentyThreeDaysAgo.setDate(twentyThreeDaysAgo.getDate() - 23);
-    
+
     const twentyFourDaysAgo = new Date();
     twentyFourDaysAgo.setDate(twentyFourDaysAgo.getDate() - 24);
 
@@ -24,15 +24,15 @@ async function sendDeletionWarnings() {
         role: { not: 'ADMIN' },
         createdAt: {
           lte: twentyThreeDaysAgo,
-          gte: twentyFourDaysAgo
-        }
+          gte: twentyFourDaysAgo,
+        },
       },
       select: {
         id: true,
         email: true,
         name: true,
-        language: true
-      }
+        language: true,
+      },
     });
 
     console.log(`📬 ${usersToWarn.length} utilisateurs à alerter`);
@@ -40,7 +40,7 @@ async function sendDeletionWarnings() {
     let sent = 0;
     for (const user of usersToWarn) {
       const success = await sendDeletionWarningEmail(user, 7);
-      if (success) sent++;
+      if (success) {sent++;}
     }
 
     console.log(`✅ ${sent}/${usersToWarn.length} emails de rappel envoyés`);
@@ -67,8 +67,8 @@ async function cleanupInactiveFreeAccounts() {
       where: {
         plan: 'FREE',
         createdAt: { lt: thirtyDaysAgo },
-        role: 'USER'
-      }
+        role: 'USER',
+      },
     });
 
     console.log(`👥 ${count} comptes FREE inactifs à supprimer`);
@@ -83,8 +83,8 @@ async function cleanupInactiveFreeAccounts() {
       where: {
         plan: 'FREE',
         createdAt: { lt: thirtyDaysAgo },
-        role: 'USER'
-      }
+        role: 'USER',
+      },
     });
 
     console.log(`✅ Nettoyage comptes FREE terminé : ${result.count} comptes supprimés`);
@@ -110,9 +110,9 @@ async function cleanupOldAnalyses() {
     const oldAnalyses = await prisma.analysis.findMany({
       where: {
         createdAt: {
-          lt: ninetyDaysAgo
-        }
-      }
+          lt: ninetyDaysAgo,
+        },
+      },
     });
 
     console.log(`📦 ${oldAnalyses.length} analyses à supprimer`);
@@ -127,7 +127,7 @@ async function cleanupOldAnalyses() {
           // Le fileUrl est de la forme /uploads/filename.ext
           const filename = analysis.fileUrl.replace('/uploads/', '');
           const filePath = path.join(__dirname, '../../uploads', filename);
-          
+
           if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
             deletedFiles++;
@@ -144,9 +144,9 @@ async function cleanupOldAnalyses() {
     const result = await prisma.analysis.deleteMany({
       where: {
         createdAt: {
-          lt: ninetyDaysAgo
-        }
-      }
+          lt: ninetyDaysAgo,
+        },
+      },
     });
 
     console.log(`✅ Nettoyage terminé : ${result.count} analyses supprimées, ${deletedFiles} fichiers supprimés`);
@@ -157,7 +157,7 @@ async function cleanupOldAnalyses() {
     return {
       analysesDeleted: result.count,
       filesDeleted: deletedFiles,
-      errors: errors
+      errors: errors,
     };
   } catch (error) {
     console.error('❌ Erreur lors du nettoyage:', error);
@@ -188,9 +188,9 @@ async function cleanupOrphanFiles() {
     // Récupérer tous les fileUrls en une seule requête (évite N+1)
     const existingAnalyses = await prisma.analysis.findMany({
       where: {
-        fileUrl: { not: null }
+        fileUrl: { not: null },
       },
-      select: { fileUrl: true }
+      select: { fileUrl: true },
     });
 
     // Créer un Set pour recherche O(1)
@@ -247,5 +247,5 @@ module.exports = {
   cleanupOrphanFiles,
   cleanupInactiveFreeAccounts,
   sendDeletionWarnings,
-  initCleanupJobs
+  initCleanupJobs,
 };

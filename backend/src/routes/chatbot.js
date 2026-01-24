@@ -24,7 +24,7 @@ router.post('/message', async (req, res) => {
     if (conversationId) {
       conversation = await prisma.chatConversation.findUnique({
         where: { id: conversationId },
-        include: { messages: { orderBy: { createdAt: 'asc' }, take: 10 } }
+        include: { messages: { orderBy: { createdAt: 'asc' }, take: 10 } },
       });
     }
 
@@ -33,26 +33,26 @@ router.post('/message', async (req, res) => {
         data: {
           userId,
           language,
-          status: 'active'
+          status: 'active',
         },
-        include: { messages: true }
+        include: { messages: true },
       });
     }
 
     // Sauvegarder le message utilisateur
-    const userMessage = await prisma.chatMessage.create({
+    const _userMessage = await prisma.chatMessage.create({
       data: {
         conversationId: conversation.id,
         role: 'user',
         content: message,
-        language
-      }
+        language,
+      },
     });
 
     // Construire le contexte de conversation
     const conversationHistory = conversation.messages.map(m => ({
       role: m.role,
-      content: m.content
+      content: m.content,
     }));
     conversationHistory.push({ role: 'user', content: message });
 
@@ -60,33 +60,33 @@ router.post('/message', async (req, res) => {
     const aiResponse = await openaiService.chatWithUser(conversationHistory, language);
 
     // Sauvegarder la réponse IA
-    const botMessage = await prisma.chatMessage.create({
+    const _botMessage = await prisma.chatMessage.create({
       data: {
         conversationId: conversation.id,
         role: 'assistant',
         content: aiResponse,
-        language
-      }
+        language,
+      },
     });
 
     logger.info('Chatbot conversation', {
       conversationId: conversation.id,
       userId,
       language,
-      messageLength: message.length
+      messageLength: message.length,
     });
 
     res.json({
       conversationId: conversation.id,
       message: aiResponse,
-      requiresHumanSupport: aiResponse.includes('[HUMAN_SUPPORT]')
+      requiresHumanSupport: aiResponse.includes('[HUMAN_SUPPORT]'),
     });
 
   } catch (error) {
     logger.error('Chatbot error', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Erreur du chatbot',
-      message: 'Désolé, une erreur est survenue. Un administrateur va vous répondre.' 
+      message: 'Désolé, une erreur est survenue. Un administrateur va vous répondre.',
     });
   }
 });
@@ -105,17 +105,17 @@ router.get('/conversations', auth, admin, async (req, res) => {
         user: { select: { id: true, email: true, name: true } },
         messages: {
           orderBy: { createdAt: 'desc' },
-          take: 1
+          take: 1,
         },
-        _count: { select: { messages: true } }
+        _count: { select: { messages: true } },
       },
       orderBy: { updatedAt: 'desc' },
       skip: (page - 1) * limit,
-      take: parseInt(limit)
+      take: parseInt(limit),
     });
 
     const total = await prisma.chatConversation.count({
-      where: status !== 'all' ? { status } : {}
+      where: status !== 'all' ? { status } : {},
     });
 
     res.json({
@@ -124,8 +124,8 @@ router.get('/conversations', auth, admin, async (req, res) => {
         page: parseInt(page),
         limit: parseInt(limit),
         total,
-        pages: Math.ceil(total / limit)
-      }
+        pages: Math.ceil(total / limit),
+      },
     });
 
   } catch (error) {
@@ -146,8 +146,8 @@ router.get('/conversations/:id', auth, admin, async (req, res) => {
       where: { id },
       include: {
         user: { select: { id: true, email: true, name: true, language: true } },
-        messages: { orderBy: { createdAt: 'asc' } }
-      }
+        messages: { orderBy: { createdAt: 'asc' } },
+      },
     });
 
     if (!conversation) {
@@ -176,7 +176,7 @@ router.post('/conversations/:id/reply', auth, admin, async (req, res) => {
     }
 
     const conversation = await prisma.chatConversation.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!conversation) {
@@ -190,28 +190,28 @@ router.post('/conversations/:id/reply', auth, admin, async (req, res) => {
         role: 'admin',
         content: message,
         language: conversation.language,
-        adminId: req.user.id
-      }
+        adminId: req.user.id,
+      },
     });
 
     // Mettre à jour le statut de la conversation
     await prisma.chatConversation.update({
       where: { id },
-      data: { 
+      data: {
         status: 'resolved',
-        updatedAt: new Date()
-      }
+        updatedAt: new Date(),
+      },
     });
 
     logger.info('Admin replied to conversation', {
       conversationId: id,
       adminId: req.user.id,
-      messageLength: message.length
+      messageLength: message.length,
     });
 
     res.json({
       message: adminMessage,
-      conversation: { id, status: 'resolved' }
+      conversation: { id, status: 'resolved' },
     });
 
   } catch (error) {
@@ -231,21 +231,21 @@ router.patch('/conversations/:id/status', auth, admin, async (req, res) => {
 
     const validStatuses = ['active', 'pending', 'resolved', 'archived'];
     if (!validStatuses.includes(status)) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         error: 'Statut invalide',
-        validStatuses 
+        validStatuses,
       });
     }
 
     const conversation = await prisma.chatConversation.update({
       where: { id },
-      data: { status }
+      data: { status },
     });
 
     logger.info('Conversation status updated', {
       conversationId: id,
       newStatus: status,
-      adminId: req.user.id
+      adminId: req.user.id,
     });
 
     res.json(conversation);

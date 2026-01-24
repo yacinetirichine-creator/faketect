@@ -24,7 +24,7 @@ router.post('/webhook', webhookLimiter, express.raw({ type: 'application/json' }
 
   // Gérer les événements
   switch (event.type) {
-    case 'checkout.session.completed':
+    case 'checkout.session.completed': {
       const session = event.data.object;
       const userId = parseInt(session.metadata.userId);
       const planId = session.metadata.planId;
@@ -32,23 +32,24 @@ router.post('/webhook', webhookLimiter, express.raw({ type: 'application/json' }
       // Mettre à jour le plan de l'utilisateur
       await prisma.user.update({
         where: { id: userId },
-        data: { 
+        data: {
           plan: planId,
           stripeCustomerId: session.customer,
-          stripeSubscriptionId: session.subscription
-        }
+          stripeSubscriptionId: session.subscription,
+        },
       });
 
       console.log(`✅ Plan ${planId} activé pour user ${userId}`);
       break;
+    }
 
     case 'customer.subscription.updated':
-    case 'customer.subscription.deleted':
+    case 'customer.subscription.deleted': {
       const subscription = event.data.object;
-      
+
       // Trouver l'utilisateur par stripeSubscriptionId
       const user = await prisma.user.findFirst({
-        where: { stripeSubscriptionId: subscription.id }
+        where: { stripeSubscriptionId: subscription.id },
       });
 
       if (user) {
@@ -56,23 +57,25 @@ router.post('/webhook', webhookLimiter, express.raw({ type: 'application/json' }
           // Rétrograder vers FREE
           await prisma.user.update({
             where: { id: user.id },
-            data: { plan: 'FREE', stripeSubscriptionId: null }
+            data: { plan: 'FREE', stripeSubscriptionId: null },
           });
           console.log(`❌ Abonnement annulé pour user ${user.id}`);
         }
       }
       break;
+    }
 
-    case 'invoice.payment_failed':
+    case 'invoice.payment_failed': {
       const invoice = event.data.object;
       const failedUser = await prisma.user.findFirst({
-        where: { stripeCustomerId: invoice.customer }
+        where: { stripeCustomerId: invoice.customer },
       });
       if (failedUser) {
         console.log(`⚠️ Échec de paiement pour user ${failedUser.id} - Email: ${failedUser.email}`);
         // TODO: Envoyer email de notification à l'utilisateur
       }
       break;
+    }
 
     default:
       console.log(`Unhandled event type ${event.type}`);
@@ -85,15 +88,15 @@ router.post('/webhook', webhookLimiter, express.raw({ type: 'application/json' }
 router.post('/create-checkout', auth, paymentLimiter, async (req, res) => {
   try {
     const { planId, billing, locale } = req.body; // planId: 'STANDARD', 'PROFESSIONAL', 'BUSINESS', 'ENTERPRISE' | billing: 'monthly' ou 'yearly' | locale: 'fr', 'en', etc.
-    
+
     const STRIPE_PRICES = getStripeProducts();
-    
+
     if (!STRIPE_PRICES[planId]) {
       return res.status(400).json({ error: 'Plan invalide' });
     }
 
-    const priceId = billing === 'yearly' 
-      ? STRIPE_PRICES[planId].yearlyPriceId 
+    const priceId = billing === 'yearly'
+      ? STRIPE_PRICES[planId].yearlyPriceId
       : STRIPE_PRICES[planId].monthlyPriceId;
 
     // Mapping des locales i18n vers Stripe
@@ -105,7 +108,7 @@ router.post('/create-checkout', auth, paymentLimiter, async (req, res) => {
       'pt': 'pt-BR',
       'it': 'it',
       'ja': 'ja',
-      'zh': 'zh'
+      'zh': 'zh',
     };
 
     const session = await stripe.checkout.sessions.create({
@@ -124,12 +127,12 @@ router.post('/create-checkout', auth, paymentLimiter, async (req, res) => {
         userId: req.user.id.toString(),
         planId: planId,
         billing: billing,
-        vat_number: 'FR09938848546' // N° TVA intracommunautaire JARVIS
+        vat_number: 'FR09938848546', // N° TVA intracommunautaire JARVIS
       },
       allow_promotion_codes: true, // Permet l'utilisation de codes promo
       billing_address_collection: 'required', // Obligatoire pour la TVA
       tax_id_collection: { enabled: true }, // Collecte du numéro de TVA client (B2B)
-      automatic_tax: { enabled: true } // Calcul automatique de la TVA selon le pays
+      automatic_tax: { enabled: true }, // Calcul automatique de la TVA selon le pays
     });
 
     res.json({ url: session.url });

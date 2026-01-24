@@ -5,7 +5,7 @@ const {
   sendDay3EngagementEmail,
   sendDay7ConversionEmail,
   sendInactiveUserEmail,
-  sendQuotaWarningEmail
+  sendQuotaWarningEmail,
 } = require('../services/emailAutomation');
 
 /**
@@ -30,12 +30,12 @@ function startEmailAutomationCron() {
         where: {
           createdAt: {
             gte: new Date(threeDaysAgo.getFullYear(), threeDaysAgo.getMonth(), threeDaysAgo.getDate()),
-            lt: new Date(threeDaysAgo.getFullYear(), threeDaysAgo.getMonth(), threeDaysAgo.getDate() + 1)
+            lt: new Date(threeDaysAgo.getFullYear(), threeDaysAgo.getMonth(), threeDaysAgo.getDate() + 1),
           },
           analyses: {
-            none: {} // Aucune analyse faite
-          }
-        }
+            none: {}, // Aucune analyse faite
+          },
+        },
       });
 
       logger.info(`Found ${day3Users.length} users for Day 3 engagement email`);
@@ -52,10 +52,10 @@ function startEmailAutomationCron() {
         where: {
           createdAt: {
             gte: new Date(sevenDaysAgo.getFullYear(), sevenDaysAgo.getMonth(), sevenDaysAgo.getDate()),
-            lt: new Date(sevenDaysAgo.getFullYear(), sevenDaysAgo.getMonth(), sevenDaysAgo.getDate() + 1)
+            lt: new Date(sevenDaysAgo.getFullYear(), sevenDaysAgo.getMonth(), sevenDaysAgo.getDate() + 1),
           },
-          plan: 'FREE' // Seulement les FREE
-        }
+          plan: 'FREE', // Seulement les FREE
+        },
       });
 
       logger.info(`Found ${day7Users.length} users for Day 7 conversion email`);
@@ -73,14 +73,14 @@ function startEmailAutomationCron() {
           analyses: {
             none: {
               createdAt: {
-                gte: thirtyDaysAgo // Aucune analyse depuis 30 jours
-              }
-            }
+                gte: thirtyDaysAgo, // Aucune analyse depuis 30 jours
+              },
+            },
           },
           createdAt: {
-            lt: thirtyDaysAgo // Compte créé il y a plus de 30 jours
-          }
-        }
+            lt: thirtyDaysAgo, // Compte créé il y a plus de 30 jours
+          },
+        },
       });
 
       logger.info(`Found ${inactiveUsers.length} inactive users for re-engagement email`);
@@ -96,7 +96,7 @@ function startEmailAutomationCron() {
       const planLimits = {
         FREE: 10,
         PRO: 100,
-        BUSINESS: 500
+        BUSINESS: 500,
       };
 
       const quotaUsers = await prisma.user.findMany({
@@ -104,9 +104,9 @@ function startEmailAutomationCron() {
           OR: [
             { plan: 'FREE', usedMonth: { gte: 8 } }, // 8/10 = 80%
             { plan: 'PRO', usedMonth: { gte: 75 } }, // 75/100 = 75%
-            { plan: 'BUSINESS', usedMonth: { gte: 375 } } // 375/500 = 75%
-          ]
-        }
+            { plan: 'BUSINESS', usedMonth: { gte: 375 } }, // 375/500 = 75%
+          ],
+        },
       });
 
       logger.info(`Found ${quotaUsers.length} users for quota warning email`);

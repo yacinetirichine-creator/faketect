@@ -5,7 +5,7 @@ const PLANS = {
   STANDARD: { name: 'Standard', monthlyPrice: 9.99, yearlyPrice: 99, credits: 100 },
   PROFESSIONAL: { name: 'Professional', monthlyPrice: 29.99, yearlyPrice: 299, credits: 500 },
   BUSINESS: { name: 'Business', monthlyPrice: 89, yearlyPrice: 890, credits: 2000 },
-  ENTERPRISE: { name: 'Enterprise', monthlyPrice: 249, yearlyPrice: 2490, credits: -1 }
+  ENTERPRISE: { name: 'Enterprise', monthlyPrice: 249, yearlyPrice: 2490, credits: -1 },
 };
 
 async function setupStripeProducts() {
@@ -18,7 +18,7 @@ async function setupStripeProducts() {
     const product = await stripe.products.create({
       name: `FakeTect ${plan.name}`,
       description: `${plan.credits > 0 ? plan.credits : 'Unlimited'} analyses/mois`,
-      metadata: { plan_id: key }
+      metadata: { plan_id: key },
     });
 
     // Créer le prix mensuel
@@ -27,7 +27,7 @@ async function setupStripeProducts() {
       unit_amount: plan.monthlyPrice * 100, // en centimes
       currency: 'eur',
       recurring: { interval: 'month' },
-      metadata: { plan_id: key, billing: 'monthly' }
+      metadata: { plan_id: key, billing: 'monthly' },
     });
 
     // Créer le prix annuel
@@ -36,7 +36,7 @@ async function setupStripeProducts() {
       unit_amount: plan.yearlyPrice * 100,
       currency: 'eur',
       recurring: { interval: 'year' },
-      metadata: { plan_id: key, billing: 'yearly' }
+      metadata: { plan_id: key, billing: 'yearly' },
     });
 
     console.log(`✅ ${plan.name}:`);
@@ -50,8 +50,8 @@ async function setupStripeProducts() {
       [key]: {
         productId: product.id,
         monthlyPriceId: monthlyPrice.id,
-        yearlyPriceId: yearlyPrice.id
-      }
+        yearlyPriceId: yearlyPrice.id,
+      },
     };
 
     const filePath = './stripe-products.json';

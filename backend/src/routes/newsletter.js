@@ -14,8 +14,8 @@ const transporter = nodemailer.createTransport({
   secure: false,
   auth: {
     user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS
-  }
+    pass: process.env.SMTP_PASS,
+  },
 });
 
 /**
@@ -32,7 +32,7 @@ router.post('/subscribe', authLimiter, async (req, res) => {
 
     // Vérifier si déjà inscrit
     const existing = await prisma.newsletterSubscriber.findUnique({
-      where: { email }
+      where: { email },
     });
 
     if (existing) {
@@ -44,8 +44,8 @@ router.post('/subscribe', authLimiter, async (req, res) => {
             isActive: true,
             interests,
             confirmedAt: new Date(),
-            unsubscribedAt: null
-          }
+            unsubscribedAt: null,
+          },
         });
         return res.json({ message: 'Réinscription réussie', wasReactivated: true });
       }
@@ -60,8 +60,8 @@ router.post('/subscribe', authLimiter, async (req, res) => {
         language,
         interests,
         source,
-        confirmedAt: new Date() // Auto-confirmé (optionnel: ajouter double opt-in plus tard)
-      }
+        confirmedAt: new Date(), // Auto-confirmé (optionnel: ajouter double opt-in plus tard)
+      },
     });
 
     // Envoyer email de bienvenue
@@ -85,7 +85,7 @@ router.post('/subscribe', authLimiter, async (req, res) => {
                 <a href="${process.env.FRONTEND_URL}/newsletter/unsubscribe?email=${email}">Se désabonner</a>
               </p>
             </div>
-          `
+          `,
         },
         en: {
           subject: '🎉 Welcome to FakeTect Newsletter',
@@ -105,8 +105,8 @@ router.post('/subscribe', authLimiter, async (req, res) => {
                 <a href="${process.env.FRONTEND_URL}/newsletter/unsubscribe?email=${email}">Unsubscribe</a>
               </p>
             </div>
-          `
-        }
+          `,
+        },
       };
 
       const msg = welcomeMessages[language] || welcomeMessages.fr;
@@ -115,7 +115,7 @@ router.post('/subscribe', authLimiter, async (req, res) => {
         from: `"FakeTect" <${process.env.SMTP_USER}>`,
         to: email,
         subject: msg.subject,
-        html: msg.html
+        html: msg.html,
       });
     } catch (emailError) {
       logger.error('Newsletter welcome email error:', emailError);
@@ -129,8 +129,8 @@ router.post('/subscribe', authLimiter, async (req, res) => {
       subscriber: {
         email: subscriber.email,
         language: subscriber.language,
-        interests: subscriber.interests
-      }
+        interests: subscriber.interests,
+      },
     });
 
   } catch (error) {
@@ -152,7 +152,7 @@ router.post('/unsubscribe', async (req, res) => {
     }
 
     const subscriber = await prisma.newsletterSubscriber.findUnique({
-      where: { email }
+      where: { email },
     });
 
     if (!subscriber) {
@@ -163,8 +163,8 @@ router.post('/unsubscribe', async (req, res) => {
       where: { email },
       data: {
         isActive: false,
-        unsubscribedAt: new Date()
-      }
+        unsubscribedAt: new Date(),
+      },
     });
 
     logger.info('Newsletter unsubscription', { email });
@@ -191,7 +191,7 @@ router.get('/subscribers', auth, admin, async (req, res) => {
       where,
       orderBy: { createdAt: 'desc' },
       skip: (page - 1) * limit,
-      take: parseInt(limit)
+      take: parseInt(limit),
     });
 
     const total = await prisma.newsletterSubscriber.count({ where });
@@ -203,12 +203,12 @@ router.get('/subscribers', auth, admin, async (req, res) => {
       inactive: await prisma.newsletterSubscriber.count({ where: { isActive: false } }),
       bySource: await prisma.newsletterSubscriber.groupBy({
         by: ['source'],
-        _count: true
+        _count: true,
       }),
       byLanguage: await prisma.newsletterSubscriber.groupBy({
         by: ['language'],
-        _count: true
-      })
+        _count: true,
+      }),
     };
 
     res.json({
@@ -218,8 +218,8 @@ router.get('/subscribers', auth, admin, async (req, res) => {
         page: parseInt(page),
         limit: parseInt(limit),
         total,
-        pages: Math.ceil(total / limit)
-      }
+        pages: Math.ceil(total / limit),
+      },
     });
 
   } catch (error) {
@@ -247,8 +247,8 @@ router.post('/campaigns', auth, admin, async (req, res) => {
         content,
         language,
         type,
-        scheduledAt: scheduledAt ? new Date(scheduledAt) : null
-      }
+        scheduledAt: scheduledAt ? new Date(scheduledAt) : null,
+      },
     });
 
     // Si pas de date programmée, envoyer immédiatement
@@ -257,8 +257,8 @@ router.post('/campaigns', auth, admin, async (req, res) => {
       const subscribers = await prisma.newsletterSubscriber.findMany({
         where: {
           isActive: true,
-          language
-        }
+          language,
+        },
       });
 
       let sentCount = 0;
@@ -270,10 +270,10 @@ router.post('/campaigns', auth, admin, async (req, res) => {
             from: `"FakeTect" <${process.env.SMTP_USER}>`,
             to: subscriber.email,
             subject,
-            html: content + `<hr><p style="font-size: 11px; color: #666;"><a href="${process.env.FRONTEND_URL}/newsletter/unsubscribe?email=${subscriber.email}">Se désabonner</a></p>`
+            html: content + `<hr><p style="font-size: 11px; color: #666;"><a href="${process.env.FRONTEND_URL}/newsletter/unsubscribe?email=${subscriber.email}">Se désabonner</a></p>`,
           });
           sentCount++;
-          
+
           // Pause toutes les 10 emails pour éviter rate limit
           if (sentCount % 10 === 0) {
             await new Promise(resolve => setTimeout(resolve, 1000));
@@ -288,21 +288,21 @@ router.post('/campaigns', auth, admin, async (req, res) => {
         where: { id: campaign.id },
         data: {
           sentTo: sentCount,
-          sentAt: new Date()
-        }
+          sentAt: new Date(),
+        },
       });
 
       logger.info('Newsletter campaign sent', { campaignId: campaign.id, sentTo: sentCount });
 
       return res.json({
         message: 'Campagne envoyée',
-        campaign: { ...campaign, sentTo: sentCount }
+        campaign: { ...campaign, sentTo: sentCount },
       });
     }
 
     res.json({
       message: 'Campagne programmée',
-      campaign
+      campaign,
     });
 
   } catch (error) {
@@ -322,7 +322,7 @@ router.get('/campaigns', auth, admin, async (req, res) => {
     const campaigns = await prisma.newsletterCampaign.findMany({
       orderBy: { createdAt: 'desc' },
       skip: (page - 1) * limit,
-      take: parseInt(limit)
+      take: parseInt(limit),
     });
 
     const total = await prisma.newsletterCampaign.count();
@@ -333,8 +333,8 @@ router.get('/campaigns', auth, admin, async (req, res) => {
         page: parseInt(page),
         limit: parseInt(limit),
         total,
-        pages: Math.ceil(total / limit)
-      }
+        pages: Math.ceil(total / limit),
+      },
     });
 
   } catch (error) {

@@ -22,8 +22,8 @@ export const ErrorCodes = {
       es: 'Email o contraseña incorrectos',
       de: 'Ungültige E-Mail oder Passwort',
       it: 'Email o password non validi',
-      pt: 'Email ou senha inválidos'
-    }
+      pt: 'Email ou senha inválidos',
+    },
   },
   AUTH_TOKEN_EXPIRED: {
     code: 'AUTH_002',
@@ -34,8 +34,8 @@ export const ErrorCodes = {
       es: 'Sesión expirada, por favor inicie sesión nuevamente',
       de: 'Sitzung abgelaufen, bitte erneut anmelden',
       it: 'Sessione scaduta, effettua nuovamente l\'accesso',
-      pt: 'Sessão expirada, faça login novamente'
-    }
+      pt: 'Sessão expirada, faça login novamente',
+    },
   },
   AUTH_TOKEN_INVALID: {
     code: 'AUTH_003',
@@ -46,8 +46,8 @@ export const ErrorCodes = {
       es: 'Token inválido',
       de: 'Ungültiges Token',
       it: 'Token non valido',
-      pt: 'Token inválido'
-    }
+      pt: 'Token inválido',
+    },
   },
   AUTH_UNAUTHORIZED: {
     code: 'AUTH_004',
@@ -58,8 +58,8 @@ export const ErrorCodes = {
       es: 'Acceso no autorizado',
       de: 'Nicht autorisierter Zugriff',
       it: 'Accesso non autorizzato',
-      pt: 'Acesso não autorizado'
-    }
+      pt: 'Acesso não autorizado',
+    },
   },
   AUTH_EMAIL_EXISTS: {
     code: 'AUTH_005',
@@ -70,8 +70,8 @@ export const ErrorCodes = {
       es: 'Este email ya está en uso',
       de: 'Diese E-Mail wird bereits verwendet',
       it: 'Questa email è già in uso',
-      pt: 'Este email já está em uso'
-    }
+      pt: 'Este email já está em uso',
+    },
   },
   AUTH_WEAK_PASSWORD: {
     code: 'AUTH_006',
@@ -82,8 +82,8 @@ export const ErrorCodes = {
       es: 'La contraseña debe contener al menos 8 caracteres, una mayúscula, una minúscula y un número',
       de: 'Das Passwort muss mindestens 8 Zeichen, einen Großbuchstaben, einen Kleinbuchstaben und eine Zahl enthalten',
       it: 'La password deve contenere almeno 8 caratteri, una maiuscola, una minuscola e un numero',
-      pt: 'A senha deve conter pelo menos 8 caracteres, uma maiúscula, uma minúscula e um número'
-    }
+      pt: 'A senha deve conter pelo menos 8 caracteres, uma maiúscula, uma minúscula e um número',
+    },
   },
 
   // ============================================
@@ -98,8 +98,8 @@ export const ErrorCodes = {
       es: 'No se proporcionó ningún archivo',
       de: 'Keine Datei bereitgestellt',
       it: 'Nessun file fornito',
-      pt: 'Nenhum arquivo fornecido'
-    }
+      pt: 'Nenhum arquivo fornecido',
+    },
   },
   ANALYSIS_FILE_TOO_LARGE: {
     code: 'ANALYSIS_002',
@@ -110,8 +110,8 @@ export const ErrorCodes = {
       es: 'El archivo es demasiado grande (máx 100MB)',
       de: 'Datei ist zu groß (max 100MB)',
       it: 'Il file è troppo grande (max 100MB)',
-      pt: 'O arquivo é muito grande (máx 100MB)'
-    }
+      pt: 'O arquivo é muito grande (máx 100MB)',
+    },
   },
   ANALYSIS_INVALID_FORMAT: {
     code: 'ANALYSIS_003',
@@ -122,8 +122,8 @@ export const ErrorCodes = {
       es: 'Formato de archivo no soportado',
       de: 'Nicht unterstütztes Dateiformat',
       it: 'Formato file non supportato',
-      pt: 'Formato de arquivo não suportado'
-    }
+      pt: 'Formato de arquivo não suportado',
+    },
   },
   ANALYSIS_PROCESSING_FAILED: {
     code: 'ANALYSIS_004',
@@ -134,8 +134,8 @@ export const ErrorCodes = {
       es: 'Error al procesar el análisis',
       de: 'Fehler bei der Analyse-Verarbeitung',
       it: 'Errore durante l\'elaborazione dell\'analisi',
-      pt: 'Erro ao processar a análise'
-    }
+      pt: 'Erro ao processar a análise',
+    },
   },
   ANALYSIS_NOT_FOUND: {
     code: 'ANALYSIS_005',
@@ -146,8 +146,8 @@ export const ErrorCodes = {
       es: 'Análisis no encontrado',
       de: 'Analyse nicht gefunden',
       it: 'Analisi non trovata',
-      pt: 'Análise não encontrada'
-    }
+      pt: 'Análise não encontrada',
+    },
   },
   ANALYSIS_TIMEOUT: {
     code: 'ANALYSIS_006',
@@ -158,8 +158,8 @@ export const ErrorCodes = {
       es: 'El análisis tardó demasiado',
       de: 'Analyse-Zeitüberschreitung',
       it: 'L\'analisi ha impiegato troppo tempo',
-      pt: 'A análise demorou muito'
-    }
+      pt: 'A análise demorou muito',
+    },
   },
 
   // ============================================
@@ -174,8 +174,8 @@ export const ErrorCodes = {
       es: 'Cuota diaria alcanzada. Actualice su plan para más análisis.',
       de: 'Tägliches Kontingent erreicht. Upgraden Sie für mehr Analysen.',
       it: 'Quota giornaliera raggiunta. Passa a un piano superiore per più analisi.',
-      pt: 'Cota diária atingida. Atualize seu plano para mais análises.'
-    }
+      pt: 'Cota diária atingida. Atualize seu plano para mais análises.',
+    },
   },
   QUOTA_EXCEEDED_MONTHLY: {
     code: 'QUOTA_002',
@@ -186,8 +186,8 @@ export const ErrorCodes = {
       es: 'Cuota mensual alcanzada',
       de: 'Monatliches Kontingent erreicht',
       it: 'Quota mensile raggiunta',
-      pt: 'Cota mensal atingida'
-    }
+      pt: 'Cota mensal atingida',
+    },
   },
   QUOTA_FREE_EXPIRED: {
     code: 'QUOTA_003',
@@ -198,8 +198,8 @@ export const ErrorCodes = {
       es: 'Su período de prueba gratuito ha terminado',
       de: 'Ihre kostenlose Testphase ist abgelaufen',
       it: 'Il tuo periodo di prova gratuito è scaduto',
-      pt: 'Seu período de teste gratuito expirou'
-    }
+      pt: 'Seu período de teste gratuito expirou',
+    },
   },
 
   // ============================================
@@ -214,8 +214,8 @@ export const ErrorCodes = {
       es: 'El pago falló',
       de: 'Zahlung fehlgeschlagen',
       it: 'Pagamento fallito',
-      pt: 'Pagamento falhou'
-    }
+      pt: 'Pagamento falhou',
+    },
   },
   PAYMENT_CARD_DECLINED: {
     code: 'PAYMENT_002',
@@ -226,8 +226,8 @@ export const ErrorCodes = {
       es: 'Tarjeta rechazada',
       de: 'Karte abgelehnt',
       it: 'Carta rifiutata',
-      pt: 'Cartão recusado'
-    }
+      pt: 'Cartão recusado',
+    },
   },
   PAYMENT_SUBSCRIPTION_NOT_FOUND: {
     code: 'PAYMENT_003',
@@ -238,8 +238,8 @@ export const ErrorCodes = {
       es: 'Suscripción no encontrada',
       de: 'Abonnement nicht gefunden',
       it: 'Abbonamento non trovato',
-      pt: 'Assinatura não encontrada'
-    }
+      pt: 'Assinatura não encontrada',
+    },
   },
   PAYMENT_WEBHOOK_INVALID: {
     code: 'PAYMENT_004',
@@ -250,8 +250,8 @@ export const ErrorCodes = {
       es: 'Firma de webhook inválida',
       de: 'Ungültige Webhook-Signatur',
       it: 'Firma webhook non valida',
-      pt: 'Assinatura de webhook inválida'
-    }
+      pt: 'Assinatura de webhook inválida',
+    },
   },
 
   // ============================================
@@ -266,8 +266,8 @@ export const ErrorCodes = {
       es: 'Demasiadas solicitudes. Por favor, inténtelo de nuevo en unos minutos.',
       de: 'Zu viele Anfragen. Bitte versuchen Sie es in einigen Minuten erneut.',
       it: 'Troppe richieste. Riprova tra qualche minuto.',
-      pt: 'Muitas solicitações. Por favor, tente novamente em alguns minutos.'
-    }
+      pt: 'Muitas solicitações. Por favor, tente novamente em alguns minutos.',
+    },
   },
   RATE_LIMIT_AUTH: {
     code: 'RATE_002',
@@ -278,8 +278,8 @@ export const ErrorCodes = {
       es: 'Demasiados intentos de inicio de sesión. Inténtelo más tarde.',
       de: 'Zu viele Anmeldeversuche. Bitte versuchen Sie es später erneut.',
       it: 'Troppi tentativi di accesso. Riprova più tardi.',
-      pt: 'Muitas tentativas de login. Tente novamente mais tarde.'
-    }
+      pt: 'Muitas tentativas de login. Tente novamente mais tarde.',
+    },
   },
 
   // ============================================
@@ -294,8 +294,8 @@ export const ErrorCodes = {
       es: 'Campo requerido faltante',
       de: 'Erforderliches Feld fehlt',
       it: 'Campo obbligatorio mancante',
-      pt: 'Campo obrigatório faltando'
-    }
+      pt: 'Campo obrigatório faltando',
+    },
   },
   VALIDATION_INVALID_EMAIL: {
     code: 'VALIDATION_002',
@@ -306,8 +306,8 @@ export const ErrorCodes = {
       es: 'Email inválido',
       de: 'Ungültige E-Mail',
       it: 'Email non valida',
-      pt: 'Email inválido'
-    }
+      pt: 'Email inválido',
+    },
   },
   VALIDATION_INVALID_FORMAT: {
     code: 'VALIDATION_003',
@@ -318,8 +318,8 @@ export const ErrorCodes = {
       es: 'Formato inválido',
       de: 'Ungültiges Format',
       it: 'Formato non valido',
-      pt: 'Formato inválido'
-    }
+      pt: 'Formato inválido',
+    },
   },
 
   // ============================================
@@ -334,8 +334,8 @@ export const ErrorCodes = {
       es: 'Error interno del servidor',
       de: 'Interner Serverfehler',
       it: 'Errore interno del server',
-      pt: 'Erro interno do servidor'
-    }
+      pt: 'Erro interno do servidor',
+    },
   },
   SERVER_UNAVAILABLE: {
     code: 'SERVER_002',
@@ -346,8 +346,8 @@ export const ErrorCodes = {
       es: 'Servicio temporalmente no disponible',
       de: 'Dienst vorübergehend nicht verfügbar',
       it: 'Servizio temporaneamente non disponibile',
-      pt: 'Serviço temporariamente indisponível'
-    }
+      pt: 'Serviço temporariamente indisponível',
+    },
   },
   SERVER_DATABASE_ERROR: {
     code: 'SERVER_003',
@@ -358,9 +358,9 @@ export const ErrorCodes = {
       es: 'Error de base de datos',
       de: 'Datenbankfehler',
       it: 'Errore del database',
-      pt: 'Erro de banco de dados'
-    }
-  }
+      pt: 'Erro de banco de dados',
+    },
+  },
 };
 
 /**
@@ -377,8 +377,8 @@ export function createErrorResponse(errorDef, lang = 'en', details = {}) {
     error: {
       code: errorDef.code,
       message,
-      ...details
-    }
+      ...details,
+    },
   };
 }
 

@@ -11,7 +11,7 @@ let cacheEnabled = false;
 // Initialisation du client Redis (Upstash)
 function initRedis() {
   const redisUrl = process.env.REDIS_URL;
-  
+
   if (!redisUrl) {
     console.log('⚠️  Redis non configuré - cache désactivé (mode dégradé)');
     return;
@@ -30,7 +30,7 @@ function initRedis() {
       reconnectOnError: (err) => {
         console.error('Redis reconnection error:', err.message);
         return false; // Don't reconnect on error
-      }
+      },
     });
 
     redis.on('connect', () => {
@@ -61,11 +61,11 @@ function initRedis() {
  * @returns {Promise<any|null>} - Valeur parsée ou null
  */
 async function get(key) {
-  if (!cacheEnabled || !redis) return null;
+  if (!cacheEnabled || !redis) {return null;}
 
   try {
     const value = await redis.get(key);
-    if (!value) return null;
+    if (!value) {return null;}
     return JSON.parse(value);
   } catch (error) {
     console.error('Cache GET error:', error.message);
@@ -81,7 +81,7 @@ async function get(key) {
  * @returns {Promise<boolean>} - true si succès, false sinon
  */
 async function set(key, value, ttl = 86400) {
-  if (!cacheEnabled || !redis) return false;
+  if (!cacheEnabled || !redis) {return false;}
 
   try {
     const serialized = JSON.stringify(value);
@@ -99,7 +99,7 @@ async function set(key, value, ttl = 86400) {
  * @returns {Promise<boolean>}
  */
 async function del(key) {
-  if (!cacheEnabled || !redis) return false;
+  if (!cacheEnabled || !redis) {return false;}
 
   try {
     await redis.del(key);
@@ -116,12 +116,12 @@ async function del(key) {
  * @returns {Promise<number>} - Nombre de clés supprimées
  */
 async function invalidatePattern(pattern) {
-  if (!cacheEnabled || !redis) return 0;
+  if (!cacheEnabled || !redis) {return 0;}
 
   try {
     const keys = await redis.keys(pattern);
-    if (keys.length === 0) return 0;
-    
+    if (keys.length === 0) {return 0;}
+
     await redis.del(...keys);
     return keys.length;
   } catch (error) {
@@ -151,7 +151,7 @@ async function getStats() {
     const info = await redis.info('stats');
     const lines = info.split('\r\n');
     const stats = {};
-    
+
     lines.forEach(line => {
       const [key, value] = line.split(':');
       if (key && value) {
@@ -163,7 +163,7 @@ async function getStats() {
       enabled: true,
       status: 'connected',
       hits: stats.keyspace_hits || '0',
-      misses: stats.keyspace_misses || '0'
+      misses: stats.keyspace_misses || '0',
     };
   } catch (error) {
     console.error('Cache STATS error:', error.message);
@@ -193,5 +193,5 @@ module.exports = {
   invalidatePattern,
   isEnabled,
   getStats,
-  disconnect
+  disconnect,
 };

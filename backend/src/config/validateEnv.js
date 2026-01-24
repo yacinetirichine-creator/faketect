@@ -4,7 +4,7 @@ const logger = require('./logger');
 const REQUIRED_ENV_VARS = [
   'DATABASE_URL',
   'JWT_SECRET',
-  'FRONTEND_URL'
+  'FRONTEND_URL',
 ];
 
 // Variables d'environnement optionnelles mais recommandées
@@ -16,7 +16,7 @@ const OPTIONAL_ENV_VARS = [
   'SIGHTENGINE_API_SECRET',
   'ILLUMINARTY_API_KEY',
   'PORT',
-  'NODE_ENV'
+  'NODE_ENV',
 ];
 
 function validateEnv() {
@@ -72,7 +72,7 @@ function validateEnv() {
       hasStripe: !!process.env.STRIPE_SECRET_KEY,
       hasOpenAI: !!process.env.OPENAI_API_KEY,
       hasSightengine: !!process.env.SIGHTENGINE_API_USER,
-      hasIllumarty: !!process.env.ILLUMINARTY_API_KEY
+      hasIllumarty: !!process.env.ILLUMINARTY_API_KEY,
     });
   }
 }

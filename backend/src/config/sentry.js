@@ -16,23 +16,23 @@ function initSentry() {
     Sentry.init({
       dsn: sentryDsn,
       environment: process.env.NODE_ENV || 'development',
-      
+
       // Performance Monitoring
       tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
-      
+
       // Ne pas capturer les erreurs de validation ou 404
       beforeSend(event, hint) {
         const error = hint.originalException;
-        
+
         // Ignorer les erreurs 404
-        if (error?.status === 404) return null;
-        
+        if (error?.status === 404) {return null;}
+
         // Ignorer les erreurs de validation
-        if (error?.name === 'ValidationError') return null;
-        
+        if (error?.name === 'ValidationError') {return null;}
+
         return event;
       },
-      
+
       // Contexte supplémentaire
       initialScope: {
         tags: {

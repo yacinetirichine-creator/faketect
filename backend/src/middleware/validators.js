@@ -1,4 +1,4 @@
-const { body, param, query, validationResult } = require('express-validator');
+const { body, param, validationResult } = require('express-validator');
 const logger = require('../config/logger');
 
 // Middleware pour vérifier les résultats de validation
@@ -8,11 +8,11 @@ const validate = (req, res, next) => {
     logger.warn('Validation failed', {
       errors: errors.array(),
       url: req.originalUrl,
-      body: req.body
+      body: req.body,
     });
-    return res.status(400).json({ 
-      error: 'Données invalides', 
-      details: errors.array() 
+    return res.status(400).json({
+      error: 'Données invalides',
+      details: errors.array(),
     });
   }
   next();
@@ -51,7 +51,7 @@ const registerValidation = [
     .optional()
     .isBoolean()
     .withMessage('acceptMarketing doit être un booléen'),
-  validate
+  validate,
 ];
 
 const loginValidation = [
@@ -62,7 +62,7 @@ const loginValidation = [
   body('password')
     .notEmpty()
     .withMessage('Mot de passe requis'),
-  validate
+  validate,
 ];
 
 // Validations pour les analyses
@@ -71,7 +71,7 @@ const analysisValidation = [
     .optional()
     .isIn(['image', 'video', 'text', 'url'])
     .withMessage('Type d\'analyse invalide'),
-  validate
+  validate,
 ];
 
 const textAnalysisValidation = [
@@ -81,7 +81,7 @@ const textAnalysisValidation = [
     .isLength({ min: 10, max: 10000 })
     .withMessage('Le texte doit contenir entre 10 et 10000 caractères')
     .trim(),
-  validate
+  validate,
 ];
 
 // Validations pour les paramètres d'URL
@@ -89,7 +89,7 @@ const idValidation = [
   param('id')
     .isUUID()
     .withMessage('ID invalide'),
-  validate
+  validate,
 ];
 
 // Validations pour les profils
@@ -105,7 +105,7 @@ const profileUpdateValidation = [
     .optional()
     .isIn(['fr', 'en', 'es', 'de', 'pt', 'it'])
     .withMessage('Langue non supportée'),
-  validate
+  validate,
 ];
 
 // Validations pour Stripe
@@ -120,7 +120,7 @@ const stripeCheckoutValidation = [
     .optional()
     .isIn(['fr', 'en', 'es', 'de', 'pt', 'it'])
     .withMessage('Locale invalide'),
-  validate
+  validate,
 ];
 
 // Validations pour l'admin
@@ -131,7 +131,7 @@ const updatePlanValidation = [
   body('plan')
     .isIn(['FREE', 'STANDARD', 'PROFESSIONAL', 'BUSINESS', 'ENTERPRISE'])
     .withMessage('Plan invalide'),
-  validate
+  validate,
 ];
 
 module.exports = {
@@ -143,5 +143,5 @@ module.exports = {
   idValidation,
   profileUpdateValidation,
   stripeCheckoutValidation,
-  updatePlanValidation
+  updatePlanValidation,
 };

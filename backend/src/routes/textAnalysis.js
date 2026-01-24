@@ -18,34 +18,34 @@ router.post('/analyze', auth, checkLimit, async (req, res) => {
     const { text } = req.body;
 
     if (!text || text.trim().length < 50) {
-      return res.status(400).json({ 
-        error: 'Le texte doit contenir au moins 50 caractères' 
+      return res.status(400).json({
+        error: 'Le texte doit contenir au moins 50 caractères',
       });
     }
 
     if (text.length > 5000) {
-      return res.status(400).json({ 
-        error: 'Le texte ne peut pas dépasser 5000 caractères' 
+      return res.status(400).json({
+        error: 'Le texte ne peut pas dépasser 5000 caractères',
       });
     }
 
     // Calculer le hash du texte pour le cache
     const textHash = crypto.createHash('sha256').update(text.trim()).digest('hex');
     const cacheKey = `text:${textHash}`;
-    
+
     // Vérifier si le résultat est en cache
     let result = await cache.get(cacheKey);
     let fromCache = false;
-    
+
     if (result) {
       console.log(`✅ Cache HIT pour texte (${textHash.substring(0, 12)}...)`);
       fromCache = true;
     } else {
       console.log(`⚠️  Cache MISS pour texte (${textHash.substring(0, 12)}...)`);
-      
+
       // Analyser avec OpenAI
       result = await openai.analyzeText(text);
-      
+
       // Stocker le résultat en cache (TTL: 30 jours pour le texte)
       const ttl = 30 * 24 * 60 * 60; // 30 jours
       await cache.set(cacheKey, result, ttl);
@@ -58,8 +58,8 @@ router.post('/analyze', auth, checkLimit, async (req, res) => {
         userId: req.user.id,
         type: 'TEXT',
         fileName: `text_${Date.now()}.txt`,
-        fileUrl: null // Pas de fichier pour le texte
-      }
+        fileUrl: null, // Pas de fichier pour le texte
+      },
     });
 
     // Mettre à jour avec les résultats
@@ -72,9 +72,9 @@ router.post('/analyze', auth, checkLimit, async (req, res) => {
         details: {
           ...result,
           textLength: text.length,
-          textPreview: text.substring(0, 200)
-        }
-      }
+          textPreview: text.substring(0, 200),
+        },
+      },
     });
 
     // Incrémenter les compteurs selon le plan
@@ -83,9 +83,9 @@ router.post('/analyze', auth, checkLimit, async (req, res) => {
       const updatedUser = await prisma.user.update({
         where: { id: req.user.id },
         data: { usedTotal: { increment: 1 } },
-        select: { usedTotal: true, email: true, name: true, language: true }
+        select: { usedTotal: true, email: true, name: true, language: true },
       });
-      
+
       // Si limite atteinte (10/10), envoyer email d'alerte (non-bloquant)
       if (updatedUser.usedTotal >= 10) {
         sendLimitReachedEmail(updatedUser).catch(err => {
@@ -98,8 +98,8 @@ router.post('/analyze', auth, checkLimit, async (req, res) => {
         where: { id: req.user.id },
         data: {
           usedToday: { increment: 1 },
-          usedMonth: { increment: 1 }
-        }
+          usedMonth: { increment: 1 },
+        },
       });
     }
 
@@ -113,14 +113,14 @@ router.post('/analyze', auth, checkLimit, async (req, res) => {
         verdict,
         indicators: result.indicators || [],
         provider: result.provider,
-        fromCache // Indiquer si le résultat vient du cache
-      }
+        fromCache, // Indiquer si le résultat vient du cache
+      },
     });
   } catch (error) {
     console.error('Text analysis error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Erreur lors de l\'analyse du texte',
-      details: error.message 
+      details: error.message,
     });
   }
 });
@@ -134,8 +134,8 @@ router.get('/explain/:id', auth, async (req, res) => {
     const analysis = await prisma.analysis.findFirst({
       where: {
         id: req.params.id,
-        userId: req.user.id
-      }
+        userId: req.user.id,
+      },
     });
 
     if (!analysis) {
@@ -146,21 +146,21 @@ router.get('/explain/:id', auth, async (req, res) => {
 
     res.json({
       success: true,
-      explanation
+      explanation,
     });
   } catch (error) {
     console.error('Explanation error:', error);
-    res.status(500).json({ 
-      error: 'Erreur lors de la génération de l\'explication' 
+    res.status(500).json({
+      error: 'Erreur lors de la génération de l\'explication',
     });
   }
 });
 
 function getVerdict(score) {
-  if (score >= 90) return { key: 'ai_generated', color: 'red' };
-  if (score >= 70) return { key: 'likely_ai', color: 'orange' };
-  if (score >= 50) return { key: 'possibly_ai', color: 'yellow' };
-  if (score >= 30) return { key: 'possibly_real', color: 'lime' };
+  if (score >= 90) {return { key: 'ai_generated', color: 'red' };}
+  if (score >= 70) {return { key: 'likely_ai', color: 'orange' };}
+  if (score >= 50) {return { key: 'possibly_ai', color: 'yellow' };}
+  if (score >= 30) {return { key: 'possibly_real', color: 'lime' };}
   return { key: 'likely_real', color: 'green' };
 }
 

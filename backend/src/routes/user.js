@@ -11,13 +11,13 @@ const router = express.Router();
 router.get('/dashboard', auth, async (req, res) => {
   const user = req.user;
   const plan = PLANS[user.plan] || PLANS.FREE;
-  
+
   const [recent, total, aiCount] = await Promise.all([
     prisma.analysis.findMany({ where: { userId: user.id }, orderBy: { createdAt: 'desc' }, take: 5 }),
     prisma.analysis.count({ where: { userId: user.id } }),
-    prisma.analysis.count({ where: { userId: user.id, isAi: true } })
+    prisma.analysis.count({ where: { userId: user.id, isAi: true } }),
   ]);
-  
+
   res.json({
     user: { id: user.id, email: user.email, name: user.name, plan: user.plan, language: user.language },
     plan: { ...plan, name: plan.name },
@@ -27,10 +27,10 @@ router.get('/dashboard', auth, async (req, res) => {
       usedToday: user.usedToday,
       usedMonth: user.usedMonth,
       remainingToday: user.plan === 'FREE' ? Math.max(0, plan.perDay - user.usedToday) : null,
-      remainingMonth: plan.perMonth > 0 ? Math.max(0, plan.perMonth - user.usedMonth) : 'unlimited'
+      remainingMonth: plan.perMonth > 0 ? Math.max(0, plan.perMonth - user.usedMonth) : 'unlimited',
     },
     stats: { total, aiDetected: aiCount, real: total - aiCount },
-    recentAnalyses: recent
+    recentAnalyses: recent,
   });
 });
 
@@ -57,15 +57,15 @@ router.post('/change-plan', auth, async (req, res) => {
     if (newPlan === 'FREE' && user.stripeSubscriptionId) {
       try {
         await stripe.subscriptions.cancel(user.stripeSubscriptionId);
-        
+
         await prisma.user.update({
           where: { id: user.id },
           data: {
             plan: 'FREE',
             stripeSubscriptionId: null,
             usedMonth: 0,
-            usedToday: 0
-          }
+            usedToday: 0,
+          },
         });
 
         logger.info('User downgraded to FREE', { userId: user.id, oldPlan: user.plan });
@@ -73,7 +73,7 @@ router.post('/change-plan', auth, async (req, res) => {
         return res.json({
           success: true,
           message: 'Abonnement annulé, vous êtes maintenant sur le plan FREE',
-          newPlan: 'FREE'
+          newPlan: 'FREE',
         });
       } catch (stripeError) {
         logger.error('Stripe cancellation error', stripeError);
@@ -102,26 +102,26 @@ router.post('/change-plan', auth, async (req, res) => {
         await stripe.subscriptions.update(user.stripeSubscriptionId, {
           items: [{
             id: subscription.items.data[0].id,
-            price: newPriceId
+            price: newPriceId,
           }],
-          proration_behavior: 'always_invoice' // Facturer la différence immédiatement
+          proration_behavior: 'always_invoice', // Facturer la différence immédiatement
         });
 
         await prisma.user.update({
           where: { id: user.id },
-          data: { plan: newPlan }
+          data: { plan: newPlan },
         });
 
         logger.info('User changed plan via Stripe', {
           userId: user.id,
           oldPlan: user.plan,
-          newPlan
+          newPlan,
         });
 
         return res.json({
           success: true,
           message: `Plan changé avec succès vers ${newPlan}`,
-          newPlan
+          newPlan,
         });
       } catch (stripeError) {
         logger.error('Stripe plan change error', stripeError);
@@ -135,7 +135,7 @@ router.post('/change-plan', auth, async (req, res) => {
         success: false,
         requiresPayment: true,
         message: 'Redirection vers le paiement nécessaire',
-        redirectTo: '/pricing'
+        redirectTo: '/pricing',
       });
     }
 
@@ -174,8 +174,8 @@ router.get('/data-export', auth, async (req, res) => {
           usedMonth: true,
           usedTotal: true,
           createdAt: true,
-          updatedAt: true
-        }
+          updatedAt: true,
+        },
       }),
       // Historique des analyses
       prisma.analysis.findMany({
@@ -188,9 +188,9 @@ router.get('/data-export', auth, async (req, res) => {
           isAi: true,
           confidence: true,
           details: true,
-          createdAt: true
+          createdAt: true,
         },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
       }),
       // Conversations du chatbot
       prisma.chatConversation.findMany({
@@ -201,12 +201,12 @@ router.get('/data-export', auth, async (req, res) => {
               id: true,
               role: true,
               content: true,
-              createdAt: true
+              createdAt: true,
             },
-            orderBy: { createdAt: 'asc' }
-          }
+            orderBy: { createdAt: 'asc' },
+          },
         },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
       }),
       // Abonnement newsletter
       prisma.newsletterSubscriber.findUnique({
@@ -218,9 +218,9 @@ router.get('/data-export', auth, async (req, res) => {
           interests: true,
           isActive: true,
           confirmedAt: true,
-          createdAt: true
-        }
-      })
+          createdAt: true,
+        },
+      }),
     ]);
 
     const exportData = {
@@ -229,18 +229,18 @@ router.get('/data-export', auth, async (req, res) => {
         format: 'application/json',
         version: '1.0',
         requestedBy: user.email,
-        legalBasis: 'RGPD Article 20 - Droit à la portabilité des données'
+        legalBasis: 'RGPD Article 20 - Droit à la portabilité des données',
       },
       user: userData,
       analyses: {
         count: analyses.length,
-        items: analyses
+        items: analyses,
       },
       chatHistory: {
         conversationsCount: chatConversations.length,
-        conversations: chatConversations
+        conversations: chatConversations,
       },
-      newsletter: newsletterSubscription || { subscribed: false }
+      newsletter: newsletterSubscription || { subscribed: false },
     };
 
     logger.info('Data export requested', { userId: user.id, email: user.email });
@@ -255,7 +255,7 @@ router.get('/data-export', auth, async (req, res) => {
     logger.error('Data export error', error);
     res.status(500).json({
       error: 'Erreur lors de l\'export des données',
-      message: 'Contactez dpo@faketect.com si le problème persiste'
+      message: 'Contactez dpo@faketect.com si le problème persiste',
     });
   }
 });
@@ -271,9 +271,9 @@ router.delete('/account', auth, async (req, res) => {
 
     // Vérifier la confirmation (sécurité)
     if (confirmation !== user.email) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         error: 'Confirmation incorrecte',
-        message: 'Veuillez entrer votre email pour confirmer la suppression' 
+        message: 'Veuillez entrer votre email pour confirmer la suppression',
       });
     }
 
@@ -291,25 +291,25 @@ router.delete('/account', auth, async (req, res) => {
     // Supprimer toutes les données utilisateur
     // Les analyses seront supprimées automatiquement (onDelete: Cascade dans Prisma)
     await prisma.user.delete({
-      where: { id: user.id }
+      where: { id: user.id },
     });
 
-    logger.info('User account deleted', { 
-      userId: user.id, 
+    logger.info('User account deleted', {
+      userId: user.id,
       email: user.email,
-      plan: user.plan
+      plan: user.plan,
     });
 
     res.json({
       success: true,
-      message: 'Votre compte a été supprimé avec succès'
+      message: 'Votre compte a été supprimé avec succès',
     });
 
   } catch (error) {
     logger.error('Account deletion error', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Erreur lors de la suppression du compte',
-      message: 'Une erreur est survenue. Contactez le support si le problème persiste.'
+      message: 'Une erreur est survenue. Contactez le support si le problème persiste.',
     });
   }
 });

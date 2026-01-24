@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
     perMonth: p.perMonth,
     perDay: p.perDay,
     features: p.features,
-    yearlyDiscount: p.monthlyPrice > 0 ? Math.round((1 - p.yearlyPrice / (p.monthlyPrice * 12)) * 100) : 0
+    yearlyDiscount: p.monthlyPrice > 0 ? Math.round((1 - p.yearlyPrice / (p.monthlyPrice * 12)) * 100) : 0,
   }));
   res.json({ plans });
 });

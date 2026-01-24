@@ -12,7 +12,6 @@ let emailEnabled = false;
 function initEmail() {
   const emailUser = process.env.EMAIL_USER;
   const emailPass = process.env.EMAIL_PASS;
-  const emailFrom = process.env.EMAIL_FROM || emailUser;
 
   if (!emailUser || !emailPass) {
     console.log('⚠️  Email non configuré - notifications désactivées (mode dégradé)');
@@ -27,11 +26,11 @@ function initEmail() {
       secure: false, // true pour 465, false pour autres ports
       auth: {
         user: emailUser,
-        pass: emailPass // Mot de passe du compte Google Workspace
+        pass: emailPass, // Mot de passe du compte Google Workspace
       },
       tls: {
-        rejectUnauthorized: false // Pour éviter les erreurs de certificat
-      }
+        rejectUnauthorized: false, // Pour éviter les erreurs de certificat
+      },
     });
 
     // Vérifier la connexion
@@ -68,13 +67,13 @@ async function sendEmail({ to, subject, html, text }) {
 
   try {
     const emailFrom = process.env.EMAIL_FROM || process.env.EMAIL_USER;
-    
+
     const mailOptions = {
       from: `"FakeTect" <${emailFrom}>`,
       to,
       subject,
       html,
-      text: text || html.replace(/<[^>]*>/g, '') // Fallback texte simple
+      text: text || html.replace(/<[^>]*>/g, ''), // Fallback texte simple
     };
 
     await transporter.sendMail(mailOptions);
@@ -91,7 +90,7 @@ async function sendEmail({ to, subject, html, text }) {
  */
 async function sendWelcomeEmail(user) {
   const subject = user.language === 'fr' ? '🎉 Bienvenue sur FakeTect !' : '🎉 Welcome to FakeTect!';
-  
+
   const messages = {
     fr: {
       title: 'Bienvenue sur FakeTect !',
@@ -102,7 +101,7 @@ async function sendWelcomeEmail(user) {
       feature2: '📅 Valables pendant 30 jours',
       feature3: '🔍 Détection avancée d\'images, vidéos et textes',
       cta: 'Commencer l\'analyse',
-      footer: 'Si vous avez des questions, répondez simplement à cet email.'
+      footer: 'Si vous avez des questions, répondez simplement à cet email.',
     },
     en: {
       title: 'Welcome to FakeTect!',
@@ -113,8 +112,8 @@ async function sendWelcomeEmail(user) {
       feature2: '📅 Valid for 30 days',
       feature3: '🔍 Advanced detection for images, videos and texts',
       cta: 'Start analyzing',
-      footer: 'If you have any questions, just reply to this email.'
-    }
+      footer: 'If you have any questions, just reply to this email.',
+    },
   };
 
   const lang = user.language || 'fr';
@@ -147,7 +146,7 @@ async function sendWelcomeEmail(user) {
       <p style="font-size: 16px; margin-bottom: 10px;">${msg.intro}</p>
       <p>${msg.text1}</p>
       <p>${msg.text2}</p>
-      
+
       <div class="features">
         <div class="feature">${msg.feature1}</div>
         <div class="feature">${msg.feature2}</div>
@@ -162,7 +161,7 @@ async function sendWelcomeEmail(user) {
     </div>
     <div class="footer">
       <p>FakeTect - Détection IA Professionnelle<br>
-      <a href="${frontendUrl}/legal/privacy" style="color: #667eea;">Politique de confidentialité</a> | 
+      <a href="${frontendUrl}/legal/privacy" style="color: #667eea;">Politique de confidentialité</a> |
       <a href="${frontendUrl}/legal/cgu" style="color: #667eea;">CGU</a></p>
     </div>
   </div>
@@ -170,10 +169,10 @@ async function sendWelcomeEmail(user) {
 </html>
   `;
 
-  return await sendEmail({
+  return sendEmail({
     to: user.email,
     subject,
-    html
+    html,
   });
 }
 
@@ -182,7 +181,7 @@ async function sendWelcomeEmail(user) {
  */
 async function sendLimitReachedEmail(user) {
   const subject = user.language === 'fr' ? '⚠️ Limite FREE atteinte - Passez à un plan supérieur' : '⚠️ FREE limit reached - Upgrade your plan';
-  
+
   const messages = {
     fr: {
       title: 'Limite atteinte !',
@@ -193,7 +192,7 @@ async function sendLimitReachedEmail(user) {
       plan2: '<strong>PROFESSIONAL</strong> - 29,99€ HT/mois - 50 analyses/jour',
       plan3: '<strong>BUSINESS</strong> - 89€ HT/mois - 200 analyses/jour',
       cta: 'Voir les plans',
-      footer: 'Votre compte FREE reste valide 30 jours après inscription.'
+      footer: 'Votre compte FREE reste valide 30 jours après inscription.',
     },
     en: {
       title: 'Limit reached!',
@@ -204,8 +203,8 @@ async function sendLimitReachedEmail(user) {
       plan2: '<strong>PROFESSIONAL</strong> - €29.99 excl. VAT/month - 50 analyses/day',
       plan3: '<strong>BUSINESS</strong> - €89 excl. VAT/month - 200 analyses/day',
       cta: 'View plans',
-      footer: 'Your FREE account remains valid for 30 days after registration.'
-    }
+      footer: 'Your FREE account remains valid for 30 days after registration.',
+    },
   };
 
   const lang = user.language || 'fr';
@@ -239,7 +238,7 @@ async function sendLimitReachedEmail(user) {
       <p style="font-size: 16px; margin-bottom: 10px;">${msg.intro}</p>
       <p>${msg.text1}</p>
       <p>${msg.text2}</p>
-      
+
       <div class="plans">
         <div class="plan">${msg.plan1}</div>
         <div class="plan">${msg.plan2}</div>
@@ -260,10 +259,10 @@ async function sendLimitReachedEmail(user) {
 </html>
   `;
 
-  return await sendEmail({
+  return sendEmail({
     to: user.email,
     subject,
-    html
+    html,
   });
 }
 
@@ -271,10 +270,10 @@ async function sendLimitReachedEmail(user) {
  * Email de rappel 7 jours avant suppression compte inactif
  */
 async function sendDeletionWarningEmail(user, daysUntilDeletion = 7) {
-  const subject = user.language === 'fr' 
-    ? `⏰ Votre compte FakeTect sera supprimé dans ${daysUntilDeletion} jours` 
+  const subject = user.language === 'fr'
+    ? `⏰ Votre compte FakeTect sera supprimé dans ${daysUntilDeletion} jours`
     : `⏰ Your FakeTect account will be deleted in ${daysUntilDeletion} days`;
-  
+
   const messages = {
     fr: {
       title: 'Compte inactif',
@@ -284,7 +283,7 @@ async function sendDeletionWarningEmail(user, daysUntilDeletion = 7) {
       text3: `Votre compte sera supprimé dans <strong>${daysUntilDeletion} jours</strong> si vous ne vous connectez pas.`,
       action: 'Pour conserver votre compte, il suffit de vous connecter ou de passer à un plan payant.',
       cta: 'Me connecter',
-      footer: 'Si vous ne souhaitez pas conserver ce compte, ignorez cet email.'
+      footer: 'Si vous ne souhaitez pas conserver ce compte, ignorez cet email.',
     },
     en: {
       title: 'Inactive account',
@@ -294,8 +293,8 @@ async function sendDeletionWarningEmail(user, daysUntilDeletion = 7) {
       text3: `Your account will be deleted in <strong>${daysUntilDeletion} days</strong> if you don't log in.`,
       action: 'To keep your account, just log in or upgrade to a paid plan.',
       cta: 'Log in',
-      footer: 'If you don\'t want to keep this account, ignore this email.'
-    }
+      footer: 'If you don\'t want to keep this account, ignore this email.',
+    },
   };
 
   const lang = user.language || 'fr';
@@ -327,7 +326,7 @@ async function sendDeletionWarningEmail(user, daysUntilDeletion = 7) {
       <p style="font-size: 16px; margin-bottom: 10px;">${msg.intro}</p>
       <p>${msg.text1}</p>
       <p>${msg.text2}</p>
-      
+
       <div class="warning">
         <p style="margin: 0;">${msg.text3}</p>
       </div>
@@ -348,10 +347,10 @@ async function sendDeletionWarningEmail(user, daysUntilDeletion = 7) {
 </html>
   `;
 
-  return await sendEmail({
+  return sendEmail({
     to: user.email,
     subject,
-    html
+    html,
   });
 }
 
@@ -368,5 +367,5 @@ module.exports = {
   sendWelcomeEmail,
   sendLimitReachedEmail,
   sendDeletionWarningEmail,
-  isEnabled
+  isEnabled,
 };
