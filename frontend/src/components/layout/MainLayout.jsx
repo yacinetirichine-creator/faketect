@@ -45,6 +45,7 @@ export default function MainLayout() {
           <div className="hidden md:flex items-center gap-8">
             <Link to="/" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">{t('nav.home')}</Link>
             <Link to="/pricing" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">{t('nav.pricing')}</Link>
+            <Link to="/features" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">{t('footer.links.features')}</Link>
 
             <div className="relative">
               <button
@@ -107,6 +108,7 @@ export default function MainLayout() {
               <div className="px-4 py-6 space-y-4">
                 <Link to="/" onClick={() => setMenuOpen(false)} className="block text-gray-400 hover:text-white">{t('nav.home')}</Link>
                 <Link to="/pricing" onClick={() => setMenuOpen(false)} className="block text-gray-400 hover:text-white">{t('nav.pricing')}</Link>
+                <Link to="/features" onClick={() => setMenuOpen(false)} className="block text-gray-400 hover:text-white">{t('footer.links.features')}</Link>
 
                 {/* Language selector mobile */}
                 <div className="border-t border-white/10 pt-4">
