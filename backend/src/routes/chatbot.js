@@ -57,7 +57,7 @@ router.post('/message', async (req, res) => {
     conversationHistory.push({ role: 'user', content: message });
 
     // Obtenir la réponse IA
-    const aiResponse = await openaiService.chatWithUser(conversationHistory, language);
+    const aiResponse = await openaiService.getChatResponse(conversationHistory, language);
 
     // Sauvegarder la réponse IA
     const botMessage = await prisma.chatMessage.create({

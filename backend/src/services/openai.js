@@ -1,42 +1,119 @@
 /**
- * Service OpenAI pour analyses avancées
- * Utilisé pour : analyse de texte, description d'images, recommandations
+ * Service AI pour analyses avancées
+ * Support: OpenAI (payant) ou Google Gemini (gratuit)
  */
 
-class OpenAIService {
+class AIService {
   constructor() {
-    this.apiKey = process.env.OPENAI_API_KEY;
-    this.baseUrl = 'https://api.openai.com/v1';
+    this.openaiKey = process.env.OPENAI_API_KEY;
+    this.geminiKey = process.env.GEMINI_API_KEY;
+    this.openaiUrl = 'https://api.openai.com/v1';
+    this.geminiUrl = 'https://generativelanguage.googleapis.com/v1beta';
   }
 
   /**
-   * Analyse un texte pour détecter s'il est généré par IA
+   * Vérifie si un service AI est configuré
    */
-  async analyzeText(text) {
-    if (!this.apiKey) {
-      return { error: 'OpenAI API key not configured', demo: true };
+  hasAIService() {
+    return !!(this.openaiKey || this.geminiKey);
+  }
+
+  /**
+   * Chatbot support client multi-langue (utilise Gemini gratuit ou OpenAI)
+   */
+  async getChatResponse(conversationHistory, language = 'fr') {
+    // Essayer Gemini d'abord (gratuit), puis OpenAI
+    if (this.geminiKey) {
+      return this.getChatResponseGemini(conversationHistory, language);
     }
+    if (this.openaiKey) {
+      return this.getChatResponseOpenAI(conversationHistory, language);
+    }
+    return this.getFallbackResponse(language);
+  }
+
+  /**
+   * Chat avec Google Gemini (GRATUIT)
+   */
+  async getChatResponseGemini(conversationHistory, language = 'fr') {
+    const systemPrompt = this.getSystemPrompt(language);
 
     try {
-      const response = await fetch(`${this.baseUrl}/chat/completions`, {
+      // Construire le prompt pour Gemini
+      const messages = conversationHistory.map(m => ({
+        role: m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: m.content }]
+      }));
+
+      // Ajouter le contexte système au premier message
+      const fullPrompt = {
+        contents: [
+          {
+            role: 'user',
+            parts: [{ text: `${systemPrompt}\n\nConversation précédente:\n${conversationHistory.slice(0, -1).map(m => `${m.role}: ${m.content}`).join('\n')}\n\nUtilisateur: ${conversationHistory[conversationHistory.length - 1]?.content || ''}` }]
+          }
+        ],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 300,
+        }
+      };
+
+      const response = await fetch(
+        `${this.geminiUrl}/models/gemini-1.5-flash:generateContent?key=${this.geminiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(fullPrompt)
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.text();
+        console.error('Gemini API error:', response.status, error);
+        throw new Error(`Gemini API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+        return data.candidates[0].content.parts[0].text;
+      }
+
+      throw new Error('Invalid Gemini response format');
+    } catch (error) {
+      console.error('Gemini chat error:', error);
+      // Fallback vers OpenAI si disponible
+      if (this.openaiKey) {
+        return this.getChatResponseOpenAI(conversationHistory, language);
+      }
+      return this.getFallbackResponse(language);
+    }
+  }
+
+  /**
+   * Chat avec OpenAI (payant)
+   */
+  async getChatResponseOpenAI(conversationHistory, language = 'fr') {
+    const systemPrompt = this.getSystemPrompt(language);
+
+    try {
+      const messages = [
+        { role: 'system', content: systemPrompt },
+        ...conversationHistory
+      ];
+
+      const response = await fetch(`${this.openaiUrl}/chat/completions`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
+          'Authorization': `Bearer ${this.openaiKey}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: 'gpt-4',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are an AI text detection expert. Analyze if the given text was likely written by AI. Return a JSON with: aiProbability (0-100), indicators (array of clues), confidence (0-100).'
-            },
-            {
-              role: 'user',
-              content: `Analyze this text:\n\n${text}`
-            }
-          ],
-          response_format: { type: 'json_object' }
+          model: 'gpt-3.5-turbo',
+          messages,
+          max_tokens: 250,
+          temperature: 0.7
         })
       });
 
@@ -45,133 +122,18 @@ class OpenAIService {
       }
 
       const data = await response.json();
-      const result = JSON.parse(data.choices[0].message.content);
-
-      return {
-        aiScore: result.aiProbability || 0,
-        isAi: (result.aiProbability || 0) >= 50,
-        confidence: result.confidence || 80,
-        indicators: result.indicators || [],
-        provider: 'openai'
-      };
-    } catch (error) {
-      console.error('OpenAI text analysis error:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Analyse une image avec vision API pour détecter des anomalies
-   */
-  async analyzeImageWithVision(base64Image) {
-    if (!this.apiKey) {
-      return { error: 'OpenAI API key not configured', demo: true };
-    }
-
-    try {
-      const response = await fetch(`${this.baseUrl}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: 'gpt-4-vision-preview',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are an expert in detecting AI-generated images. Look for artifacts, inconsistencies, unnatural patterns, impossible lighting, distorted details, and other signs of AI generation.'
-            },
-            {
-              role: 'user',
-              content: [
-                {
-                  type: 'text',
-                  text: 'Analyze this image for signs of AI generation. Return JSON with: aiProbability (0-100), anomalies (array), confidence (0-100), reasoning (brief explanation).'
-                },
-                {
-                  type: 'image_url',
-                  image_url: {
-                    url: `data:image/jpeg;base64,${base64Image}`
-                  }
-                }
-              ]
-            }
-          ],
-          max_tokens: 500,
-          response_format: { type: 'json_object' }
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`OpenAI Vision API error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const result = JSON.parse(data.choices[0].message.content);
-
-      return {
-        aiScore: result.aiProbability || 0,
-        isAi: (result.aiProbability || 0) >= 50,
-        confidence: result.confidence || 75,
-        anomalies: result.anomalies || [],
-        reasoning: result.reasoning || '',
-        provider: 'openai-vision'
-      };
-    } catch (error) {
-      console.error('OpenAI vision analysis error:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Génère une explication détaillée d'un résultat d'analyse
-   */
-  async explainAnalysis(analysisResult) {
-    if (!this.apiKey) {
-      return 'OpenAI API non configurée';
-    }
-
-    try {
-      const response = await fetch(`${this.baseUrl}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are an AI detection expert. Explain analysis results in simple, clear French. Be concise (max 100 words).'
-            },
-            {
-              role: 'user',
-              content: `Explain this AI detection result:\nScore: ${analysisResult.aiScore}%\nConfidence: ${analysisResult.confidence}%\nProvider: ${analysisResult.provider}`
-            }
-          ],
-          max_tokens: 150
-        })
-      });
-
-      const data = await response.json();
       return data.choices[0].message.content;
     } catch (error) {
-      console.error('OpenAI explanation error:', error);
-      return 'Explication non disponible';
+      console.error('OpenAI chat error:', error);
+      return this.getFallbackResponse(language);
     }
   }
 
   /**
-   * Chatbot support client multi-langue
+   * Prompts système multilingues pour le chatbot
    */
-  async getChatResponse(conversationHistory, language = 'fr') {
-    if (!this.apiKey) {
-      return this.getFallbackResponse(language);
-    }
-
-    const systemPrompts = {
+  getSystemPrompt(language) {
+    const prompts = {
       fr: `Tu es l'assistant virtuel de FakeTect, plateforme de détection de deepfakes et contenus IA.
 Tu aides les utilisateurs avec:
 - Questions sur les plans (FREE: 3 analyses/jour, PRO: 50/jour, BUSINESS: illimité)
@@ -219,45 +181,38 @@ Você ajuda os usuários com:
 - Explicações de resultados de análise
 - Problemas de pagamento Stripe
 Seja conciso (max 150 palavras), profissional e útil.
-Se não puder responder ou for complexo, termine com [HUMAN_SUPPORT] para alertar um admin.`
+Se não puder responder ou for complexo, termine com [HUMAN_SUPPORT] para alertar um admin.`,
+      ar: `أنت المساعد الافتراضي لـ FakeTect، منصة كشف التزييف العميق والمحتوى المُنشأ بالذكاء الاصطناعي.
+تساعد المستخدمين في:
+- أسئلة حول الخطط (FREE: 3 تحليلات/يوم، PRO: 50/يوم، BUSINESS: غير محدود)
+- المساعدة التقنية (الصيغ المقبولة: JPG، PNG، MP4، MOV بحد أقصى 100MB)
+- شرح نتائج التحليل
+- مشاكل الدفع عبر Stripe
+كن موجزاً (150 كلمة كحد أقصى)، محترفاً ومفيداً.
+إذا لم تستطع الإجابة أو كان الأمر معقداً، أنهِ بـ [HUMAN_SUPPORT] لتنبيه المسؤول.`,
+      zh: `你是FakeTect的虚拟助手，这是一个深度伪造和AI内容检测平台。
+你帮助用户解决:
+- 计划问题（FREE: 每天3次分析，PRO: 每天50次，BUSINESS: 无限）
+- 技术帮助（支持格式: JPG、PNG、MP4、MOV 最大100MB）
+- 分析结果说明
+- Stripe支付问题
+简洁（最多150字）、专业且有帮助。
+如果无法回答或问题复杂，请以[HUMAN_SUPPORT]结尾以提醒管理员。`,
+      ja: `あなたはFakeTectのバーチャルアシスタントです。ディープフェイクとAI生成コンテンツを検出するプラットフォームです。
+ユーザーをサポートします:
+- プランに関する質問（FREE: 1日3分析、PRO: 1日50回、BUSINESS: 無制限）
+- 技術サポート（対応フォーマット: JPG、PNG、MP4、MOV 最大100MB）
+- 分析結果の説明
+- Stripe決済の問題
+簡潔に（最大150語）、プロフェッショナルで親切に対応してください。
+回答できない場合や複雑な場合は、[HUMAN_SUPPORT]で終わり、管理者に通知してください。`
     };
-
-    try {
-      const messages = [
-        {
-          role: 'system',
-          content: systemPrompts[language] || systemPrompts.fr
-        },
-        ...conversationHistory
-      ];
-
-      const response = await fetch(`${this.baseUrl}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages,
-          max_tokens: 250,
-          temperature: 0.7
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`OpenAI API error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return data.choices[0].message.content;
-
-    } catch (error) {
-      console.error('Chatbot error:', error);
-      return this.getFallbackResponse(language);
-    }
+    return prompts[language] || prompts.fr;
   }
 
+  /**
+   * Réponse de secours multilingue
+   */
   getFallbackResponse(language) {
     const fallbacks = {
       fr: "Désolé, je rencontre un problème technique. Un administrateur va vous répondre rapidement. [HUMAN_SUPPORT]",
@@ -265,10 +220,228 @@ Se não puder responder ou for complexo, termine com [HUMAN_SUPPORT] para alerta
       es: "Lo siento, tengo un problema técnico. Un administrador responderá pronto. [HUMAN_SUPPORT]",
       de: "Entschuldigung, ich habe ein technisches Problem. Ein Administrator wird bald antworten. [HUMAN_SUPPORT]",
       it: "Scusa, ho un problema tecnico. Un amministratore risponderà presto. [HUMAN_SUPPORT]",
-      pt: "Desculpe, estou com um problema técnico. Um administrador responderá em breve. [HUMAN_SUPPORT]"
+      pt: "Desculpe, estou com um problema técnico. Um administrador responderá em breve. [HUMAN_SUPPORT]",
+      ar: "عذراً، أواجه مشكلة تقنية. سيرد عليك أحد المسؤولين قريباً. [HUMAN_SUPPORT]",
+      zh: "抱歉，我遇到了技术问题。管理员将很快回复您。[HUMAN_SUPPORT]",
+      ja: "申し訳ありませんが、技術的な問題が発生しています。管理者がすぐに対応いたします。[HUMAN_SUPPORT]"
     };
     return fallbacks[language] || fallbacks.fr;
   }
+
+  /**
+   * Analyse un texte pour détecter s'il est généré par IA
+   */
+  async analyzeText(text) {
+    if (this.geminiKey) {
+      return this.analyzeTextGemini(text);
+    }
+    if (this.openaiKey) {
+      return this.analyzeTextOpenAI(text);
+    }
+    return { error: 'No AI API key configured', demo: true };
+  }
+
+  async analyzeTextGemini(text) {
+    try {
+      const response = await fetch(
+        `${this.geminiUrl}/models/gemini-1.5-flash:generateContent?key=${this.geminiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `You are an AI text detection expert. Analyze if this text was likely written by AI. Return ONLY a valid JSON object with: aiProbability (number 0-100), indicators (array of strings with clues), confidence (number 0-100).
+
+Text to analyze:
+${text}
+
+Return only the JSON, no explanation.`
+              }]
+            }],
+            generationConfig: {
+              temperature: 0.3,
+              maxOutputTokens: 500
+            }
+          })
+        }
+      );
+
+      if (!response.ok) throw new Error(`Gemini API error: ${response.status}`);
+
+      const data = await response.json();
+      const content = data.candidates[0]?.content?.parts?.[0]?.text || '{}';
+      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      const result = JSON.parse(jsonMatch ? jsonMatch[0] : '{}');
+
+      return {
+        aiScore: result.aiProbability || 0,
+        isAi: (result.aiProbability || 0) >= 50,
+        confidence: result.confidence || 80,
+        indicators: result.indicators || [],
+        provider: 'gemini'
+      };
+    } catch (error) {
+      console.error('Gemini text analysis error:', error);
+      throw error;
+    }
+  }
+
+  async analyzeTextOpenAI(text) {
+    try {
+      const response = await fetch(`${this.openaiUrl}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.openaiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'gpt-4',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an AI text detection expert. Analyze if the given text was likely written by AI. Return a JSON with: aiProbability (0-100), indicators (array of clues), confidence (0-100).'
+            },
+            { role: 'user', content: `Analyze this text:\n\n${text}` }
+          ],
+          response_format: { type: 'json_object' }
+        })
+      });
+
+      if (!response.ok) throw new Error(`OpenAI API error: ${response.status}`);
+
+      const data = await response.json();
+      const result = JSON.parse(data.choices[0].message.content);
+
+      return {
+        aiScore: result.aiProbability || 0,
+        isAi: (result.aiProbability || 0) >= 50,
+        confidence: result.confidence || 80,
+        indicators: result.indicators || [],
+        provider: 'openai'
+      };
+    } catch (error) {
+      console.error('OpenAI text analysis error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Analyse une image avec vision API
+   */
+  async analyzeImageWithVision(base64Image) {
+    if (!this.openaiKey) {
+      return { error: 'OpenAI API key not configured for vision', demo: true };
+    }
+
+    try {
+      const response = await fetch(`${this.openaiUrl}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.openaiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'gpt-4-vision-preview',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an expert in detecting AI-generated images.'
+            },
+            {
+              role: 'user',
+              content: [
+                {
+                  type: 'text',
+                  text: 'Analyze this image for signs of AI generation. Return JSON with: aiProbability (0-100), anomalies (array), confidence (0-100), reasoning (brief explanation).'
+                },
+                {
+                  type: 'image_url',
+                  image_url: { url: `data:image/jpeg;base64,${base64Image}` }
+                }
+              ]
+            }
+          ],
+          max_tokens: 500,
+          response_format: { type: 'json_object' }
+        })
+      });
+
+      if (!response.ok) throw new Error(`OpenAI Vision API error: ${response.status}`);
+
+      const data = await response.json();
+      const result = JSON.parse(data.choices[0].message.content);
+
+      return {
+        aiScore: result.aiProbability || 0,
+        isAi: (result.aiProbability || 0) >= 50,
+        confidence: result.confidence || 75,
+        anomalies: result.anomalies || [],
+        reasoning: result.reasoning || '',
+        provider: 'openai-vision'
+      };
+    } catch (error) {
+      console.error('OpenAI vision analysis error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Génère une explication détaillée d'un résultat d'analyse
+   */
+  async explainAnalysis(analysisResult) {
+    if (!this.openaiKey && !this.geminiKey) {
+      return 'API AI non configurée';
+    }
+
+    const prompt = `Explain this AI detection result in simple terms:\nScore: ${analysisResult.aiScore}%\nConfidence: ${analysisResult.confidence}%\nProvider: ${analysisResult.provider}`;
+
+    if (this.geminiKey) {
+      try {
+        const response = await fetch(
+          `${this.geminiUrl}/models/gemini-1.5-flash:generateContent?key=${this.geminiKey}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: { maxOutputTokens: 150 }
+            })
+          }
+        );
+        const data = await response.json();
+        return data.candidates[0]?.content?.parts?.[0]?.text || 'Explication non disponible';
+      } catch (error) {
+        console.error('Gemini explanation error:', error);
+      }
+    }
+
+    if (this.openaiKey) {
+      try {
+        const response = await fetch(`${this.openaiUrl}/chat/completions`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${this.openaiKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: 'gpt-3.5-turbo',
+            messages: [
+              { role: 'system', content: 'Explain analysis results in simple, clear French. Be concise (max 100 words).' },
+              { role: 'user', content: prompt }
+            ],
+            max_tokens: 150
+          })
+        });
+        const data = await response.json();
+        return data.choices[0].message.content;
+      } catch (error) {
+        console.error('OpenAI explanation error:', error);
+      }
+    }
+
+    return 'Explication non disponible';
+  }
 }
 
-module.exports = new OpenAIService();
+module.exports = new AIService();
