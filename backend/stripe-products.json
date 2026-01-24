@@ -1,10 +1,10 @@
 {
-  "STANDARD": {
+  "STARTER": {
     "productId": "prod_TgmlZOc4tkmaxO",
     "monthlyPriceId": "price_1SjPByIaJ0g5yYYSfEI3f8Zg",
     "yearlyPriceId": "price_1SjPBzIaJ0g5yYYSw9EGBGlX"
   },
-  "PROFESSIONAL": {
+  "PRO": {
     "productId": "prod_TgmlEBV8wcSr7r",
     "monthlyPriceId": "price_1SjPBzIaJ0g5yYYSG8ytllBA",
     "yearlyPriceId": "price_1SjPC0IaJ0g5yYYSJ2JqVKdZ"
