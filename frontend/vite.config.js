@@ -10,13 +10,7 @@ export default defineConfig({
   build: {
     // Optimisations de production
     target: 'esnext',
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true
-      }
-    },
+    minify: 'esbuild', // esbuild est intégré à Vite (plus rapide que terser)
     // Code splitting pour des chunks plus petits
     rollupOptions: {
       output: {
@@ -32,6 +26,10 @@ export default defineConfig({
     // Réduire la taille du bundle
     chunkSizeWarningLimit: 500,
     sourcemap: false
+  },
+  // Supprimer console.log en production via esbuild
+  esbuild: {
+    drop: ['console', 'debugger']
   },
   // Optimisations de dépendances
   optimizeDeps: {
