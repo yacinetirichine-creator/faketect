@@ -1,0 +1,12 @@
+# Security Policy for FakeTect
+
+Contact: mailto:security@faketect.com
+Expires: 2026-12-31T23:59:00.000Z
+Encryption: https://faketect.com/.well-known/pgp-key.txt
+Preferred-Languages: fr, en
+Canonical: https://faketect.com/.well-known/security.txt
+Policy: https://faketect.com/legal/security-policy
+
+# Our security team will respond within 24 hours.
+# We offer a bug bounty program for responsible disclosure.
+# Thank you for helping keep FakeTect secure.
