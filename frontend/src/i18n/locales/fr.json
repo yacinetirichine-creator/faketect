@@ -81,6 +81,30 @@
     "usersTable": { "email": "Email", "name": "Nom", "plan": "Plan", "role": "Rôle", "createdAt": "Inscrit", "actions": "Actions" },
     "analysesTable": { "date": "Date", "user": "Utilisateur", "file": "Fichier", "type": "Type", "score": "Score", "verdict": "Verdict", "provider": "Provider" }
   },
+  "adminChat": {
+    "title": "Gestion Chat Support",
+    "subtitle": "Répondez aux conversations nécessitant une intervention humaine",
+    "conversations": "Conversations",
+    "noConversation": "Aucune conversation",
+    "anonymousVisitor": "Visiteur anonyme",
+    "messages": "messages",
+    "emailNotAvailable": "Email non disponible",
+    "markResolved": "Marquer résolu",
+    "client": "Client",
+    "admin": "Admin",
+    "bot": "Bot",
+    "replyPlaceholder": "Votre réponse en tant qu'admin...",
+    "send": "Envoyer",
+    "selectConversation": "Sélectionnez une conversation pour voir les détails",
+    "sendError": "Erreur lors de l'envoi de la réponse",
+    "status": {
+      "pending": "En attente",
+      "active": "Actif",
+      "resolved": "Résolu",
+      "archived": "Archivé",
+      "all": "Tous"
+    }
+  },
   "common": { "loading": "Chargement...", "save": "Enregistrer", "cancel": "Annuler", "delete": "Supprimer", "deleted": "Supprimé", "confirmDelete": "Supprimer ?", "searchPlaceholder": "Rechercher...", "error": "Erreur", "loadError": "Erreur de chargement", "errorGeneric": "Erreur", "saved": "Enregistré", "id": "ID", "optional": "optionnel" },
   "errorBoundary": { "title": "Erreur d’affichage", "description": "Une erreur JavaScript empêche cette page de s’afficher.", "reload": "Recharger", "retry": "Réessayer" },
   "historyPage": { "url": "URL", "table": { "file": "Fichier", "type": "Type", "score": "Score", "date": "Date", "actions": "Actions" } },

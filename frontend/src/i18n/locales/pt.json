@@ -81,6 +81,30 @@
     "usersTable": { "email": "Email", "name": "Nome", "plan": "Plano", "role": "Função", "createdAt": "Criado", "actions": "Ações" },
     "analysesTable": { "date": "Data", "user": "Usuário", "file": "Arquivo", "type": "Tipo", "score": "Pontuação", "verdict": "Veredito", "provider": "Provedor" }
   },
+  "adminChat": {
+    "title": "Gerenciamento de Chat de Suporte",
+    "subtitle": "Responda às conversas que requerem intervenção humana",
+    "conversations": "Conversas",
+    "noConversation": "Nenhuma conversa",
+    "anonymousVisitor": "Visitante anônimo",
+    "messages": "mensagens",
+    "emailNotAvailable": "Email não disponível",
+    "markResolved": "Marcar resolvido",
+    "client": "Cliente",
+    "admin": "Admin",
+    "bot": "Bot",
+    "replyPlaceholder": "Sua resposta como admin...",
+    "send": "Enviar",
+    "selectConversation": "Selecione uma conversa para ver os detalhes",
+    "sendError": "Erro ao enviar a resposta",
+    "status": {
+      "pending": "Pendente",
+      "active": "Ativo",
+      "resolved": "Resolvido",
+      "archived": "Arquivado",
+      "all": "Todos"
+    }
+  },
   "common": { "loading": "Carregando...", "save": "Salvar", "cancel": "Cancelar", "delete": "Excluir", "deleted": "Excluído", "confirmDelete": "Excluir?", "searchPlaceholder": "Pesquisar...", "error": "Erro", "loadError": "Erro ao carregar", "errorGeneric": "Erro", "saved": "Salvo", "id": "ID", "optional": "opcional" },
   "errorBoundary": { "title": "Erro de exibição", "description": "Um erro de JavaScript impede que esta página seja exibida.", "reload": "Recarregar", "retry": "Tentar novamente" },
   "historyPage": { "url": "URL", "table": { "file": "Arquivo", "type": "Tipo", "score": "Pontuação", "date": "Data", "actions": "Ações" } },

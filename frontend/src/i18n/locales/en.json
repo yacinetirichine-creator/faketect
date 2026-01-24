@@ -81,6 +81,30 @@
     "usersTable": { "email": "Email", "name": "Name", "plan": "Plan", "role": "Role", "createdAt": "Created", "actions": "Actions" },
     "analysesTable": { "date": "Date", "user": "User", "file": "File", "type": "Type", "score": "Score", "verdict": "Verdict", "provider": "Provider" }
   },
+  "adminChat": {
+    "title": "Chat Support Management",
+    "subtitle": "Respond to conversations requiring human intervention",
+    "conversations": "Conversations",
+    "noConversation": "No conversation",
+    "anonymousVisitor": "Anonymous visitor",
+    "messages": "messages",
+    "emailNotAvailable": "Email not available",
+    "markResolved": "Mark resolved",
+    "client": "Client",
+    "admin": "Admin",
+    "bot": "Bot",
+    "replyPlaceholder": "Your reply as admin...",
+    "send": "Send",
+    "selectConversation": "Select a conversation to see details",
+    "sendError": "Error sending reply",
+    "status": {
+      "pending": "Pending",
+      "active": "Active",
+      "resolved": "Resolved",
+      "archived": "Archived",
+      "all": "All"
+    }
+  },
   "common": { "loading": "Loading...", "save": "Save", "cancel": "Cancel", "delete": "Delete", "deleted": "Deleted", "confirmDelete": "Delete?", "searchPlaceholder": "Search...", "error": "Error", "loadError": "Load error", "errorGeneric": "Error", "saved": "Saved", "id": "ID", "optional": "optional" },
   "errorBoundary": { "title": "Render error", "description": "A JavaScript error prevents this page from displaying.", "reload": "Reload", "retry": "Retry" },
   "historyPage": { "url": "URL", "table": { "file": "File", "type": "Type", "score": "Score", "date": "Date", "actions": "Actions" } },

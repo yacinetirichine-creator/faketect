@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Mail, Check, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import api from '../services/api';
@@ -42,90 +42,6 @@ export default function NewsletterSubscribe() {
     }
   }, [email, isLoading, i18n.language, t]);
 
-  const translations = useMemo(() => ({
-    fr: {
-      title: 'Newsletter',
-      subtitle: 'Recevez les dernières nouveautés et cas d\'usage',
-      placeholder: 'Votre email',
-      button: 'S\'abonner',
-      success: '✓ Inscription réussie !',
-      error: 'Erreur lors de l\'inscription',
-      benefits: [
-        '✨ Nouveautés produit',
-        '📰 Cas d\'usage exclusifs',
-        '📊 Statistiques mensuelles'
-      ]
-    },
-    en: {
-      title: 'Newsletter',
-      subtitle: 'Get the latest updates and use cases',
-      placeholder: 'Your email',
-      button: 'Subscribe',
-      success: '✓ Successfully subscribed!',
-      error: 'Subscription error',
-      benefits: [
-        '✨ Product updates',
-        '📰 Exclusive use cases',
-        '📊 Monthly statistics'
-      ]
-    },
-    es: {
-      title: 'Newsletter',
-      subtitle: 'Recibe las últimas novedades y casos de uso',
-      placeholder: 'Tu email',
-      button: 'Suscribirse',
-      success: '✓ ¡Suscripción exitosa!',
-      error: 'Error de suscripción',
-      benefits: [
-        '✨ Novedades del producto',
-        '📰 Casos de uso exclusivos',
-        '📊 Estadísticas mensuales'
-      ]
-    },
-    de: {
-      title: 'Newsletter',
-      subtitle: 'Erhalten Sie die neuesten Updates und Anwendungsfälle',
-      placeholder: 'Ihre E-Mail',
-      button: 'Abonnieren',
-      success: '✓ Erfolgreich abonniert!',
-      error: 'Abonnementfehler',
-      benefits: [
-        '✨ Produktaktualisierungen',
-        '📰 Exklusive Anwendungsfälle',
-        '📊 Monatliche Statistiken'
-      ]
-    },
-    pt: {
-      title: 'Newsletter',
-      subtitle: 'Receba as últimas atualizações e casos de uso',
-      placeholder: 'Seu email',
-      button: 'Inscrever-se',
-      success: '✓ Inscrição bem-sucedida!',
-      error: 'Erro de inscrição',
-      benefits: [
-        '✨ Atualizações de produtos',
-        '📰 Casos de uso exclusivos',
-        '📊 Estatísticas mensais'
-      ]
-    },
-    it: {
-      title: 'Newsletter',
-      subtitle: 'Ricevi gli ultimi aggiornamenti e casi d\'uso',
-      placeholder: 'La tua email',
-      button: 'Iscriviti',
-      success: '✓ Iscrizione riuscita!',
-      error: 'Errore di iscrizione',
-      benefits: [
-        '✨ Aggiornamenti del prodotto',
-        '📰 Casi d\'uso esclusivi',
-        '📊 Statistiche mensili'
-      ]
-    }
-  }), []);
-
-  const lang = i18n.language || 'fr';
-  const txt = useMemo(() => translations[lang] || translations.fr, [translations, lang]);
-
   return (
     <div className="bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20 rounded-2xl p-6">
       <div className="flex items-start gap-3 mb-4">
@@ -133,15 +49,15 @@ export default function NewsletterSubscribe() {
           <Mail className="text-primary" size={20} />
         </div>
         <div>
-          <h3 className="font-semibold text-white mb-1">{txt.title}</h3>
-          <p className="text-sm text-gray-400">{txt.subtitle}</p>
+          <h3 className="font-semibold text-white mb-1">{t('newsletter.title')}</h3>
+          <p className="text-sm text-gray-400">{t('newsletter.subtitle')}</p>
         </div>
       </div>
 
       <ul className="space-y-1.5 mb-4">
-        {txt.benefits.map((benefit, i) => (
-          <li key={i} className="text-xs text-gray-300">{benefit}</li>
-        ))}
+        <li className="text-xs text-gray-300">{t('newsletter.benefits.updates')}</li>
+        <li className="text-xs text-gray-300">{t('newsletter.benefits.cases')}</li>
+        <li className="text-xs text-gray-300">{t('newsletter.benefits.stats')}</li>
       </ul>
 
       <form onSubmit={handleSubmit} className="space-y-3">
@@ -150,7 +66,7 @@ export default function NewsletterSubscribe() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder={txt.placeholder}
+            placeholder={t('newsletter.placeholder')}
             disabled={isLoading || success}
             className="w-full px-4 py-2.5 bg-surface/50 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 transition-colors disabled:opacity-50 text-sm"
             required
@@ -164,7 +80,7 @@ export default function NewsletterSubscribe() {
         {success ? (
           <div className="flex items-center gap-2 text-green-400 text-sm font-medium">
             <Check size={16} />
-            {txt.success}
+            {t('newsletter.success')}
           </div>
         ) : (
           <button
@@ -178,7 +94,7 @@ export default function NewsletterSubscribe() {
                 {t('common.loading')}
               </>
             ) : (
-              txt.button
+              t('newsletter.button')
             )}
           </button>
         )}

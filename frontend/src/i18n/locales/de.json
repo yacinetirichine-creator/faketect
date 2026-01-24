@@ -81,6 +81,30 @@
     "usersTable": { "email": "E-Mail", "name": "Name", "plan": "Plan", "role": "Rolle", "createdAt": "Erstellt", "actions": "Aktionen" },
     "analysesTable": { "date": "Datum", "user": "Benutzer", "file": "Datei", "type": "Typ", "score": "Score", "verdict": "Urteil", "provider": "Provider" }
   },
+  "adminChat": {
+    "title": "Chat-Support-Verwaltung",
+    "subtitle": "Antworten Sie auf Gespräche, die menschliche Intervention erfordern",
+    "conversations": "Gespräche",
+    "noConversation": "Kein Gespräch",
+    "anonymousVisitor": "Anonymer Besucher",
+    "messages": "Nachrichten",
+    "emailNotAvailable": "E-Mail nicht verfügbar",
+    "markResolved": "Als gelöst markieren",
+    "client": "Kunde",
+    "admin": "Admin",
+    "bot": "Bot",
+    "replyPlaceholder": "Ihre Antwort als Admin...",
+    "send": "Senden",
+    "selectConversation": "Wählen Sie ein Gespräch aus, um Details anzuzeigen",
+    "sendError": "Fehler beim Senden der Antwort",
+    "status": {
+      "pending": "Ausstehend",
+      "active": "Aktiv",
+      "resolved": "Gelöst",
+      "archived": "Archiviert",
+      "all": "Alle"
+    }
+  },
   "common": { "loading": "Laden...", "save": "Speichern", "cancel": "Abbrechen", "delete": "Löschen", "deleted": "Gelöscht", "confirmDelete": "Löschen?", "searchPlaceholder": "Suchen...", "error": "Fehler", "loadError": "Ladefehler", "errorGeneric": "Fehler", "saved": "Gespeichert", "id": "ID", "optional": "optional" },
   "errorBoundary": { "title": "Anzeigefehler", "description": "Ein JavaScript-Fehler verhindert, dass diese Seite angezeigt wird.", "reload": "Neu laden", "retry": "Erneut versuchen" },
   "historyPage": { "url": "URL", "table": { "file": "Datei", "type": "Typ", "score": "Score", "date": "Datum", "actions": "Aktionen" } },
