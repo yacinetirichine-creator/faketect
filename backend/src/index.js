@@ -16,8 +16,8 @@ const morgan = require('morgan');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const logger = require('./config/logger');
-const { 
-  globalLimiter, 
+const {
+  globalLimiter,
   apiSlowDown,
   ddosProtection,
   authLimiter,
@@ -27,13 +27,47 @@ const {
   webhookLimiter,
   passwordResetLimiter
 } = require('./middleware/rateLimiter');
+const { requestId } = require('./middleware/requestId');
 
 const app = express();
 
-// Sécurité: Helmet (headers HTTP sécurisés)
+// Request ID pour traçabilité
+app.use(requestId);
+
+// Sécurité: Helmet (headers HTTP sécurisés renforcés)
 app.use(helmet({
-  crossOriginResourcePolicy: { policy: "cross-origin" } // Permet le chargement des uploads
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  crossOriginOpenerPolicy: { policy: "same-origin" },
+  referrerPolicy: { policy: "strict-origin-when-cross-origin" },
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://js.stripe.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      imgSrc: ["'self'", "data:", "https:", "blob:"],
+      connectSrc: ["'self'", "https://api.stripe.com", "https://api.openai.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      objectSrc: ["'none'"],
+      mediaSrc: ["'self'"],
+      frameSrc: ["https://js.stripe.com", "https://hooks.stripe.com"],
+      upgradeInsecureRequests: []
+    }
+  },
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true
+  }
 }));
+
+// Headers de sécurité additionnels
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+  next();
+});
 
 // Compression des réponses (gzip) - réduit la bande passante de 60-70%
 app.use(compression({

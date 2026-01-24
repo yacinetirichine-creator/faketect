@@ -1,12 +1,13 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Globe, Menu, X, ShieldCheck } from 'lucide-react';
+import { Globe, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import useAuthStore from '../../stores/authStore';
 import { languages, normalizeLanguage, persistLanguage } from '../../i18n';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../services/api';
 import NewsletterSubscribe from '../NewsletterSubscribe';
+import Logo from '../Logo';
 
 export default function MainLayout() {
   const { t, i18n } = useTranslation();
@@ -34,16 +35,10 @@ export default function MainLayout() {
 
   return (
     <div className="min-h-screen bg-background text-white selection:bg-primary/30">
-      <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-white/10">
+      <nav className="sticky top-0 z-50 bg-background/90 backdrop-blur-xl border-b border-white/5 shadow-lg shadow-black/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="relative w-8 h-8">
-              <div className="absolute inset-0 bg-primary/50 blur-lg rounded-full group-hover:bg-primary/80 transition-all" />
-              <div className="relative w-full h-full bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
-                <ShieldCheck size={18} className="text-white" />
-              </div>
-            </div>
-            <span className="font-display font-bold text-xl tracking-tight">FakeTect</span>
+          <Link to="/" className="flex items-center group hover:opacity-90 transition-opacity">
+            <Logo size="sm" />
           </Link>
 
           {/* Desktop Menu */}
@@ -82,14 +77,14 @@ export default function MainLayout() {
 
             {isAuthenticated ? (
               <div className="flex items-center gap-4">
-                <Link to="/dashboard" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">{t('nav.dashboard')}</Link>
-                {user?.role === 'ADMIN' && <Link to="/admin" className="text-sm font-medium text-accent hover:text-accent-400 transition-colors">{t('nav.admin')}</Link>}
-                <button onClick={() => { logout(); navigate('/'); }} className="px-4 py-2 text-sm rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/10 transition-all">{t('nav.logout')}</button>
+                <Link to="/dashboard" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">{t('nav.dashboard')}</Link>
+                {user?.role === 'ADMIN' && <Link to="/admin" className="text-sm font-medium text-purple-400 hover:text-purple-300 transition-colors">{t('nav.admin')}</Link>}
+                <button onClick={() => { logout(); navigate('/'); }} className="px-4 py-2 text-sm rounded-xl bg-white/5 hover:bg-white/10 text-white border border-white/10 hover:border-white/20 transition-all duration-200">{t('nav.logout')}</button>
               </div>
             ) : (
-              <div className="flex items-center gap-4">
-                <Link to="/login" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">{t('nav.login')}</Link>
-                <Link to="/register" className="px-4 py-2 text-sm rounded-lg bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20 transition-all">{t('nav.register')}</Link>
+              <div className="flex items-center gap-3">
+                <Link to="/login" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors">{t('nav.login')}</Link>
+                <Link to="/register" className="px-5 py-2.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-500 text-white shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-200 hover:-translate-y-0.5">{t('nav.register')}</Link>
               </div>
             )}
           </div>
@@ -154,11 +149,8 @@ export default function MainLayout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
             <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
-                  <ShieldCheck size={18} className="text-white" />
-                </div>
-                <span className="font-display font-bold text-xl">FakeTect</span>
+              <div className="mb-4">
+                <Logo size="sm" />
               </div>
               <p className="text-gray-400 max-w-sm mb-6">
                 {t('footer.description')}

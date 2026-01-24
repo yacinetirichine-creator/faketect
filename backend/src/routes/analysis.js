@@ -146,7 +146,7 @@ router.post('/file', auth, checkLimit, upload.single('file'), validateVideoDurat
       });
       
       // Vérifier si l'utilisateur atteint 75% du quota et envoyer email d'alerte
-      const planLimits = { FREE: 10, PRO: 100, BUSINESS: 500 };
+      const planLimits = { FREE: 10, STARTER: 100, PRO: 500, BUSINESS: 2000, ENTERPRISE: -1 };
       const limit = planLimits[updatedUser.plan] || 10;
       const percentUsed = (updatedUser.usedMonth / limit) * 100;
       

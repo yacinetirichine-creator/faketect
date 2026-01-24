@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Shield, FileSearch, Video, Layers, Code, Database, CheckCircle2, ArrowRight, Lock, Zap, Activity, FileText, Cookie } from 'lucide-react';
 import CookieConsent from '../CookieConsent';
 import DemoSection from '../DemoSection';
+import Logo from '../Logo';
 
 const container = {
   hidden: { opacity: 0 },
@@ -70,11 +71,11 @@ export default function Landing() {
             </motion.p>
 
             <motion.div variants={item} className="flex flex-col sm:flex-row gap-4">
-              <Link to="/register" className="btn-primary text-lg px-8 py-4 group">
+              <Link to="/register" className="inline-flex items-center justify-center text-lg px-8 py-4 font-semibold rounded-2xl bg-gradient-to-r from-primary via-purple-600 to-pink-500 hover:from-primary/90 hover:via-purple-500 hover:to-pink-400 text-white shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 transition-all duration-300 hover:-translate-y-1 group">
                 {t('landing.hero.ctaPrimary')}
                 <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
               </Link>
-              <Link to="/pricing" className="btn-secondary text-lg px-8 py-4">
+              <Link to="/pricing" className="inline-flex items-center justify-center text-lg px-8 py-4 font-semibold rounded-2xl bg-white/5 hover:bg-white/10 text-white border border-white/10 hover:border-white/20 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1">
                 {t('landing.hero.ctaSecondary')}
               </Link>
             </motion.div>
@@ -256,9 +257,8 @@ export default function Landing() {
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             {/* Company Info */}
             <div className="md:col-span-1">
-              <div className="flex items-center gap-2 mb-4">
-                <Shield className="text-primary" size={28} />
-                <span className="text-2xl font-bold text-gradient">Faketect</span>
+              <div className="mb-4">
+                <Logo size="sm" />
               </div>
               <p className="text-gray-400 text-sm mb-4 leading-relaxed">
                 {t('landing.footer.description')}
@@ -309,9 +309,9 @@ export default function Landing() {
                 <li><Link to="/legal/terms" className="text-gray-400 hover:text-primary transition-colors">{t('footer.links.terms')}</Link></li>
                 <li><Link to="/legal/sales" className="text-gray-400 hover:text-primary transition-colors">{t('footer.links.sales')}</Link></li>
                 <li>
-                  <button 
+                  <button
                     onClick={() => {
-                      localStorage.removeItem('cookieConsent');
+                      localStorage.removeItem('cookie_consent');
                       window.location.reload();
                     }}
                     className="text-gray-400 hover:text-primary transition-colors text-left flex items-center gap-2"
@@ -327,7 +327,7 @@ export default function Landing() {
           <div className="pt-8 border-t border-white/5">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-sm text-gray-500">
-                © 2024 JARVIS - {t('landing.footer.rights')}
+                © {new Date().getFullYear()} JARVIS - {t('landing.footer.rights')}
               </p>
               <div className="flex items-center gap-6 text-xs text-gray-500">
                 <span className="flex items-center gap-2">

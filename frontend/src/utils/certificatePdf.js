@@ -21,6 +21,18 @@ function formatDateTimeUtcISO(date) {
   return `${yyyy}-${mm}-${dd}T${hh}:${mi}:${ss}Z`;
 }
 
+function formatDateHuman(date, lang = 'fr') {
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZoneName: 'short'
+  };
+  return date.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', options);
+}
+
 function toHex(buffer) {
   return [...new Uint8Array(buffer)].map((b) => b.toString(16).padStart(2, '0')).join('');
 }
@@ -42,14 +54,54 @@ function shortenHex(hex, head = 12, tail = 12) {
   return `${h.slice(0, head)}…${h.slice(-tail)}`;
 }
 
-/** Dessine une loupe (vectoriel) : pas d'emoji, pas d'image externe */
+/** Charge le logo en base64 pour l'intégrer au PDF */
+async function loadLogoBase64() {
+  try {
+    const response = await fetch('/images/logo.png');
+    if (!response.ok) return null;
+    const blob = await response.blob();
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(blob);
+    });
+  } catch {
+    return null;
+  }
+}
+
+/** Dessine une loupe (vectoriel) : fallback si pas de logo */
 function drawMagnifier(doc, x, y, size = 18) {
   doc.setDrawColor(255, 255, 255);
   doc.setLineWidth(2);
-  // lentille
   doc.circle(x, y, size * 0.45, 'S');
-  // manche
   doc.line(x + size * 0.32, y + size * 0.32, x + size * 0.75, y + size * 0.75);
+}
+
+/** Dessine un QR code simplifié (placeholder visuel) */
+function drawQRPlaceholder(doc, x, y, size, text) {
+  doc.setFillColor(255, 255, 255);
+  doc.rect(x, y, size, size, 'F');
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(0.5);
+  doc.rect(x, y, size, size, 'S');
+
+  // Pattern simplifié
+  const cellSize = size / 8;
+  doc.setFillColor(0, 0, 0);
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      if ((i + j) % 3 === 0 || (i === 0 || i === 7 || j === 0 || j === 7)) {
+        doc.rect(x + i * cellSize, y + j * cellSize, cellSize, cellSize, 'F');
+      }
+    }
+  }
+
+  // Texte sous le QR
+  doc.setFontSize(6);
+  doc.setTextColor(100, 100, 100);
+  doc.text(text, x + size/2, y + size + 8, { align: 'center' });
 }
 
 /** Auto page break simple */
@@ -127,64 +179,167 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
   const fingerprintFull = await sha256HexFromString(fingerprintSource);
   const fingerprint = shortenHex(fingerprintFull, 10, 10);
 
-  // Legal text (French)
-  const legalTextFR = [
-    "1. Objet : Ce document constitue une attestation technique d'analyse d'authenticité réalisée par FakeTect. Il résulte d'un traitement algorithmique visant à détecter la présence de contenus générés ou manipulés par intelligence artificielle (IA) ou techniques de deepfake.",
-    "2. Intégrité : L'empreinte numérique (SHA-256) garantit que le fichier analysé n'a pas été modifié depuis l'analyse. Toute altération invaliderait ce certificat.",
-    "3. Valeur probatoire : Conformément au règlement eIDAS (UE) n°910/2014, ce document peut servir de moyen de preuve électronique. Toutefois, sa recevabilité en justice dépend de la législation nationale et de l'appréciation du juge.",
-    "4. Cadre UE : L'analyse respecte les principes de transparence et de traçabilité des systèmes d'IA prévus par le règlement IA (AI Act). Les scores indiqués reflètent une probabilité statistique, non une certitude absolue.",
-    "5. Limites : Ce certificat n'est pas un horodatage qualifié ni une signature électronique qualifiée au sens d'eIDAS. Pour une valeur probatoire renforcée, un horodatage ou une signature qualifiée peut être appliqué a posteriori."
-  ].join('\n\n');
+  // Glossaire pédagogique (FR)
+  const glossaryFR = {
+    title: "COMPRENDRE CE CERTIFICAT",
+    intro: "Ce document atteste de l'analyse d'un fichier pour détecter s'il a été créé ou modifié par intelligence artificielle. Voici les termes clés :",
+    terms: [
+      { term: "Deepfake", def: "Contenu (image, vidéo, audio) créé ou modifié par IA pour faire croire à quelque chose de faux. Exemple : faire dire à une personne des propos qu'elle n'a jamais tenus." },
+      { term: "Score IA", def: "Pourcentage indiquant la probabilité que le contenu soit généré par IA. Plus le score est élevé, plus il y a de chances que ce soit artificiel." },
+      { term: "Score Authenticité", def: "L'inverse du score IA. Un score de 85% signifie 85% de chances que le contenu soit authentique/réel." },
+      { term: "SHA-256", def: "Empreinte numérique unique du fichier, comme une empreinte digitale. Si le fichier est modifié, même d'un pixel, l'empreinte change complètement." },
+      { term: "Consensus multi-sources", def: "Notre analyse combine plusieurs moteurs IA (OpenAI, Sightengine, Illuminarty) pour une détection plus fiable qu'un seul système." }
+    ]
+  };
 
-  // Legal text (English)
+  // Glossaire pédagogique (EN)
+  const glossaryEN = {
+    title: "UNDERSTANDING THIS CERTIFICATE",
+    intro: "This document certifies the analysis of a file to detect if it was created or modified by artificial intelligence. Here are the key terms:",
+    terms: [
+      { term: "Deepfake", def: "Content (image, video, audio) created or modified by AI to deceive. Example: making a person say things they never said." },
+      { term: "AI Score", def: "Percentage indicating the likelihood that content was AI-generated. Higher score means higher chance of being artificial." },
+      { term: "Authenticity Score", def: "The inverse of AI score. A score of 85% means 85% chance the content is authentic/real." },
+      { term: "SHA-256", def: "Unique digital fingerprint of the file. If the file is modified, even by one pixel, the fingerprint completely changes." },
+      { term: "Multi-source Consensus", def: "Our analysis combines multiple AI engines (OpenAI, Sightengine, Illuminarty) for more reliable detection than a single system." }
+    ]
+  };
+
+  const glossary = currentLanguage === 'fr' ? glossaryFR : glossaryEN;
+
+  // Legal text complet (French)
+  const legalTextFR = [
+    "CADRE JURIDIQUE ET VALEUR PROBATOIRE",
+    "",
+    "Article 1 - Nature du document",
+    "Ce certificat constitue une attestation technique d'analyse d'authenticité réalisée par FakeTect (JARVIS SAS, SIREN 928 499 166). Il résulte d'un traitement algorithmique multi-sources visant à détecter la présence de contenus générés ou manipulés par intelligence artificielle (IA) ou techniques de deepfake.",
+    "",
+    "Article 2 - Intégrité et traçabilité",
+    "L'empreinte numérique SHA-256 garantit l'intégrité du fichier analysé. Cette empreinte cryptographique permet de vérifier que le fichier n'a subi aucune modification depuis l'analyse. Toute altération, même minime, invaliderait ce certificat. L'identifiant unique (ID) permet la traçabilité de l'analyse dans nos systèmes.",
+    "",
+    "Article 3 - Valeur probatoire (Règlement eIDAS)",
+    "Conformément au Règlement (UE) n°910/2014 (eIDAS), ce document électronique peut constituer un élément de preuve recevable devant les juridictions européennes (Art. 25.1). Sa force probante est laissée à l'appréciation souveraine du juge, qui évaluera sa fiabilité et sa pertinence au regard des circonstances de l'espèce.",
+    "",
+    "Article 4 - Conformité AI Act (Règlement UE 2024/1689)",
+    "Notre système d'analyse respecte les obligations de transparence et de traçabilité prévues par le Règlement européen sur l'Intelligence Artificielle. Les scores fournis reflètent une probabilité statistique basée sur l'état de l'art technologique, et non une certitude absolue.",
+    "",
+    "Article 5 - Limites et réserves",
+    "• Ce certificat n'est PAS un horodatage qualifié ni une signature électronique qualifiée au sens d'eIDAS.",
+    "• Les technologies de détection IA évoluent constamment ; aucun système ne garantit une détection à 100%.",
+    "• Ce document ne préjuge pas de l'intention de l'auteur du contenu analysé.",
+    "• Pour une valeur probatoire renforcée, un horodatage qualifié peut être appliqué (nous contacter).",
+    "",
+    "Article 6 - Protection des données (RGPD)",
+    "Le traitement est effectué conformément au Règlement (UE) 2016/679 (RGPD). Les données sont conservées 90 jours (gratuit) ou selon votre abonnement. Vous disposez d'un droit d'accès, rectification, effacement et portabilité (contact@faketect.com)."
+  ].join('\n');
+
+  // Legal text complet (English)
   const legalTextEN = [
-    "1. Purpose: This document constitutes a technical certificate of authenticity analysis performed by FakeTect. It results from algorithmic processing aimed at detecting content generated or manipulated by artificial intelligence (AI) or deepfake techniques.",
-    "2. Integrity: The digital fingerprint (SHA-256) ensures that the analyzed file has not been modified since the analysis. Any alteration would invalidate this certificate.",
-    "3. Evidential value: In accordance with eIDAS Regulation (EU) No 910/2014, this document may serve as electronic evidence. However, its admissibility in court depends on national legislation and judicial discretion.",
-    "4. EU framework: The analysis complies with transparency and traceability principles for AI systems as set out in the AI Act. The indicated scores reflect statistical probability, not absolute certainty.",
-    "5. Limitations: This certificate is not a qualified timestamp or qualified electronic signature within the meaning of eIDAS. For enhanced evidential value, a qualified timestamp or signature may be applied subsequently."
-  ].join('\n\n');
+    "LEGAL FRAMEWORK AND EVIDENTIAL VALUE",
+    "",
+    "Article 1 - Document Nature",
+    "This certificate constitutes a technical authenticity analysis attestation performed by FakeTect (JARVIS SAS, SIREN 928 499 166). It results from multi-source algorithmic processing aimed at detecting content generated or manipulated by artificial intelligence (AI) or deepfake techniques.",
+    "",
+    "Article 2 - Integrity and Traceability",
+    "The SHA-256 digital fingerprint guarantees the integrity of the analyzed file. This cryptographic hash verifies that the file has not been modified since analysis. Any alteration, however minor, would invalidate this certificate. The unique identifier (ID) enables analysis traceability in our systems.",
+    "",
+    "Article 3 - Evidential Value (eIDAS Regulation)",
+    "In accordance with Regulation (EU) No 910/2014 (eIDAS), this electronic document may constitute admissible evidence before European courts (Art. 25.1). Its probative value is left to the sovereign discretion of the judge, who will assess its reliability and relevance in light of case circumstances.",
+    "",
+    "Article 4 - AI Act Compliance (EU Regulation 2024/1689)",
+    "Our analysis system complies with transparency and traceability obligations under the European AI Regulation. Provided scores reflect statistical probability based on technological state-of-the-art, not absolute certainty.",
+    "",
+    "Article 5 - Limitations and Reservations",
+    "• This certificate is NOT a qualified timestamp or qualified electronic signature under eIDAS.",
+    "• AI detection technologies constantly evolve; no system guarantees 100% detection.",
+    "• This document does not presume the intent of the analyzed content's author.",
+    "• For enhanced evidential value, a qualified timestamp may be applied (contact us).",
+    "",
+    "Article 6 - Data Protection (GDPR)",
+    "Processing complies with Regulation (EU) 2016/679 (GDPR). Data is retained for 90 days (free) or per subscription. You have rights of access, rectification, erasure, and portability (contact@faketect.com)."
+  ].join('\n');
 
   const legalText = currentLanguage === 'fr' ? legalTextFR : legalTextEN;
 
-  // ========= HEADER =========
-  doc.setFillColor(67, 56, 202);
-  doc.rect(0, 0, pageW, 150, 'F');
-  doc.setFillColor(99, 102, 241);
-  doc.rect(0, 0, pageW, 6, 'F');
+  // Charger le logo
+  const logoBase64 = await loadLogoBase64();
 
-  // loupe + marque
-  drawMagnifier(doc, margin + 14, 40, 22);
+  // ========= HEADER =========
+  // Gradient background
+  doc.setFillColor(15, 23, 42); // dark blue
+  doc.rect(0, 0, pageW, 160, 'F');
+
+  // Accent line
+  doc.setFillColor(99, 102, 241);
+  doc.rect(0, 0, pageW, 4, 'F');
+  doc.setFillColor(34, 211, 238); // cyan accent
+  doc.rect(0, 4, pageW * 0.3, 2, 'F');
+
+  // Logo
+  let logoEndX = margin + 44;
+  if (logoBase64) {
+    try {
+      doc.addImage(logoBase64, 'PNG', margin, 20, 180, 45);
+      logoEndX = margin + 190;
+    } catch {
+      drawMagnifier(doc, margin + 14, 45, 22);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(28);
+      doc.setTextColor(255, 255, 255);
+      doc.text('FakeTect', margin + 44, 52);
+    }
+  } else {
+    drawMagnifier(doc, margin + 14, 45, 22);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(28);
+    doc.setTextColor(255, 255, 255);
+    doc.text('FakeTect', margin + 44, 52);
+  }
+
+  // Certificate title
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(28);
+  doc.setFontSize(18);
   doc.setTextColor(255, 255, 255);
-  doc.text('FakeTect', margin + 44, 48);
+  const certTitle = currentLanguage === 'fr'
+    ? "CERTIFICAT D'AUTHENTICITÉ"
+    : "AUTHENTICITY CERTIFICATE";
+  doc.text(certTitle, margin, 95);
 
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(12);
-  doc.setTextColor(224, 231, 255);
-  doc.text(
-    currentLanguage === 'fr' ? "Certificat d'analyse d'authenticité (IA / Deepfake)" : "Authenticity Certificate (AI / Deepfake)",
-    margin + 44,
-    68
-  );
+  doc.setFontSize(11);
+  doc.setTextColor(148, 163, 184);
+  const certSubtitle = currentLanguage === 'fr'
+    ? "Analyse de détection IA & Deepfake"
+    : "AI & Deepfake Detection Analysis";
+  doc.text(certSubtitle, margin, 112);
 
+  // Meta info
   doc.setFontSize(9);
-  doc.setTextColor(199, 210, 254);
-  doc.text(`${currentLanguage === 'fr' ? 'Émis le (UTC)' : 'Issued (UTC)'}: ${formatDateTimeUtcISO(now)}`, margin + 44, 86);
-  if (analysisId) doc.text(`${currentLanguage === 'fr' ? 'ID analyse' : 'Analysis ID'}: ${analysisId}`, margin + 44, 100);
+  doc.setTextColor(148, 163, 184);
+  doc.text(`${currentLanguage === 'fr' ? 'Date' : 'Date'}: ${formatDateHuman(now, currentLanguage)}`, margin, 130);
+  if (analysisId) {
+    doc.text(`${currentLanguage === 'fr' ? 'Référence' : 'Reference'}: ${analysisId}`, margin, 143);
+  }
 
-  // Badge "DOCUMENT TECHNIQUE"
-  doc.setFillColor(255, 255, 255);
-  doc.setTextColor(67, 56, 202);
-  doc.roundedRect(pageW - margin - 140, 24, 140, 26, 6, 6, 'F');
+  // QR Code placeholder (top right)
+  drawQRPlaceholder(doc, pageW - margin - 60, 20, 55, 'faketect.com/verify');
+
+  // Badge officiel
+  doc.setFillColor(16, 185, 129);
+  doc.roundedRect(pageW - margin - 130, 90, 130, 28, 5, 5, 'F');
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(9);
-  const badgeText = currentLanguage === 'fr' ? 'DOCUMENT TECHNIQUE' : 'TECHNICAL DOCUMENT';
+  doc.setFontSize(10);
+  doc.setTextColor(255, 255, 255);
+  const badgeText = currentLanguage === 'fr' ? 'DOCUMENT OFFICIEL' : 'OFFICIAL DOCUMENT';
   const badgeWidth = doc.getTextWidth(badgeText);
-  doc.text(badgeText, pageW - margin - 70 - badgeWidth/2, 41);
+  doc.text(badgeText, pageW - margin - 65 - badgeWidth/2, 107);
 
-  let y = 170;
+  // Separator
+  doc.setDrawColor(51, 65, 85);
+  doc.setLineWidth(1);
+  doc.line(margin, 155, pageW - margin, 155);
+
+  let y = 175;
 
   // ========= RESULT CARD =========
   y = ensureSpace(doc, y, 180, margin);
@@ -322,39 +477,140 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
   
   y += techH + 20;
 
-  // ========= LEGAL SECTION =========
-  y = ensureSpace(doc, y, 180, margin);
-  
-  // Green legal box
-  const legalH = 200;
-  doc.setFillColor(240, 253, 244);
-  doc.setDrawColor(16, 185, 129);
+  // ========= GLOSSAIRE PEDAGOGIQUE =========
+  y = ensureSpace(doc, y, 200, margin);
+
+  // Blue info box
+  doc.setFillColor(239, 246, 255);
+  doc.setDrawColor(59, 130, 246);
   doc.setLineWidth(2);
+  const glossaryH = 180;
+  doc.roundedRect(margin, y, contentW, glossaryH, 8, 8, 'FD');
+
+  // Icon info
+  doc.setFillColor(59, 130, 246);
+  doc.circle(margin + 20, y + 22, 10, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(255, 255, 255);
+  doc.text('?', margin + 17, y + 27);
+
+  // Title
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  doc.setTextColor(30, 64, 175);
+  doc.text(glossary.title, margin + 38, y + 26);
+
+  // Intro
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(55, 65, 81);
+  const introLines = doc.splitTextToSize(glossary.intro, contentW - 30);
+  doc.text(introLines, margin + 15, y + 45);
+
+  // Terms
+  let yGloss = y + 65;
+  doc.setFontSize(8);
+  for (const item of glossary.terms) {
+    if (yGloss > y + glossaryH - 15) break;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(30, 64, 175);
+    doc.text(`• ${item.term}:`, margin + 15, yGloss);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(55, 65, 81);
+    const termW = doc.getTextWidth(`• ${item.term}: `);
+    const defLines = doc.splitTextToSize(item.def, contentW - 35 - termW);
+    doc.text(defLines[0], margin + 15 + termW, yGloss);
+    if (defLines.length > 1) {
+      for (let i = 1; i < defLines.length; i++) {
+        yGloss += 10;
+        if (yGloss > y + glossaryH - 15) break;
+        doc.text(defLines[i], margin + 25, yGloss);
+      }
+    }
+    yGloss += 14;
+  }
+
+  y += glossaryH + 20;
+
+  // ========= LEGAL SECTION =========
+  y = ensureSpace(doc, y, 280, margin);
+
+  // Professional legal box
+  const legalH = 280;
+  // Professional legal styling - ivory background
+  doc.setFillColor(254, 252, 247);
+  doc.setDrawColor(120, 113, 108);
+  doc.setLineWidth(1.5);
   doc.roundedRect(margin, y, contentW, legalH, 8, 8, 'FD');
-  
+
+  // Header bar
+  doc.setFillColor(41, 37, 36);
+  doc.rect(margin, y, contentW, 32, 'F');
+
+  // Legal icon (scales)
+  doc.setFillColor(254, 252, 247);
+  doc.circle(margin + 22, y + 16, 10, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  doc.setTextColor(41, 37, 36);
+  doc.text('§', margin + 18, y + 20);
+
   // Title
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(11);
-  doc.setTextColor(6, 95, 70);
-  const legalTitle = currentLanguage === 'fr' ? 'Attestation & analyse juridique' : 'Certificate & legal analysis';
-  doc.text(legalTitle, margin + 12, y + 20);
-  
-  // Legal text
+  doc.setTextColor(254, 252, 247);
+  const legalTitle = currentLanguage === 'fr' ? 'MENTIONS LÉGALES ET VALEUR PROBATOIRE' : 'LEGAL NOTICES AND EVIDENTIAL VALUE';
+  doc.text(legalTitle, margin + 40, y + 20);
+
+  // Legal text with proper formatting
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8);
-  doc.setTextColor(50, 50, 50);
-  const legalLines = doc.splitTextToSize(legalText, contentW - 24);
-  let yLegal = y + 35;
-  
+  doc.setFontSize(7.5);
+  doc.setTextColor(41, 37, 36);
+  const legalLines = doc.splitTextToSize(legalText, contentW - 28);
+  let yLegal = y + 45;
+
   for (const line of legalLines) {
-    if (yLegal > y + legalH - 10) {
+    if (yLegal > y + legalH - 15) {
+      // New page for overflow
       doc.addPage();
-      yLegal = margin;
+
+      // Continue header on new page
+      doc.setFillColor(254, 252, 247);
+      doc.rect(margin, margin, contentW, pageH - margin * 2, 'F');
+      doc.setDrawColor(120, 113, 108);
+      doc.setLineWidth(1);
+      doc.rect(margin, margin, contentW, pageH - margin * 2, 'S');
+
+      doc.setFont('helvetica', 'italic');
+      doc.setFontSize(8);
+      doc.setTextColor(120, 113, 108);
+      doc.text(currentLanguage === 'fr' ? '(suite des mentions légales)' : '(legal notices continued)', margin + 10, margin + 15);
+
+      yLegal = margin + 30;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(41, 37, 36);
     }
-    doc.text(line, margin + 12, yLegal);
-    yLegal += 10;
+
+    // Bold article titles
+    if (line.startsWith('Article') || line.startsWith('CADRE') || line.startsWith('LEGAL')) {
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(41, 37, 36);
+    } else if (line.startsWith('•')) {
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(68, 64, 60);
+    } else {
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(68, 64, 60);
+    }
+
+    doc.text(line, margin + 14, yLegal);
+    yLegal += 9;
   }
-  
+
   y += legalH + 20;
   
   // Confidence message if available
@@ -375,38 +631,62 @@ export async function downloadCertificatePdf({ t, analysis, user, file, currentL
   }
 
   // ========= FOOTER =========
-  const footerY = pageH - 50;
-  
-  doc.setFillColor(67, 56, 202);
-  doc.rect(0, footerY, pageW, 50, 'F');
-  
-  doc.setDrawColor(99, 102, 241);
-  doc.setLineWidth(2);
-  doc.line(0, footerY, pageW, footerY);
-  
+  const footerY = pageH - 70;
+
+  // Footer background
+  doc.setFillColor(15, 23, 42);
+  doc.rect(0, footerY, pageW, 70, 'F');
+
+  // Accent line
+  doc.setFillColor(99, 102, 241);
+  doc.rect(0, footerY, pageW, 3, 'F');
+
+  // Logo text
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(12);
+  doc.setFontSize(14);
   doc.setTextColor(255, 255, 255);
-  const footerLogo = 'FakeTect';
-  const footerLogoW = doc.getTextWidth(footerLogo);
-  doc.text(footerLogo, (pageW - footerLogoW)/2, footerY + 18);
-  
+  doc.text('FakeTect', margin, footerY + 22);
+
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8);
-  doc.setTextColor(224, 231, 255);
-  const footerText = currentLanguage === 'fr' 
-    ? 'Détection IA & Deepfakes • www.faketect.com'
-    : 'AI & Deepfake Detection • www.faketect.com';
-  const footerTextW = doc.getTextWidth(footerText);
-  doc.text(footerText, (pageW - footerTextW)/2, footerY + 30);
-  
+  doc.setTextColor(148, 163, 184);
+  const footerTagline = currentLanguage === 'fr'
+    ? 'Plateforme de détection IA & Deepfakes'
+    : 'AI & Deepfake Detection Platform';
+  doc.text(footerTagline, margin, footerY + 35);
+
+  // Company info (center)
   doc.setFontSize(7);
-  doc.setTextColor(165, 180, 252);
-  const footerNote = currentLanguage === 'fr'
-    ? 'Note : Pour horodatage/signature qualifié(e) eIDAS, contactez-nous'
-    : 'Note: For qualified eIDAS timestamp/signature, contact us';
-  const footerNoteW = doc.getTextWidth(footerNote);
-  doc.text(footerNote, (pageW - footerNoteW)/2, footerY + 40);
+  doc.setTextColor(100, 116, 139);
+  const companyInfo = 'JARVIS SAS • SIREN 928 499 166 • RCS Créteil';
+  const companyW = doc.getTextWidth(companyInfo);
+  doc.text(companyInfo, (pageW - companyW) / 2, footerY + 50);
+
+  const addressInfo = '64 Avenue Marinville, 94100 Saint-Maur-des-Fossés, France';
+  const addressW = doc.getTextWidth(addressInfo);
+  doc.text(addressInfo, (pageW - addressW) / 2, footerY + 60);
+
+  // Contact (right side)
+  doc.setTextColor(148, 163, 184);
+  doc.setFontSize(8);
+  const webUrl = 'www.faketect.com';
+  const webW = doc.getTextWidth(webUrl);
+  doc.text(webUrl, pageW - margin - webW, footerY + 22);
+
+  doc.setFontSize(7);
+  doc.setTextColor(100, 116, 139);
+  const contactEmail = 'contact@faketect.com';
+  const emailW = doc.getTextWidth(contactEmail);
+  doc.text(contactEmail, pageW - margin - emailW, footerY + 35);
+
+  // Verification note
+  doc.setFontSize(6);
+  doc.setTextColor(71, 85, 105);
+  const verifyNote = currentLanguage === 'fr'
+    ? 'Vérifiez ce certificat : faketect.com/verify • Pour horodatage qualifié eIDAS, contactez-nous'
+    : 'Verify this certificate: faketect.com/verify • For qualified eIDAS timestamp, contact us';
+  const verifyW = doc.getTextWidth(verifyNote);
+  doc.text(verifyNote, (pageW - verifyW) / 2, footerY + 68);
 
   const filename = analysisId ? `faketect-certificate-${analysisId}.pdf` : 'faketect-certificate.pdf';
   doc.save(filename);
