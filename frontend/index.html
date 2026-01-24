@@ -44,9 +44,142 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- JSON-LD Structured Data - Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "FakeTect",
+      "legalName": "JARVIS SAS",
+      "url": "https://faketect.com",
+      "logo": "https://faketect.com/logo.png",
+      "description": "Plateforme de détection de contenus générés par IA, deepfakes et faux contenus",
+      "foundingDate": "2024",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "64 Avenue Marinville",
+        "addressLocality": "Saint-Maur-des-Fossés",
+        "postalCode": "94100",
+        "addressCountry": "FR"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "contact@faketect.com",
+        "contactType": "customer service",
+        "availableLanguage": ["French", "English", "Spanish", "German", "Italian", "Portuguese"]
+      },
+      "sameAs": []
+    }
+    </script>
+
+    <!-- JSON-LD Structured Data - SoftwareApplication -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "FakeTect",
+      "operatingSystem": "Web",
+      "applicationCategory": "SecurityApplication",
+      "description": "Détectez instantanément les images, vidéos et textes générés par IA. Protection contre les deepfakes.",
+      "url": "https://faketect.com",
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Plan Gratuit",
+          "price": "0",
+          "priceCurrency": "EUR",
+          "description": "10 analyses gratuites sur 30 jours"
+        },
+        {
+          "@type": "Offer",
+          "name": "Plan PRO",
+          "price": "9.99",
+          "priceCurrency": "EUR",
+          "billingIncrement": "P1M",
+          "description": "50 analyses par jour"
+        },
+        {
+          "@type": "Offer",
+          "name": "Plan BUSINESS",
+          "price": "29.99",
+          "priceCurrency": "EUR",
+          "billingIncrement": "P1M",
+          "description": "Analyses illimitées + API"
+        }
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "150",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "featureList": [
+        "Détection d'images IA",
+        "Détection de deepfakes vidéo",
+        "Certificat d'authenticité PDF",
+        "API REST pour développeurs",
+        "Historique des analyses",
+        "Support multilingue"
+      ]
+    }
+    </script>
+
+    <!-- JSON-LD Structured Data - WebSite with SearchAction -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "FakeTect",
+      "url": "https://faketect.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://faketect.com/dashboard?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <!-- JSON-LD Structured Data - FAQ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Comment fonctionne la détection IA de FakeTect ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "FakeTect utilise plusieurs modèles d'intelligence artificielle pour analyser les caractéristiques des images et vidéos. Notre technologie détecte les signatures typiques des contenus générés par IA comme Midjourney, DALL-E, Stable Diffusion et les deepfakes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "FakeTect est-il conforme au RGPD ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui, FakeTect est entièrement conforme au RGPD. Vos fichiers sont analysés de manière sécurisée et nous ne conservons pas vos données au-delà de ce qui est nécessaire pour fournir le service."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Puis-je utiliser FakeTect pour mon entreprise ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui, notre plan BUSINESS est conçu pour les entreprises avec des analyses illimitées, un accès API et un support prioritaire. Idéal pour les DSI et équipes de sécurité."
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

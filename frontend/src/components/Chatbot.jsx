@@ -57,11 +57,10 @@ export default function Chatbot() {
 
     } catch (error) {
       console.error('Chatbot error:', error);
+      const trans = translations[language] || translations.fr;
       const errorMessage = {
         role: 'assistant',
-        content: language === 'fr' 
-          ? 'Désolé, une erreur est survenue. Veuillez réessayer.' 
-          : 'Sorry, an error occurred. Please try again.',
+        content: trans.error,
         timestamp: new Date(),
         isError: true
       };
@@ -77,42 +76,54 @@ export default function Chatbot() {
       placeholder: 'Posez votre question...',
       send: 'Envoyer',
       welcome: 'Bonjour ! Comment puis-je vous aider ?',
-      helpButton: 'Besoin d\'aide ?'
+      helpButton: 'Besoin d\'aide ?',
+      error: 'Désolé, une erreur est survenue. Veuillez réessayer.',
+      humanSupport: '⚠️ Un admin va vous répondre prochainement'
     },
     en: {
       title: 'FakeTect Assistant',
       placeholder: 'Ask your question...',
       send: 'Send',
       welcome: 'Hello! How can I help you?',
-      helpButton: 'Need help?'
+      helpButton: 'Need help?',
+      error: 'Sorry, an error occurred. Please try again.',
+      humanSupport: '⚠️ An admin will respond soon'
     },
     es: {
       title: 'Asistente FakeTect',
       placeholder: 'Haz tu pregunta...',
       send: 'Enviar',
       welcome: '¡Hola! ¿Cómo puedo ayudarte?',
-      helpButton: '¿Necesitas ayuda?'
+      helpButton: '¿Necesitas ayuda?',
+      error: 'Lo siento, ocurrió un error. Por favor, inténtalo de nuevo.',
+      humanSupport: '⚠️ Un administrador te responderá pronto'
     },
     de: {
       title: 'FakeTect Assistent',
       placeholder: 'Stellen Sie Ihre Frage...',
       send: 'Senden',
       welcome: 'Hallo! Wie kann ich Ihnen helfen?',
-      helpButton: 'Brauchen Sie Hilfe?'
+      helpButton: 'Brauchen Sie Hilfe?',
+      error: 'Entschuldigung, ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.',
+      humanSupport: '⚠️ Ein Administrator wird Ihnen bald antworten'
     },
     it: {
       title: 'Assistente FakeTect',
       placeholder: 'Fai la tua domanda...',
       send: 'Invia',
       welcome: 'Ciao! Come posso aiutarti?',
-      helpButton: 'Hai bisogno di aiuto?'
+      helpButton: 'Hai bisogno di aiuto?',
+      error: 'Spiacente, si è verificato un errore. Riprova.',
+      humanSupport: '⚠️ Un amministratore ti risponderà presto'
     },
     pt: {
       title: 'Assistente FakeTect',
       placeholder: 'Faça sua pergunta...',
       send: 'Enviar',
       welcome: 'Olá! Como posso ajudar?',
-      helpButton: 'Precisa de ajuda?'
+      helpButton: 'Precisa de ajuda?',
+      error: 'Desculpe, ocorreu um erro. Por favor, tente novamente.',
+      humanSupport: '⚠️ Um administrador responderá em breve'
     }
   };
 
@@ -173,9 +184,7 @@ export default function Chatbot() {
                   <p className="text-sm whitespace-pre-wrap">{msg.content.replace('[HUMAN_SUPPORT]', '')}</p>
                   {msg.requiresHumanSupport && (
                     <p className="text-xs mt-2 opacity-75 italic">
-                      {language === 'fr' 
-                        ? '⚠️ Un admin va vous répondre prochainement' 
-                        : '⚠️ An admin will respond soon'}
+                      {t.humanSupport}
                     </p>
                   )}
                 </div>

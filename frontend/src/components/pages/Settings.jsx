@@ -51,7 +51,7 @@ export default function Settings() {
 
   const handleDeleteAccount = async () => {
     if (deleteConfirmation !== user?.email) {
-      toast.error('Email de confirmation incorrect');
+      toast.error(t('settings.deleteModal.incorrectEmail'));
       return;
     }
 
@@ -60,12 +60,12 @@ export default function Settings() {
       await api.delete('/user/account', {
         data: { confirmation: deleteConfirmation }
       });
-      
-      toast.success('Compte supprimé avec succès');
+
+      toast.success(t('settings.deleteModal.accountDeleted'));
       logout();
       navigate('/');
     } catch (error) {
-      toast.error(error.response?.data?.error || 'Erreur lors de la suppression');
+      toast.error(error.response?.data?.error || t('settings.deleteModal.deleteError'));
       setDeleteLoading(false);
     }
   };
@@ -86,7 +86,7 @@ export default function Settings() {
         setShowPlanModal(false);
       }
     } catch (error) {
-      toast.error(error.response?.data?.error || 'Erreur lors du changement de plan');
+      toast.error(error.response?.data?.error || t('settings.planModal.planChangeError'));
     } finally {
       setPlanChangeLoading(false);
     }
@@ -170,12 +170,12 @@ export default function Settings() {
                   {portalLoading ? <Loader2 className="animate-spin" size={16} /> : <ExternalLink size={16} />}
                   {t('settings.subscription.manage')}
                 </button>
-                <button 
+                <button
                   onClick={() => setShowPlanModal(true)}
                   className="btn-outline flex items-center gap-2 text-yellow-400 border-yellow-400/30 hover:bg-yellow-400/10"
                 >
                   <ArrowDownCircle size={16} />
-                  Changer de plan
+                  {t('settings.subscription.changePlan')}
                 </button>
               </>
             )}
@@ -195,20 +195,20 @@ export default function Settings() {
           <div className="w-10 h-10 bg-red-500/10 rounded-lg flex items-center justify-center">
             <AlertTriangle className="text-red-400" size={20} />
           </div>
-          <h2 className="text-xl font-semibold text-white">Zone de danger</h2>
+          <h2 className="text-xl font-semibold text-white">{t('settings.dangerZone.title')}</h2>
         </div>
 
         <div className="flex items-center justify-between p-4 bg-red-500/5 rounded-xl border border-red-500/20">
           <div>
-            <p className="font-semibold text-white">Supprimer mon compte</p>
-            <p className="text-sm text-gray-400">Cette action est irréversible. Toutes vos données seront supprimées.</p>
+            <p className="font-semibold text-white">{t('settings.dangerZone.deleteAccount')}</p>
+            <p className="text-sm text-gray-400">{t('settings.dangerZone.deleteWarning')}</p>
           </div>
-          <button 
+          <button
             onClick={() => setShowDeleteModal(true)}
             className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg border border-red-500/30 transition-colors flex items-center gap-2"
           >
             <Trash2 size={16} />
-            Supprimer
+            {t('settings.dangerZone.deleteButton')}
           </button>
         </div>
       </div>
@@ -221,26 +221,26 @@ export default function Settings() {
               <div className="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center">
                 <AlertTriangle className="text-red-400" size={24} />
               </div>
-              <h3 className="text-xl font-bold text-white">Confirmer la suppression</h3>
+              <h3 className="text-xl font-bold text-white">{t('settings.deleteModal.title')}</h3>
             </div>
 
             <div className="space-y-4 mb-6">
               <p className="text-gray-300">
-                Êtes-vous absolument sûr de vouloir supprimer votre compte ?
+                {t('settings.deleteModal.question')}
               </p>
               <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
-                <p className="text-sm text-red-300 font-medium mb-2">Cette action va :</p>
+                <p className="text-sm text-red-300 font-medium mb-2">{t('settings.deleteModal.actionWill')}</p>
                 <ul className="text-sm text-red-200 space-y-1 list-disc list-inside">
-                  <li>Supprimer toutes vos analyses</li>
-                  <li>Annuler votre abonnement (si actif)</li>
-                  <li>Effacer toutes vos données personnelles</li>
-                  <li>Cette action est IRRÉVERSIBLE</li>
+                  <li>{t('settings.deleteModal.deleteAnalyses')}</li>
+                  <li>{t('settings.deleteModal.cancelSubscription')}</li>
+                  <li>{t('settings.deleteModal.deleteData')}</li>
+                  <li>{t('settings.deleteModal.irreversible')}</li>
                 </ul>
               </div>
 
               <div>
                 <label className="label text-white">
-                  Tapez votre email <span className="text-red-400">({user?.email})</span> pour confirmer :
+                  {t('settings.deleteModal.typeEmail')} <span className="text-red-400">({user?.email})</span> {t('settings.deleteModal.toConfirm')}:
                 </label>
                 <input
                   type="email"
@@ -262,7 +262,7 @@ export default function Settings() {
                 className="flex-1 btn-outline"
                 disabled={deleteLoading}
               >
-                Annuler
+                {t('common.cancel')}
               </button>
               <button
                 onClick={handleDeleteAccount}
@@ -272,12 +272,12 @@ export default function Settings() {
                 {deleteLoading ? (
                   <>
                     <Loader2 className="animate-spin" size={16} />
-                    Suppression...
+                    {t('settings.deleteModal.deleting')}
                   </>
                 ) : (
                   <>
                     <Trash2 size={16} />
-                    Supprimer définitivement
+                    {t('settings.deleteModal.deleteForever')}
                   </>
                 )}
               </button>
@@ -290,7 +290,7 @@ export default function Settings() {
       {showPlanModal && user?.plan !== 'FREE' && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
           <div className="bg-surface border border-white/10 rounded-2xl p-6 max-w-md w-full">
-            <h3 className="text-xl font-bold text-white mb-4">Changer de plan</h3>
+            <h3 className="text-xl font-bold text-white mb-4">{t('settings.planModal.title')}</h3>
 
             <div className="space-y-3 mb-6">
               {user?.plan === 'BUSINESS' && (
@@ -301,8 +301,8 @@ export default function Settings() {
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-semibold text-white">Plan PRO</p>
-                      <p className="text-sm text-gray-400">50 analyses/jour • 9.99€/mois</p>
+                      <p className="font-semibold text-white">{t('settings.plans.pro')}</p>
+                      <p className="text-sm text-gray-400">{t('settings.plans.proDesc')}</p>
                     </div>
                     <ArrowDownCircle className="text-yellow-400" size={20} />
                   </div>
@@ -317,8 +317,8 @@ export default function Settings() {
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-semibold text-white">Plan BUSINESS</p>
-                      <p className="text-sm text-gray-400">Analyses illimitées • 29.99€/mois</p>
+                      <p className="font-semibold text-white">{t('settings.plans.business')}</p>
+                      <p className="text-sm text-gray-400">{t('settings.plans.businessDesc')}</p>
                     </div>
                     <ArrowUpCircle className="text-green-400" size={20} />
                   </div>
@@ -332,8 +332,8 @@ export default function Settings() {
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-semibold text-white">Plan FREE</p>
-                    <p className="text-sm text-red-300">3 analyses/jour • Gratuit • Annule l'abonnement</p>
+                    <p className="font-semibold text-white">{t('settings.plans.free')}</p>
+                    <p className="text-sm text-red-300">{t('settings.plans.freeDesc')}</p>
                   </div>
                   <ArrowDownCircle className="text-red-400" size={20} />
                 </div>
@@ -345,7 +345,7 @@ export default function Settings() {
               className="w-full btn-outline"
               disabled={planChangeLoading}
             >
-              Annuler
+              {t('common.cancel')}
             </button>
           </div>
         </div>

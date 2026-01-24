@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { MessageCircle, Send, Check, Archive, Clock, AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import api from '../../../services/api';
 import useAuthStore from '../../../stores/authStore';
 
 export default function AdminChat() {
+  const { t, i18n } = useTranslation();
   const { user } = useAuthStore();
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
@@ -53,7 +55,7 @@ export default function AdminChat() {
       await loadConversations();
     } catch (error) {
       console.error('Error sending reply:', error);
-      alert('Erreur lors de l\'envoi de la réponse');
+      alert(t('adminChat.sendError'));
     } finally {
       setIsLoading(false);
     }
@@ -95,7 +97,13 @@ export default function AdminChat() {
   };
 
   const formatDate = (date) => {
-    return new Date(date).toLocaleString('fr-FR', {
+    const locale = i18n.language === 'fr' ? 'fr-FR' :
+                   i18n.language === 'en' ? 'en-US' :
+                   i18n.language === 'es' ? 'es-ES' :
+                   i18n.language === 'de' ? 'de-DE' :
+                   i18n.language === 'it' ? 'it-IT' :
+                   i18n.language === 'pt' ? 'pt-BR' : 'fr-FR';
+    return new Date(date).toLocaleString(locale, {
       day: '2-digit',
       month: '2-digit',
       hour: '2-digit',
@@ -109,10 +117,10 @@ export default function AdminChat() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
             <MessageCircle className="w-8 h-8 text-indigo-600" />
-            Gestion Chat Support
+            {t('adminChat.title')}
           </h1>
           <p className="text-gray-600 mt-2">
-            Répondez aux conversations nécessitant une intervention humaine
+            {t('adminChat.subtitle')}
           </p>
         </div>
 
@@ -129,7 +137,7 @@ export default function AdminChat() {
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                {status.charAt(0).toUpperCase() + status.slice(1)}
+                {t(`adminChat.status.${status}`)}
                 {conversations.length > 0 && filter === status && (
                   <span className="ml-2 bg-white text-indigo-600 px-2 py-0.5 rounded-full text-xs">
                     {conversations.length}
@@ -144,12 +152,12 @@ export default function AdminChat() {
           {/* Conversations List */}
           <div className="md:col-span-1 bg-white rounded-lg shadow-sm overflow-hidden">
             <div className="p-4 border-b border-gray-200">
-              <h2 className="font-semibold text-gray-900">Conversations ({conversations.length})</h2>
+              <h2 className="font-semibold text-gray-900">{t('adminChat.conversations')} ({conversations.length})</h2>
             </div>
             <div className="overflow-y-auto max-h-[600px]">
               {conversations.length === 0 ? (
                 <div className="p-4 text-center text-gray-500">
-                  Aucune conversation {filter !== 'all' && filter}
+                  {t('adminChat.noConversation')} {filter !== 'all' && t(`adminChat.status.${filter}`).toLowerCase()}
                 </div>
               ) : (
                 conversations.map((conv) => (
@@ -164,13 +172,13 @@ export default function AdminChat() {
                       <div className="flex items-center gap-2">
                         {getStatusIcon(conv.status)}
                         <span className="font-medium text-sm text-gray-900">
-                          {conv.user?.name || conv.user?.email || 'Visiteur anonyme'}
+                          {conv.user?.name || conv.user?.email || t('adminChat.anonymousVisitor')}
                         </span>
                       </div>
                       {getStatusBadge(conv.status)}
                     </div>
                     <p className="text-xs text-gray-600 mb-1">
-                      {conv._count.messages} messages • {conv.language.toUpperCase()}
+                      {conv._count.messages} {t('adminChat.messages')} • {conv.language.toUpperCase()}
                     </p>
                     <p className="text-xs text-gray-500">
                       {formatDate(conv.updatedAt)}
@@ -194,10 +202,10 @@ export default function AdminChat() {
                 <div className="p-4 border-b border-gray-200 flex items-center justify-between">
                   <div>
                     <h2 className="font-semibold text-gray-900">
-                      {selectedConversation.user?.name || 'Visiteur anonyme'}
+                      {selectedConversation.user?.name || t('adminChat.anonymousVisitor')}
                     </h2>
                     <p className="text-sm text-gray-600">
-                      {selectedConversation.user?.email || 'Email non disponible'}
+                      {selectedConversation.user?.email || t('adminChat.emailNotAvailable')}
                     </p>
                   </div>
                   <div className="flex gap-2">
@@ -207,7 +215,7 @@ export default function AdminChat() {
                         onClick={() => updateStatus(selectedConversation.id, 'resolved')}
                         className="px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm"
                       >
-                        Marquer résolu
+                        {t('adminChat.markResolved')}
                       </button>
                     )}
                   </div>
@@ -231,7 +239,7 @@ export default function AdminChat() {
                       >
                         <div className="flex items-center gap-2 mb-1">
                           <span className="text-xs font-semibold">
-                            {msg.role === 'user' ? 'Client' : msg.role === 'admin' ? '👨‍💼 Admin' : '🤖 Bot'}
+                            {msg.role === 'user' ? t('adminChat.client') : msg.role === 'admin' ? `👨‍💼 ${t('adminChat.admin')}` : `🤖 ${t('adminChat.bot')}`}
                           </span>
                           <span className="text-xs text-gray-500">
                             {formatDate(msg.createdAt)}
@@ -250,7 +258,7 @@ export default function AdminChat() {
                       type="text"
                       value={replyMessage}
                       onChange={(e) => setReplyMessage(e.target.value)}
-                      placeholder="Votre réponse en tant qu'admin..."
+                      placeholder={t('adminChat.replyPlaceholder')}
                       className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       disabled={isLoading}
                     />
@@ -260,14 +268,14 @@ export default function AdminChat() {
                       className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                     >
                       <Send className="w-4 h-4" />
-                      Envoyer
+                      {t('adminChat.send')}
                     </button>
                   </div>
                 </form>
               </>
             ) : (
               <div className="flex-1 flex items-center justify-center text-gray-500">
-                Sélectionnez une conversation pour voir les détails
+                {t('adminChat.selectConversation')}
               </div>
             )}
           </div>

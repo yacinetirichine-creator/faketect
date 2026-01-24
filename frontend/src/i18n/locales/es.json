@@ -62,11 +62,93 @@
   },
   "certificate": { "download": "Descargar certificado", "downloadError": "No se pudo generar el certificado", "basedOnExplainability": "Certificado basado en la puntuación, la confianza y las señales de abajo.", "title": "Certificado de análisis", "subtitle": "Generado por FakeTect", "fields": { "analysisId": "ID de análisis", "user": "Usuario", "date": "Fecha", "file": "Archivo", "fileHash": "Huella del archivo (SHA-256)", "score": "Puntuación IA", "verdict": "Veredicto", "confidence": "Confianza", "provider": "Proveedor", "framesAnalyzed": "Fotogramas analizados", "consensus": "Consenso", "sources": "Fuentes", "topSignals": "Señales principales", "fingerprint": "Huella del certificado", "scoreShort": "Score", "confidenceShort": "Conf." }, "generatedAt": "Generado el {{date}}", "verificationHint": "Verificación: compara el ID de análisis en la app" },
   "verdicts": { "ai_generated": "IA", "likely_ai": "Probablemente IA", "possibly_ai": "Quizás IA", "possibly_real": "Quizás real", "likely_real": "Probablemente real" },
-  "admin": { "title": "Admin", "metrics": "Métricas", "users": "Usuarios", "totalUsers": "Total", "newToday": "Nuevos hoy", "totalAnalyses": "Análisis", "mrr": "MRR", "usersByPlan": "Usuarios por plan", "analysesToday": "Análisis hoy", "analysesPerformed": "análisis realizados", "noAnalyses": "Sin análisis", "confirmDeleteUser": "¿Eliminar este usuario?", "planUpdated": "Plan actualizado", "usersTable": { "email": "Email", "name": "Nombre", "plan": "Plan", "role": "Rol", "createdAt": "Registro", "actions": "Acciones" }, "analysesTable": { "date": "Fecha", "user": "Usuario", "file": "Archivo", "type": "Tipo", "score": "Puntuación", "verdict": "Veredicto", "provider": "Proveedor" } },
+  "admin": {
+    "title": "Admin",
+    "metrics": "Métricas",
+    "users": "Usuarios",
+    "totalUsers": "Total",
+    "newToday": "Nuevos hoy",
+    "totalAnalyses": "Análisis",
+    "mrr": "MRR",
+    "usersByPlan": "Usuarios por plan",
+    "analysesToday": "Análisis hoy",
+    "analysesPerformed": "análisis realizados",
+    "noAnalyses": "Sin análisis",
+    "confirmDeleteUser": "¿Eliminar este usuario?",
+    "planUpdated": "Plan actualizado",
+    "chatSupport": "Chat Soporte",
+    "newsletter": "Newsletter",
+    "usersTable": { "email": "Email", "name": "Nombre", "plan": "Plan", "role": "Rol", "createdAt": "Registro", "actions": "Acciones" },
+    "analysesTable": { "date": "Fecha", "user": "Usuario", "file": "Archivo", "type": "Tipo", "score": "Puntuación", "verdict": "Veredicto", "provider": "Proveedor" }
+  },
+  "adminChat": {
+    "title": "Gestión de Chat de Soporte",
+    "subtitle": "Responde a las conversaciones que requieren intervención humana",
+    "conversations": "Conversaciones",
+    "noConversation": "Sin conversación",
+    "anonymousVisitor": "Visitante anónimo",
+    "messages": "mensajes",
+    "emailNotAvailable": "Email no disponible",
+    "markResolved": "Marcar resuelto",
+    "client": "Cliente",
+    "admin": "Admin",
+    "bot": "Bot",
+    "replyPlaceholder": "Tu respuesta como admin...",
+    "send": "Enviar",
+    "selectConversation": "Selecciona una conversación para ver los detalles",
+    "sendError": "Error al enviar la respuesta",
+    "status": {
+      "pending": "Pendiente",
+      "active": "Activo",
+      "resolved": "Resuelto",
+      "archived": "Archivado",
+      "all": "Todos"
+    }
+  },
   "common": { "loading": "Cargando...", "save": "Guardar", "cancel": "Cancelar", "delete": "Eliminar", "deleted": "Eliminado", "confirmDelete": "¿Eliminar?", "searchPlaceholder": "Buscar...", "error": "Error", "loadError": "Error de carga", "errorGeneric": "Error", "saved": "Guardado", "id": "ID", "optional": "opcional" },
   "errorBoundary": { "title": "Error de visualización", "description": "Un error de JavaScript impide que esta página se muestre.", "reload": "Recargar", "retry": "Reintentar" },
   "historyPage": { "url": "URL", "table": { "file": "Archivo", "type": "Tipo", "score": "Puntuación", "date": "Fecha", "actions": "Acciones" } },
-  "settings": { "sections": { "admin": "Admin", "profile": "Perfil", "language": "Idioma", "subscription": "Suscripción" }, "admin": { "accessTitle": "Acceso de admin", "accessDesc": "Abrir el panel de admin y gestionar usuarios", "open": "Abrir" }, "freeQuotaHint": "10 pruebas gratuitas (válido 30 días)", "activeSubscription": "Suscripción activa", "subscription": { "plan": "Plan {{plan}}", "manage": "Gestionar suscripción", "upgrade": "Mejorar", "change": "Cambiar" } },
+  "settings": {
+    "sections": { "admin": "Admin", "profile": "Perfil", "language": "Idioma", "subscription": "Suscripción" },
+    "admin": { "accessTitle": "Acceso de admin", "accessDesc": "Abrir el panel de admin y gestionar usuarios", "open": "Abrir" },
+    "freeQuotaHint": "10 pruebas gratuitas (válido 30 días)",
+    "activeSubscription": "Suscripción activa",
+    "subscription": { "plan": "Plan {{plan}}", "manage": "Gestionar suscripción", "upgrade": "Mejorar", "change": "Cambiar", "changePlan": "Cambiar de plan" },
+    "dangerZone": {
+      "title": "Zona de peligro",
+      "deleteAccount": "Eliminar mi cuenta",
+      "deleteWarning": "Esta acción es irreversible. Todos sus datos serán eliminados.",
+      "deleteButton": "Eliminar"
+    },
+    "deleteModal": {
+      "title": "Confirmar eliminación",
+      "question": "¿Está absolutamente seguro de que desea eliminar su cuenta?",
+      "actionWill": "Esta acción:",
+      "deleteAnalyses": "Eliminará todos sus análisis",
+      "cancelSubscription": "Cancelará su suscripción (si está activa)",
+      "deleteData": "Borrará todos sus datos personales",
+      "irreversible": "Esta acción es IRREVERSIBLE",
+      "typeEmail": "Escriba su email",
+      "toConfirm": "para confirmar",
+      "deleting": "Eliminando...",
+      "deleteForever": "Eliminar permanentemente",
+      "incorrectEmail": "Email de confirmación incorrecto",
+      "accountDeleted": "Cuenta eliminada con éxito",
+      "deleteError": "Error al eliminar"
+    },
+    "planModal": {
+      "title": "Cambiar de plan",
+      "planChangeError": "Error al cambiar de plan"
+    },
+    "plans": {
+      "pro": "Plan PRO",
+      "proDesc": "50 análisis/día • 9.99€/mes",
+      "business": "Plan BUSINESS",
+      "businessDesc": "Análisis ilimitados • 29.99€/mes",
+      "free": "Plan FREE",
+      "freeDesc": "3 análisis/día • Gratis • Cancela suscripción"
+    }
+  },
   "footer": { "description": "Detección avanzada por IA para tu contenido.", "product": "Producto", "company": "Empresa", "legal": "Legal", "links": { "pricing": "Precios", "features": "Características", "api": "API", "about": "Acerca de", "blog": "Blog", "contact": "Contacto", "terms": "Términos de uso", "sales": "Términos de venta" }, "rights": "© 2025 FakeTect. Todos los derechos reservados." },
   "newsletter": {
     "title": "Newsletter",
@@ -182,8 +264,262 @@
     }
   },
   "legal": {
+    "documentLabel": "Documento legal",
+    "lastUpdate": "Última actualización",
+    "company": {
+      "name": "JARVIS",
+      "form": "Sociedad por acciones simplificada (SAS)",
+      "capital": "Capital social: 1.000 EUR",
+      "address": "64 Avenue Marinville, 94100 Saint-Maur-des-Fossés, Francia",
+      "siren": "928 499 166",
+      "rcs": "RCS Créteil",
+      "email": "contact@faketect.com",
+      "dpo": "dpo@faketect.com"
+    },
+    "terms": {
+      "title": "Términos de Servicio",
+      "shortTitle": "TdS",
+      "sections": {
+        "presentation": {
+          "title": "1. Presentación del servicio",
+          "content": "FakeTect (en adelante \"el Servicio\") es una plataforma SaaS de detección de contenido generado por IA, publicada por JARVIS.",
+          "hosting": "Alojamiento: Render (backend) y Vercel (frontend)"
+        },
+        "acceptance": {
+          "title": "2. Aceptación de los términos",
+          "content": "El uso del Servicio implica la aceptación total de estos Términos de Servicio (TdS).",
+          "confirm": "Al crear una cuenta o usar el Servicio, confirma que ha leído, entendido y aceptado estos TdS y nuestra Política de Privacidad."
+        },
+        "services": {
+          "title": "3. Descripción del servicio",
+          "intro": "FakeTect ofrece:",
+          "imageAnalysis": "Análisis de imágenes: Detección de IA en formatos JPEG, PNG, WEBP, GIF",
+          "videoAnalysis": "Análisis de videos: Detección en MP4, MOV, AVI (primeros 60 segundos)",
+          "certificates": "Certificados PDF: Certificado de autenticidad descargable",
+          "history": "Historial: Almacenamiento de sus análisis según su plan",
+          "api": "API REST: Acceso programático (planes PRO y superiores)"
+        },
+        "account": {
+          "title": "4. Registro y cuenta de usuario",
+          "eligibility": "4.1. Elegibilidad: El Servicio está reservado para adultos (18 años o más) o menores con autorización parental.",
+          "accountInfo": "4.2. Cuenta: Se compromete a proporcionar información precisa durante el registro y mantenerla actualizada.",
+          "security": "4.3. Seguridad: Es responsable de mantener la confidencialidad de sus credenciales. Cualquier actividad bajo su cuenta se considera suya.",
+          "deletion": "4.4. Eliminación: Puede solicitar la eliminación de la cuenta en cualquier momento a través de la configuración o por correo electrónico."
+        },
+        "pricing": {
+          "title": "5. Precios y pago",
+          "freePlan": "5.1. Plan gratuito: 10 análisis en 30 días, sin compromiso.",
+          "paidPlans": "5.2. Planes de pago: Facturación mensual o anual a través de Stripe. Los precios incluyen impuestos.",
+          "renewal": "5.3. Renovación: Las suscripciones se renuevan automáticamente. Puede cancelar en cualquier momento.",
+          "refund": "5.4. Reembolso: Conforme al derecho de desistimiento, reembolso posible dentro de los 14 días posteriores a la suscripción."
+        },
+        "usage": {
+          "title": "6. Uso aceptable",
+          "intro": "Está prohibido usar el Servicio para:",
+          "illegal": "Cualquier actividad ilegal o fraudulenta",
+          "harm": "Dañar a otros o su reputación",
+          "reverse": "Intentar realizar ingeniería inversa o copiar nuestros algoritmos",
+          "overload": "Sobrecargar intencionalmente nuestros servidores",
+          "resell": "Revender el acceso al Servicio sin autorización"
+        },
+        "ip": {
+          "title": "7. Propiedad intelectual",
+          "ownership": "7.1. Nuestros derechos: FakeTect, su logo, algoritmos e interfaz están protegidos por derechos de autor y marcas registradas.",
+          "userContent": "7.2. Su contenido: Conserva todos los derechos sobre los archivos que sube. Solo los usamos para proporcionar el Servicio.",
+          "license": "7.3. Licencia limitada: Tiene una licencia no exclusiva e intransferible para usar el Servicio."
+        },
+        "liability": {
+          "title": "8. Responsabilidad",
+          "accuracy": "8.1. Precisión: Nuestros análisis se basan en probabilidades estadísticas. No garantizamos una detección del 100%.",
+          "availability": "8.2. Disponibilidad: Nos esforzamos por asegurar la máxima disponibilidad pero no podemos garantizar un servicio ininterrumpido.",
+          "damages": "8.3. Daños: Nuestra responsabilidad se limita al monto de su suscripción de los últimos 12 meses."
+        },
+        "termination": {
+          "title": "9. Terminación",
+          "byUser": "9.1. Por el usuario: Puede terminar en cualquier momento a través de la configuración de su cuenta.",
+          "byUs": "9.2. Por nosotros: Podemos suspender o terminar su acceso por violaciones de los TdS, impago o actividad sospechosa.",
+          "effects": "9.3. Efectos: La terminación resulta en la eliminación de sus datos según nuestra política de retención."
+        },
+        "law": {
+          "title": "10. Ley aplicable",
+          "jurisdiction": "Estos TdS se rigen por la ley francesa. Cualquier disputa se someterá a los tribunales competentes de Créteil, Francia."
+        },
+        "contact": {
+          "title": "11. Contacto",
+          "content": "Para cualquier pregunta sobre estos TdS, contáctenos."
+        }
+      }
+    },
     "privacy": {
-      "title": "Política de privacidad"
+      "title": "Política de Privacidad",
+      "shortTitle": "Privacidad",
+      "intro": "Esta política explica cómo recopilamos, usamos y protegemos sus datos personales conforme al RGPD.",
+      "sections": {
+        "legalInfo": {
+          "title": "Información Legal",
+          "content": "Responsable del tratamiento: JARVIS SAS"
+        },
+        "dataCollected": {
+          "title": "Datos Personales Recopilados",
+          "identification": {
+            "title": "Datos de identificación",
+            "items": ["Nombre y apellidos", "Dirección de correo electrónico", "Contraseña (cifrada con bcrypt)", "Idioma preferido", "Estado de suscripción"]
+          },
+          "payment": {
+            "title": "Datos de pago",
+            "items": ["Información de facturación", "Historial de transacciones", "ID de cliente de Stripe"],
+            "note": "Los datos bancarios nunca se almacenan en nuestros servidores. Son procesados directamente por Stripe (certificado PCI-DSS Nivel 1)."
+          },
+          "usage": {
+            "title": "Datos de uso",
+            "items": ["Archivos subidos para análisis", "Resultados de análisis", "Historial de detecciones", "Certificados de autenticidad generados"]
+          },
+          "technical": {
+            "title": "Datos técnicos",
+            "items": ["Dirección IP (anonimizada)", "Tipo de navegador", "Sistema operativo", "Páginas visitadas y duración"]
+          }
+        },
+        "purposes": {
+          "title": "Finalidades del Tratamiento",
+          "items": [
+            "Proporcionar servicio de detección de IA",
+            "Gestionar su cuenta de usuario",
+            "Procesar pagos y facturación",
+            "Mejorar nuestros algoritmos",
+            "Comunicaciones de servicio",
+            "Cumplimiento legal y seguridad"
+          ]
+        },
+        "legalBasis": {
+          "title": "Base Legal",
+          "contract": "Ejecución del contrato: Para proporcionar nuestros servicios",
+          "consent": "Consentimiento: Para comunicaciones de marketing",
+          "legitimate": "Interés legítimo: Para mejorar nuestros servicios",
+          "legal": "Obligación legal: Para cumplimiento fiscal y regulatorio"
+        },
+        "retention": {
+          "title": "Período de Conservación",
+          "account": "Datos de cuenta: Duración de la suscripción + 3 años",
+          "analyses": "Análisis: Según su plan (30 días gratis, 1 año pago)",
+          "payment": "Datos de pago: 10 años (requisito legal)",
+          "logs": "Registros técnicos: 1 año"
+        },
+        "rights": {
+          "title": "Sus Derechos RGPD",
+          "intro": "Conforme al RGPD, tiene los siguientes derechos:",
+          "access": "Derecho de acceso: Obtener una copia de sus datos",
+          "rectification": "Derecho de rectificación: Corregir sus datos",
+          "erasure": "Derecho de supresión: Eliminar sus datos",
+          "portability": "Derecho a la portabilidad: Recuperar sus datos",
+          "opposition": "Derecho de oposición: Rechazar ciertos tratamientos",
+          "restriction": "Derecho a la limitación: Limitar el tratamiento",
+          "howTo": "Para ejercer estos derechos, contacte a nuestro DPO."
+        },
+        "security": {
+          "title": "Seguridad",
+          "measures": "Implementamos medidas de seguridad apropiadas:",
+          "items": ["Cifrado TLS 1.3 en tránsito", "Cifrado AES-256 en reposo", "Autenticación JWT segura", "Auditorías de seguridad regulares", "Alojamiento certificado ISO 27001"]
+        },
+        "transfers": {
+          "title": "Transferencias de Datos",
+          "content": "Sus datos pueden ser transferidos a procesadores ubicados fuera de la UE, con las garantías apropiadas (cláusulas contractuales tipo)."
+        },
+        "cookies": {
+          "title": "Cookies",
+          "content": "Para más información sobre nuestro uso de cookies, consulte nuestra Política de Cookies."
+        }
+      }
+    },
+    "cookiesPage": {
+      "title": "Política de Cookies",
+      "shortTitle": "Cookies",
+      "whatIs": {
+        "title": "¿Qué es una cookie?",
+        "content": "Una cookie es un pequeño archivo de texto colocado en su dispositivo al visitar un sitio web. Permite reconocer su navegador, recordar sus preferencias y analizar el uso del sitio."
+      },
+      "types": {
+        "title": "Tipos de cookies utilizadas",
+        "necessary": {
+          "title": "Cookies estrictamente necesarias",
+          "description": "Esenciales para el funcionamiento del sitio. No se pueden desactivar.",
+          "alwaysEnabled": "Siempre activadas",
+          "cookies": {
+            "authToken": { "name": "auth_token", "purpose": "Autenticación", "duration": "Sesión" },
+            "refreshToken": { "name": "refresh_token", "purpose": "Mantener sesión", "duration": "7 días" },
+            "csrfToken": { "name": "csrf_token", "purpose": "Protección CSRF", "duration": "Sesión" },
+            "cookieConsent": { "name": "cookie_consent", "purpose": "Elección de cookies", "duration": "13 meses" }
+          }
+        },
+        "preferences": {
+          "title": "Cookies de preferencias",
+          "description": "Recuerdan sus elecciones (idioma, tema, configuración de visualización).",
+          "cookies": {
+            "language": { "name": "i18next", "purpose": "Idioma preferido", "duration": "1 año" },
+            "theme": { "name": "theme", "purpose": "Tema de visualización", "duration": "1 año" }
+          }
+        },
+        "analytics": {
+          "title": "Cookies analíticas",
+          "description": "Nos ayudan a entender cómo los visitantes usan el sitio.",
+          "cookies": {
+            "ga": { "name": "_ga", "purpose": "Google Analytics", "duration": "2 años" },
+            "gid": { "name": "_gid", "purpose": "Distinción de visitantes", "duration": "24 horas" }
+          },
+          "note": "Google Analytics está configurado con anonimización de IP (conforme al RGPD)."
+        },
+        "functional": {
+          "title": "Cookies funcionales",
+          "description": "Habilitan funciones avanzadas y personalizadas.",
+          "cookies": {
+            "tutorial": { "name": "tutorial_seen", "purpose": "Tutorial visto", "duration": "Permanente" },
+            "history": { "name": "recent_analyses", "purpose": "Historial local", "duration": "30 días" }
+          }
+        }
+      },
+      "manage": {
+        "title": "Gestionar sus preferencias",
+        "content": "Puede cambiar sus preferencias de cookies en cualquier momento a través del botón \"Gestionar cookies\" en el pie de página.",
+        "browser": "También puede configurar su navegador para bloquear cookies, pero algunas funciones del sitio podrían dejar de funcionar."
+      },
+      "validity": {
+        "title": "Período de validez",
+        "content": "Su consentimiento es válido por 13 meses de acuerdo con las recomendaciones del RGPD."
+      },
+      "table": {
+        "cookie": "Cookie",
+        "purpose": "Finalidad",
+        "duration": "Duración"
+      }
+    },
+    "mentions": {
+      "title": "Aviso Legal",
+      "shortTitle": "Legal",
+      "sections": {
+        "editor": {
+          "title": "Editor del sitio",
+          "content": "El sitio web faketect.com está publicado por JARVIS, SAS con un capital social de 1.000 EUR."
+        },
+        "director": {
+          "title": "Director de publicación",
+          "content": "El director de publicación es el representante legal de JARVIS."
+        },
+        "hosting": {
+          "title": "Alojamiento",
+          "frontend": "Frontend: Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA",
+          "backend": "Backend: Render Services, Inc., San Francisco, CA, USA",
+          "database": "Base de datos: Neon, Inc. (PostgreSQL cloud)"
+        },
+        "ip": {
+          "title": "Propiedad intelectual",
+          "content": "Todo el contenido del sitio (textos, imágenes, logos, algoritmos) está protegido por derechos de autor. Cualquier reproducción está prohibida sin autorización previa."
+        },
+        "credits": {
+          "title": "Créditos",
+          "design": "Diseño: Equipo FakeTect",
+          "icons": "Iconos: Lucide Icons (Licencia ISC)",
+          "fonts": "Fuentes: Inter, Space Grotesk (Google Fonts)"
+        }
+      }
     }
   },
   "demo": {

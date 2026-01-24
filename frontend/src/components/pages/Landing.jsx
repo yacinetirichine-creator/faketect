@@ -258,7 +258,7 @@ export default function Landing() {
             {/* Company Info */}
             <div className="md:col-span-1">
               <div className="mb-4">
-                <Logo size="sm" />
+                <Logo size="2xl" />
               </div>
               <p className="text-gray-400 text-sm mb-4 leading-relaxed">
                 {t('landing.footer.description')}
