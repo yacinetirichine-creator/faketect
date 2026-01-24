@@ -1,10 +1,19 @@
 {
   "name": "faketect-backend",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "start": "node src/cluster.js",
     "start:single": "node src/index.js",
-    "dev": "node --watch src/index.js"
+    "dev": "node --watch src/index.js",
+    "lint": "eslint src --ext .js --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint src --ext .js --fix",
+    "format": "prettier --write \"src/**/*.js\"",
+    "format:check": "prettier --check \"src/**/*.js\"",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "prepare": "cd .. && husky install backend/.husky"
   },
   "dependencies": {
     "@prisma/client": "^5.7.0",
@@ -29,10 +38,23 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^7.0.12",
     "stripe": "^14.25.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "uuid": "^9.0.1",
     "winston": "^3.19.0"
   },
   "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.1.1",
     "prisma": "^5.7.0"
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }

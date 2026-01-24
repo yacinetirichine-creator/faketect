@@ -1,0 +1,33 @@
+# CODEOWNERS file for FakeTect
+# This file defines who is responsible for code review in different parts of the codebase
+# Learn more: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+* @yacinetirichine-creator
+
+# Frontend code
+/frontend/ @yacinetirichine-creator
+
+# Backend code
+/backend/ @yacinetirichine-creator
+
+# Critical paths - require additional review
+/backend/src/routes/payment.js @yacinetirichine-creator
+/backend/src/routes/auth.js @yacinetirichine-creator
+/backend/src/middleware/auth.js @yacinetirichine-creator
+/backend/src/services/stripe.js @yacinetirichine-creator
+
+# Database schema changes
+/backend/prisma/ @yacinetirichine-creator
+
+# Security-sensitive files
+/backend/src/config/ @yacinetirichine-creator
+/.github/workflows/ @yacinetirichine-creator
+
+# Documentation
+*.md @yacinetirichine-creator
+/docs/ @yacinetirichine-creator
+
+# Infrastructure
+render.yaml @yacinetirichine-creator
+vercel.json @yacinetirichine-creator
