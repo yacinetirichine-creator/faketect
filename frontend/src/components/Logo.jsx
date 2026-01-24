@@ -3,13 +3,15 @@ import { memo, useState } from 'react';
 const Logo = memo(({ size = 'md', className = '', variant = 'image' }) => {
   const [imageError, setImageError] = useState(false);
 
-  // Tailles pour le logo image
+  // Tailles pour le logo image (plus grandes)
   const imageSizes = {
-    sm: 'h-8',
-    md: 'h-10',
-    lg: 'h-12',
+    xs: 'h-8',
+    sm: 'h-10',
+    md: 'h-12',
+    lg: 'h-14',
     xl: 'h-16',
-    '2xl': 'h-20'
+    '2xl': 'h-20',
+    '3xl': 'h-24'
   };
 
   const imageHeight = imageSizes[size] || imageSizes.md;
