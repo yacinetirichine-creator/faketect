@@ -1,12 +1,13 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Globe, Menu, X, ShieldCheck } from 'lucide-react';
+import { Globe, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import useAuthStore from '../../stores/authStore';
 import { languages, normalizeLanguage, persistLanguage } from '../../i18n';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../services/api';
 import NewsletterSubscribe from '../NewsletterSubscribe';
+import Logo from '../Logo';
 
 export default function MainLayout() {
   const { t, i18n } = useTranslation();
@@ -36,14 +37,8 @@ export default function MainLayout() {
     <div className="min-h-screen bg-background text-white selection:bg-primary/30">
       <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="relative w-8 h-8">
-              <div className="absolute inset-0 bg-primary/50 blur-lg rounded-full group-hover:bg-primary/80 transition-all" />
-              <div className="relative w-full h-full bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
-                <ShieldCheck size={18} className="text-white" />
-              </div>
-            </div>
-            <span className="font-display font-bold text-xl tracking-tight">FakeTect</span>
+          <Link to="/" className="flex items-center group">
+            <Logo size="sm" animated={false} />
           </Link>
 
           {/* Desktop Menu */}
@@ -154,11 +149,8 @@ export default function MainLayout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
             <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
-                  <ShieldCheck size={18} className="text-white" />
-                </div>
-                <span className="font-display font-bold text-xl">FakeTect</span>
+              <div className="mb-4">
+                <Logo size="sm" animated={false} />
               </div>
               <p className="text-gray-400 max-w-sm mb-6">
                 {t('footer.description')}

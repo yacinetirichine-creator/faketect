@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Shield, FileSearch, Video, Layers, Code, Database, CheckCircle2, ArrowRight, Lock, Zap, Activity, FileText, Cookie } from 'lucide-react';
 import CookieConsent from '../CookieConsent';
 import DemoSection from '../DemoSection';
+import Logo from '../Logo';
 
 const container = {
   hidden: { opacity: 0 },
@@ -256,9 +257,8 @@ export default function Landing() {
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             {/* Company Info */}
             <div className="md:col-span-1">
-              <div className="flex items-center gap-2 mb-4">
-                <Shield className="text-primary" size={28} />
-                <span className="text-2xl font-bold text-gradient">Faketect</span>
+              <div className="mb-4">
+                <Logo size="sm" animated={false} />
               </div>
               <p className="text-gray-400 text-sm mb-4 leading-relaxed">
                 {t('landing.footer.description')}
