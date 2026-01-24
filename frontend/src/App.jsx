@@ -25,6 +25,7 @@ const PrivacyPolicy = lazy(() => import('./components/pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./components/pages/TermsOfService'));
 const LegalPage = lazy(() => import('./components/pages/LegalPage'));
 const CookiesPage = lazy(() => import('./components/pages/CookiesPage'));
+const Features = lazy(() => import('./components/pages/Features'));
 
 // Composant de chargement réutilisable
 const PageLoader = () => (
@@ -54,7 +55,7 @@ const Admin = ({ children }) => {
 export default function App() {
   const { fetchUser, token, user, isFetchingUser } = useAuthStore();
   useLanguageSync();
-  
+
   useEffect(() => {
     if (token && !user && !isFetchingUser) fetchUser();
   }, [token, user, isFetchingUser]);
@@ -66,6 +67,8 @@ export default function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Landing />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/features" element={<Features />} />
+            <Route path="/fonctionnalites" element={<Navigate to="/features" replace />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/legal/privacy" element={<PrivacyPolicy />} />

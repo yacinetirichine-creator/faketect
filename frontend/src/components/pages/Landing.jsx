@@ -47,7 +47,7 @@ export default function Landing() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-16 items-center">
-          <motion.div 
+          <motion.div
             variants={container}
             initial="hidden"
             animate="show"
@@ -94,22 +94,22 @@ export default function Landing() {
           </motion.div>
 
           {/* 3D/Floating Visual */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.2 }}
             className="relative perspective-1000 hidden lg:block"
           >
-            <motion.div 
-              animate={{ 
+            <motion.div
+              animate={{
                 rotateY: [0, -5, 0, 5, 0],
                 rotateX: [0, 5, 0, -5, 0],
                 y: [0, -20, 0]
               }}
-              transition={{ 
-                duration: 8, 
-                repeat: Infinity, 
-                ease: "easeInOut" 
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut"
               }}
               className="relative z-10"
             >
@@ -151,7 +151,7 @@ export default function Landing() {
 
                   {/* Scanning Line Animation */}
                   <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
-                    <motion.div 
+                    <motion.div
                       animate={{ top: ['0%', '100%', '0%'] }}
                       transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                       className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_20px_rgba(59,130,246,0.5)]"
@@ -161,15 +161,15 @@ export default function Landing() {
               </div>
 
               {/* Floating Elements */}
-              <motion.div 
+              <motion.div
                 animate={{ y: [0, 30, 0] }}
                 transition={{ duration: 5, repeat: Infinity, delay: 1 }}
                 className="absolute -right-12 -top-12 p-4 glass-panel rounded-2xl border border-white/10 shadow-xl"
               >
                 <Shield size={32} className="text-accent" />
               </motion.div>
-              
-              <motion.div 
+
+              <motion.div
                 animate={{ y: [0, -40, 0] }}
                 transition={{ duration: 6, repeat: Infinity, delay: 2 }}
                 className="absolute -left-8 -bottom-8 p-4 glass-panel rounded-2xl border border-white/10 shadow-xl"
@@ -213,7 +213,7 @@ export default function Landing() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((f, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -278,7 +278,7 @@ export default function Landing() {
               <h3 className="font-semibold mb-4 text-white">{t('landing.footer.product')}</h3>
               <ul className="space-y-3 text-sm">
                 <li><Link to="/pricing" className="text-gray-400 hover:text-primary transition-colors">{t('landing.footer.pricing')}</Link></li>
-                <li><Link to="/dashboard" className="text-gray-400 hover:text-primary transition-colors">{t('landing.footer.features')}</Link></li>
+                <li><Link to="/features" className="text-gray-400 hover:text-primary transition-colors">{t('landing.footer.features')}</Link></li>
                 <li><Link to="/register" className="text-gray-400 hover:text-primary transition-colors">{t('landing.footer.getStarted')}</Link></li>
               </ul>
             </div>
@@ -336,9 +336,9 @@ export default function Landing() {
                 <span className="flex items-center gap-2">
                   <Lock size={12} /> {t('landing.footer.stripe')}
                 </span>
-                <a 
-                  href="https://www.cnil.fr" 
-                  target="_blank" 
+                <a
+                  href="https://www.cnil.fr"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-primary transition-colors"
                 >

@@ -45,25 +45,25 @@ export default function MainLayout() {
           <div className="hidden md:flex items-center gap-8">
             <Link to="/" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">{t('nav.home')}</Link>
             <Link to="/pricing" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">{t('nav.pricing')}</Link>
-            
+
             <div className="relative">
-              <button 
-                onClick={() => setLangOpen(!langOpen)} 
+              <button
+                onClick={() => setLangOpen(!langOpen)}
                 className="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-white transition-colors"
               >
                 <Globe size={20} />
               </button>
               <AnimatePresence>
                 {langOpen && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
                     className="absolute right-0 mt-2 w-40 bg-surface border border-white/10 rounded-xl shadow-xl py-2 overflow-hidden"
                   >
                     {languages.map(l => (
-                      <button 
-                        key={l.code} 
+                      <button
+                        key={l.code}
                         onClick={() => changeLang(l.code)}
                         className={`w-full px-4 py-2 text-left hover:bg-white/5 flex items-center gap-2 text-sm transition-colors ${currentLang === l.code ? 'text-primary font-semibold bg-primary/10' : 'text-gray-200 hover:text-white'}`}
                       >
@@ -98,7 +98,7 @@ export default function MainLayout() {
         {/* Mobile Menu */}
         <AnimatePresence>
           {menuOpen && (
-            <motion.div 
+            <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
@@ -107,14 +107,14 @@ export default function MainLayout() {
               <div className="px-4 py-6 space-y-4">
                 <Link to="/" onClick={() => setMenuOpen(false)} className="block text-gray-400 hover:text-white">{t('nav.home')}</Link>
                 <Link to="/pricing" onClick={() => setMenuOpen(false)} className="block text-gray-400 hover:text-white">{t('nav.pricing')}</Link>
-                
+
                 {/* Language selector mobile */}
                 <div className="border-t border-white/10 pt-4">
                   <p className="text-xs text-gray-500 mb-2">{t('settings.sections.language')}</p>
                   <div className="grid grid-cols-2 gap-2">
                     {languages.map(l => (
-                      <button 
-                        key={l.code} 
+                      <button
+                        key={l.code}
                         onClick={() => { changeLang(l.code); setMenuOpen(false); }}
                         className={`px-3 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors ${currentLang === l.code ? 'bg-primary/20 text-primary border border-primary/50' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
                       >
@@ -123,7 +123,7 @@ export default function MainLayout() {
                     ))}
                   </div>
                 </div>
-                
+
                 {isAuthenticated ? (
                   <>
                     <Link to="/dashboard" onClick={() => setMenuOpen(false)} className="block text-gray-400 hover:text-white">{t('nav.dashboard')}</Link>
@@ -166,7 +166,7 @@ export default function MainLayout() {
               <h3 className="font-semibold mb-4 text-white">{t('footer.product')}</h3>
               <ul className="space-y-2 text-gray-400">
                 <li><Link to="/pricing" className="hover:text-primary transition-colors">{t('footer.links.pricing')}</Link></li>
-                <li><Link to="/dashboard" className="hover:text-primary transition-colors">{t('footer.links.features')}</Link></li>
+                <li><Link to="/features" className="hover:text-primary transition-colors">{t('footer.links.features')}</Link></li>
                 <li><a href="mailto:contact@faketect.com" className="hover:text-primary transition-colors">{t('footer.links.contact')}</a></li>
               </ul>
             </div>
