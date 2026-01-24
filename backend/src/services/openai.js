@@ -8,17 +8,34 @@ class OpenAIService {
     this.apiKey = process.env.OPENAI_API_KEY;
     this.baseUrl = 'https://api.openai.com/v1';
     this.hasApiKey = Boolean(this.apiKey && this.apiKey.length > 0);
+    this.hasFetch = typeof globalThis.fetch === 'function';
+    this.canCallApi = this.hasApiKey && this.hasFetch;
 
     if (!this.hasApiKey) {
       console.warn('⚠️  OpenAI API non configurée - Mode fallback activé pour le chatbot');
+    } else if (!this.hasFetch) {
+      console.warn('⚠️  fetch() non disponible (Node < 18 ?) - Mode fallback activé pour le chatbot');
     }
+  }
+
+  _sanitizeOpenAiErrorBody(text) {
+    if (!text) {
+      return undefined;
+    }
+    // Évite de logguer des payloads trop volumineux
+    return text.length > 2000 ? text.slice(0, 2000) + '…' : text;
+  }
+
+  _shouldEscalateToHuman(message) {
+    const m = (message || '').toLowerCase();
+    return /(paiement|payment|stripe|rembours|refund|factur|billing|cb\b|carte|urgent|arnaque|fraude|chargeback|bug|erreur|error|crash|compte|account|connexion|login|mot de passe|password)/i.test(m);
   }
 
   /**
    * Analyse un texte pour détecter s'il est généré par IA
    */
   async analyzeText(text) {
-    if (!this.apiKey) {
+    if (!this.apiKey || typeof globalThis.fetch !== 'function') {
       return { error: 'OpenAI API key not configured', demo: true };
     }
 
@@ -69,7 +86,7 @@ class OpenAIService {
    * Analyse une image avec vision API pour détecter des anomalies
    */
   async analyzeImageWithVision(base64Image) {
-    if (!this.apiKey) {
+    if (!this.apiKey || typeof globalThis.fetch !== 'function') {
       return { error: 'OpenAI API key not configured', demo: true };
     }
 
@@ -133,7 +150,7 @@ class OpenAIService {
    * Génère une explication détaillée d'un résultat d'analyse
    */
   async explainAnalysis(analysisResult) {
-    if (!this.apiKey) {
+    if (!this.apiKey || typeof globalThis.fetch !== 'function') {
       return 'OpenAI API non configurée';
     }
 
@@ -171,13 +188,13 @@ class OpenAIService {
   /**
    * Chatbot support client multi-langue
    */
-  async chatWithUser(conversationHistory, language = 'fr') {
+  chatWithUser(conversationHistory, language = 'fr') {
     return this.getChatResponse(conversationHistory, language);
   }
 
   async getChatResponse(conversationHistory, language = 'fr') {
-    // Mode fallback intelligent si pas de clé API
-    if (!this.hasApiKey) {
+    // Mode fallback intelligent si pas de clé API ou runtime incompatible
+    if (!this.canCallApi) {
       return this.getSmartFallbackResponse(conversationHistory, language);
     }
 
@@ -256,26 +273,51 @@ Se não puder responder ou for complexo, termine com [HUMAN_SUPPORT] para alerta
       });
 
       if (!response.ok) {
-        throw new Error(`OpenAI API error: ${response.status}`);
+        const errorText = await response.text().catch(() => undefined);
+        const sanitized = this._sanitizeOpenAiErrorBody(errorText);
+
+        // Si la clé est invalide/interdite, désactiver OpenAI pour éviter de spammer l'API
+        if (response.status === 401 || response.status === 403) {
+          this.canCallApi = false;
+        }
+
+        const err = new Error(`OpenAI API error: ${response.status}`);
+        err.status = response.status;
+        err.body = sanitized;
+        throw err;
       }
 
       const data = await response.json();
       return data.choices[0].message.content;
 
     } catch (error) {
-      console.error('Chatbot error:', error);
-      return this.getFallbackResponse(language);
+      // Ne pas bloquer le chatbot si OpenAI est en erreur: fallback intelligent
+      console.error('Chatbot error:', {
+        message: error?.message,
+        status: error?.status,
+        body: error?.body,
+      });
+
+      const lastUserMessage = conversationHistory?.[conversationHistory.length - 1]?.content;
+      const smart = this.getSmartFallbackResponse(conversationHistory, language);
+
+      // Si c'est un sujet sensible/complexe (paiement/compte/bug), on peut demander un humain
+      if (this._shouldEscalateToHuman(lastUserMessage) && !smart.includes('[HUMAN_SUPPORT]')) {
+        return smart + ' [HUMAN_SUPPORT]';
+      }
+
+      return smart;
     }
   }
 
   getFallbackResponse(language) {
     const fallbacks = {
-      fr: "Désolé, je rencontre un problème technique. Un administrateur va vous répondre rapidement. [HUMAN_SUPPORT]",
-      en: "Sorry, I'm experiencing a technical issue. An administrator will respond shortly. [HUMAN_SUPPORT]",
-      es: "Lo siento, tengo un problema técnico. Un administrador responderá pronto. [HUMAN_SUPPORT]",
-      de: "Entschuldigung, ich habe ein technisches Problem. Ein Administrator wird bald antworten. [HUMAN_SUPPORT]",
-      it: "Scusa, ho un problema tecnico. Un amministratore risponderà presto. [HUMAN_SUPPORT]",
-      pt: "Desculpe, estou com um problema técnico. Um administrador responderá em breve. [HUMAN_SUPPORT]",
+      fr: "Je peux vous aider avec les plans, les formats supportés, ou des questions techniques. Que souhaitez-vous savoir ?",
+      en: "I can help with plans, supported formats, or technical questions. What would you like to know?",
+      es: "Puedo ayudarte con planes, formatos compatibles o preguntas técnicas. ¿Qué te gustaría saber?",
+      de: "Ich kann bei Plänen, unterstützten Formaten oder technischen Fragen helfen. Was möchten Sie wissen?",
+      it: "Posso aiutarti con piani, formati supportati o domande tecniche. Cosa vorresti sapere?",
+      pt: "Posso ajudar com planos, formatos suportados ou questões técnicas. O que você gostaria de saber?",
     };
     return fallbacks[language] || fallbacks.fr;
   }
@@ -292,43 +334,43 @@ Se não puder responder ou for complexo, termine com [HUMAN_SUPPORT] para alerta
         formats: "Nous acceptons les formats JPG, PNG, MP4 et MOV jusqu'à 100MB. Pour de meilleurs résultats, utilisez des fichiers de bonne qualité.",
         price: "Nos tarifs : FREE (gratuit, 3 analyses/jour), PRO (9.99€/mois, 50 analyses/jour), BUSINESS (49.99€/mois, analyses illimitées).",
         help: "Je peux vous aider avec : vos analyses, les plans tarifaires, les formats acceptés, les problèmes techniques. Que souhaitez-vous savoir ?",
-        default: "Merci pour votre message. Je peux vous aider avec les plans, les formats supportés ou des questions techniques. Pour des demandes spécifiques, un administrateur vous répondra. [HUMAN_SUPPORT]"
+        default: "Merci pour votre message. Je peux vous aider avec les plans, les formats supportés ou des questions techniques. Que souhaitez-vous savoir ?",
       },
       en: {
         plans: "FakeTect offers 3 plans: FREE (3 analyses/day free), PRO (50/day at €9.99/month), and BUSINESS (unlimited at €49.99/month). Need help choosing?",
         formats: "We accept JPG, PNG, MP4, and MOV formats up to 100MB. For best results, use high-quality files.",
         price: "Our pricing: FREE (free, 3 analyses/day), PRO (€9.99/month, 50 analyses/day), BUSINESS (€49.99/month, unlimited analyses).",
         help: "I can help you with: your analyses, pricing plans, accepted formats, technical issues. What would you like to know?",
-        default: "Thank you for your message. I can help with plans, supported formats or technical questions. For specific requests, an administrator will respond. [HUMAN_SUPPORT]"
+        default: "Thank you for your message. I can help with plans, supported formats or technical questions. What would you like to know?",
       },
       es: {
         plans: "FakeTect ofrece 3 planes: FREE (3 análisis/día gratis), PRO (50/día por 9.99€/mes), y BUSINESS (ilimitado por 49.99€/mes). ¿Necesitas ayuda para elegir?",
         formats: "Aceptamos formatos JPG, PNG, MP4 y MOV hasta 100MB. Para mejores resultados, usa archivos de buena calidad.",
         price: "Nuestras tarifas: FREE (gratis, 3 análisis/día), PRO (9.99€/mes, 50 análisis/día), BUSINESS (49.99€/mes, análisis ilimitados).",
         help: "Puedo ayudarte con: tus análisis, planes de precios, formatos aceptados, problemas técnicos. ¿Qué te gustaría saber?",
-        default: "Gracias por tu mensaje. Puedo ayudar con planes, formatos soportados o preguntas técnicas. Para solicitudes específicas, un administrador responderá. [HUMAN_SUPPORT]"
+        default: "Gracias por tu mensaje. Puedo ayudar con planes, formatos soportados o preguntas técnicas. ¿Qué te gustaría saber?",
       },
       de: {
         plans: "FakeTect bietet 3 Pläne: FREE (3 Analysen/Tag kostenlos), PRO (50/Tag für 9,99€/Monat) und BUSINESS (unbegrenzt für 49,99€/Monat). Brauchen Sie Hilfe bei der Auswahl?",
         formats: "Wir akzeptieren JPG, PNG, MP4 und MOV Formate bis 100MB. Für beste Ergebnisse verwenden Sie qualitativ hochwertige Dateien.",
         price: "Unsere Preise: FREE (kostenlos, 3 Analysen/Tag), PRO (9,99€/Monat, 50 Analysen/Tag), BUSINESS (49,99€/Monat, unbegrenzte Analysen).",
         help: "Ich kann Ihnen helfen mit: Ihren Analysen, Preisplänen, akzeptierten Formaten, technischen Problemen. Was möchten Sie wissen?",
-        default: "Danke für Ihre Nachricht. Ich kann bei Plänen, unterstützten Formaten oder technischen Fragen helfen. Für spezifische Anfragen wird ein Administrator antworten. [HUMAN_SUPPORT]"
+        default: "Danke für Ihre Nachricht. Ich kann bei Plänen, unterstützten Formaten oder technischen Fragen helfen. Was möchten Sie wissen?",
       },
       it: {
         plans: "FakeTect offre 3 piani: FREE (3 analisi/giorno gratis), PRO (50/giorno a 9,99€/mese) e BUSINESS (illimitato a 49,99€/mese). Serve aiuto per scegliere?",
         formats: "Accettiamo formati JPG, PNG, MP4 e MOV fino a 100MB. Per risultati migliori, usa file di buona qualità.",
         price: "Le nostre tariffe: FREE (gratis, 3 analisi/giorno), PRO (9,99€/mese, 50 analisi/giorno), BUSINESS (49,99€/mese, analisi illimitate).",
         help: "Posso aiutarti con: le tue analisi, i piani tariffari, i formati accettati, problemi tecnici. Cosa vorresti sapere?",
-        default: "Grazie per il tuo messaggio. Posso aiutare con i piani, i formati supportati o domande tecniche. Per richieste specifiche, un amministratore risponderà. [HUMAN_SUPPORT]"
+        default: "Grazie per il tuo messaggio. Posso aiutare con i piani, i formati supportati o domande tecniche. Cosa vorresti sapere?",
       },
       pt: {
         plans: "FakeTect oferece 3 planos: FREE (3 análises/dia grátis), PRO (50/dia por €9,99/mês) e BUSINESS (ilimitado por €49,99/mês). Precisa de ajuda para escolher?",
         formats: "Aceitamos formatos JPG, PNG, MP4 e MOV até 100MB. Para melhores resultados, use arquivos de boa qualidade.",
         price: "Nossos preços: FREE (grátis, 3 análises/dia), PRO (€9,99/mês, 50 análises/dia), BUSINESS (€49,99/mês, análises ilimitadas).",
         help: "Posso ajudá-lo com: suas análises, planos de preços, formatos aceitos, problemas técnicos. O que gostaria de saber?",
-        default: "Obrigado pela sua mensagem. Posso ajudar com planos, formatos suportados ou questões técnicas. Para solicitações específicas, um administrador responderá. [HUMAN_SUPPORT]"
-      }
+        default: "Obrigado pela sua mensagem. Posso ajudar com planos, formatos suportados ou questões técnicas. O que você gostaria de saber?",
+      },
     };
 
     const langResponses = responses[language] || responses.fr;
