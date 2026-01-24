@@ -71,11 +71,11 @@ export default function Landing() {
             </motion.p>
 
             <motion.div variants={item} className="flex flex-col sm:flex-row gap-4">
-              <Link to="/register" className="btn-primary text-lg px-8 py-4 group">
+              <Link to="/register" className="inline-flex items-center justify-center text-lg px-8 py-4 font-semibold rounded-2xl bg-gradient-to-r from-primary via-purple-600 to-pink-500 hover:from-primary/90 hover:via-purple-500 hover:to-pink-400 text-white shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 transition-all duration-300 hover:-translate-y-1 group">
                 {t('landing.hero.ctaPrimary')}
                 <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
               </Link>
-              <Link to="/pricing" className="btn-secondary text-lg px-8 py-4">
+              <Link to="/pricing" className="inline-flex items-center justify-center text-lg px-8 py-4 font-semibold rounded-2xl bg-white/5 hover:bg-white/10 text-white border border-white/10 hover:border-white/20 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1">
                 {t('landing.hero.ctaSecondary')}
               </Link>
             </motion.div>
