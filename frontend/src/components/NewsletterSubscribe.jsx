@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Mail, Check, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import api from '../services/api';
@@ -10,7 +10,14 @@ export default function NewsletterSubscribe() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
+  // Cleanup timer pour éviter memory leak
+  useEffect(() => {
+    if (!success) return;
+    const timer = setTimeout(() => setSuccess(false), 5000);
+    return () => clearTimeout(timer);
+  }, [success]);
+
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     if (!email || isLoading) return;
 
@@ -27,19 +34,15 @@ export default function NewsletterSubscribe() {
 
       setSuccess(true);
       setEmail('');
-
-      // Reset success message après 5s
-      setTimeout(() => setSuccess(false), 5000);
-
     } catch (err) {
       console.error('Newsletter error:', err);
       setError(err.response?.data?.error || t('newsletter.error'));
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [email, isLoading, i18n.language, t]);
 
-  const translations = {
+  const translations = useMemo(() => ({
     fr: {
       title: 'Newsletter',
       subtitle: 'Recevez les dernières nouveautés et cas d\'usage',
@@ -118,10 +121,10 @@ export default function NewsletterSubscribe() {
         '📊 Statistiche mensili'
       ]
     }
-  };
+  }), []);
 
   const lang = i18n.language || 'fr';
-  const txt = translations[lang] || translations.fr;
+  const txt = useMemo(() => translations[lang] || translations.fr, [translations, lang]);
 
   return (
     <div className="bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20 rounded-2xl p-6">

@@ -53,6 +53,7 @@ async function sendDeletionWarnings() {
 
 /**
  * Supprime les comptes FREE inactifs de plus de 30 jours
+ * Optimisé avec deleteMany pour éviter les N+1 queries
  */
 async function cleanupInactiveFreeAccounts() {
   try {
@@ -61,38 +62,34 @@ async function cleanupInactiveFreeAccounts() {
 
     console.log(`🧹 Nettoyage des comptes FREE inactifs créés avant le ${thirtyDaysAgo.toISOString()}`);
 
-    // Récupérer les comptes FREE de plus de 30 jours
-    const inactiveFreeUsers = await prisma.user.findMany({
+    // Compter d'abord pour logging
+    const count = await prisma.user.count({
       where: {
         plan: 'FREE',
-        createdAt: {
-          lt: thirtyDaysAgo
-        },
-        role: 'USER' // Ne pas supprimer les admins
+        createdAt: { lt: thirtyDaysAgo },
+        role: 'USER'
       }
     });
 
-    console.log(`👥 ${inactiveFreeUsers.length} comptes FREE inactifs à supprimer`);
+    console.log(`👥 ${count} comptes FREE inactifs à supprimer`);
 
-    let deletedUsers = 0;
-
-    // Supprimer chaque utilisateur (cascade sur analyses)
-    for (const user of inactiveFreeUsers) {
-      try {
-        // Les analyses seront supprimées automatiquement grâce au onDelete: Cascade
-        await prisma.user.delete({
-          where: { id: user.id }
-        });
-        deletedUsers++;
-        console.log(`✅ Compte FREE supprimé : ${user.email} (créé le ${user.createdAt.toISOString()})`);
-      } catch (error) {
-        console.error(`❌ Erreur suppression utilisateur ${user.email}:`, error.message);
-      }
+    if (count === 0) {
+      return { usersDeleted: 0 };
     }
 
-    console.log(`✅ Nettoyage comptes FREE terminé : ${deletedUsers} comptes supprimés`);
+    // Suppression batch avec deleteMany (plus performant que la boucle)
+    // Les analyses seront supprimées automatiquement grâce au onDelete: Cascade
+    const result = await prisma.user.deleteMany({
+      where: {
+        plan: 'FREE',
+        createdAt: { lt: thirtyDaysAgo },
+        role: 'USER'
+      }
+    });
 
-    return { usersDeleted: deletedUsers };
+    console.log(`✅ Nettoyage comptes FREE terminé : ${result.count} comptes supprimés`);
+
+    return { usersDeleted: result.count };
   } catch (error) {
     console.error('❌ Erreur lors du nettoyage des comptes FREE:', error);
     throw error;
@@ -170,11 +167,12 @@ async function cleanupOldAnalyses() {
 
 /**
  * Nettoie les fichiers orphelins (dans uploads/ mais pas en base)
+ * Optimisé pour éviter les N+1 queries: charge tous les fileUrls en une seule requête
  */
 async function cleanupOrphanFiles() {
   try {
     const uploadsDir = path.join(__dirname, '../../uploads');
-    
+
     if (!fs.existsSync(uploadsDir)) {
       console.log('📁 Dossier uploads/ inexistant');
       return { orphansDeleted: 0 };
@@ -183,17 +181,28 @@ async function cleanupOrphanFiles() {
     const files = fs.readdirSync(uploadsDir);
     console.log(`📁 ${files.length} fichiers dans uploads/`);
 
+    if (files.length === 0) {
+      return { orphansDeleted: 0 };
+    }
+
+    // Récupérer tous les fileUrls en une seule requête (évite N+1)
+    const existingAnalyses = await prisma.analysis.findMany({
+      where: {
+        fileUrl: { not: null }
+      },
+      select: { fileUrl: true }
+    });
+
+    // Créer un Set pour recherche O(1)
+    const existingFileUrls = new Set(existingAnalyses.map(a => a.fileUrl));
+
     let orphansDeleted = 0;
 
     for (const file of files) {
-      // Chercher si le fichier existe en base
       const fileUrl = `/uploads/${file}`;
-      const analysis = await prisma.analysis.findFirst({
-        where: { fileUrl }
-      });
 
-      if (!analysis) {
-        // Fichier orphelin
+      // Vérification en mémoire au lieu d'une requête DB
+      if (!existingFileUrls.has(fileUrl)) {
         const filePath = path.join(uploadsDir, file);
         try {
           fs.unlinkSync(filePath);

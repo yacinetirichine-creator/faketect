@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useCallback, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Cookie, Settings, X, Check } from 'lucide-react';
 
-const CookieConsent = () => {
+const CookieConsent = memo(() => {
   const { t } = useTranslation();
   const [showBanner, setShowBanner] = useState(() => {
     return !localStorage.getItem('cookie_consent');
@@ -15,7 +15,7 @@ const CookieConsent = () => {
     functional: false,
   });
 
-  const handleAcceptAll = () => {
+  const handleAcceptAll = useCallback(() => {
     const consent = {
       necessary: true,
       preferences: true,
@@ -25,16 +25,16 @@ const CookieConsent = () => {
     };
     localStorage.setItem('cookie_consent', JSON.stringify(consent));
     setShowBanner(false);
-    
+
     // Activer Google Analytics si accepté
-    if (consent.analytics && window.gtag) {
+    if (window.gtag) {
       window.gtag('consent', 'update', {
         analytics_storage: 'granted',
       });
     }
-  };
+  }, []);
 
-  const handleRejectAll = () => {
+  const handleRejectAll = useCallback(() => {
     const consent = {
       necessary: true,
       preferences: false,
@@ -44,16 +44,17 @@ const CookieConsent = () => {
     };
     localStorage.setItem('cookie_consent', JSON.stringify(consent));
     setShowBanner(false);
-    
+    setShowSettings(false);
+
     // Désactiver Google Analytics
     if (window.gtag) {
       window.gtag('consent', 'update', {
         analytics_storage: 'denied',
       });
     }
-  };
+  }, []);
 
-  const handleSavePreferences = () => {
+  const handleSavePreferences = useCallback(() => {
     const consent = {
       ...preferences,
       timestamp: new Date().toISOString(),
@@ -61,14 +62,17 @@ const CookieConsent = () => {
     localStorage.setItem('cookie_consent', JSON.stringify(consent));
     setShowBanner(false);
     setShowSettings(false);
-    
+
     // Mettre à jour Google Analytics selon les préférences
     if (window.gtag) {
       window.gtag('consent', 'update', {
         analytics_storage: preferences.analytics ? 'granted' : 'denied',
       });
     }
-  };
+  }, [preferences]);
+
+  const openSettings = useCallback(() => setShowSettings(true), []);
+  const closeSettings = useCallback(() => setShowSettings(false), []);
 
   if (!showBanner) return null;
 
@@ -100,7 +104,7 @@ const CookieConsent = () => {
             {/* Boutons d'action */}
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
               <button
-                onClick={() => setShowSettings(true)}
+                onClick={openSettings}
                 className="px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
               >
                 <Settings className="w-4 h-4 mr-2" />
@@ -134,7 +138,7 @@ const CookieConsent = () => {
                 {t('cookies.settings.title')}
               </h2>
               <button
-                onClick={() => setShowSettings(false)}
+                onClick={closeSettings}
                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5" />
@@ -280,6 +284,8 @@ const CookieConsent = () => {
       )}
     </>
   );
-};
+});
+
+CookieConsent.displayName = 'CookieConsent';
 
 export default CookieConsent;

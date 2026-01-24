@@ -64,6 +64,11 @@ model ChatConversation {
   updatedAt DateTime      @updatedAt
   user      User?         @relation(fields: [userId], references: [id])
   messages  ChatMessage[]
+
+  // Indexes pour optimiser les requêtes fréquentes
+  @@index([userId])
+  @@index([status, updatedAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
 }
 
 model ChatMessage {
@@ -76,6 +81,11 @@ model ChatMessage {
   createdAt      DateTime         @default(now())
   admin          User?            @relation("AdminMessages", fields: [adminId], references: [id])
   conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  // Indexes pour optimiser les requêtes fréquentes
+  @@index([conversationId, createdAt(sort: Desc)])
+  @@index([adminId])
+  @@index([role])
 }
 
 model NewsletterSubscriber {
@@ -90,6 +100,10 @@ model NewsletterSubscriber {
   unsubscribedAt DateTime?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+
+  // Indexes pour optimiser les requêtes fréquentes
+  @@index([isActive, language])
+  @@index([createdAt(sort: Desc)])
 }
 
 model NewsletterCampaign {

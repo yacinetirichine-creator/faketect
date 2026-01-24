@@ -144,6 +144,119 @@ router.post('/change-plan', auth, async (req, res) => {
 });
 
 /**
+ * GET /api/user/data-export
+ * Export des données personnelles (RGPD Art. 20 - Droit à la portabilité)
+ * Retourne toutes les données de l'utilisateur au format JSON
+ */
+router.get('/data-export', auth, async (req, res) => {
+  try {
+    const user = req.user;
+
+    // Récupérer toutes les données de l'utilisateur
+    const [userData, analyses, chatConversations, newsletterSubscription] = await Promise.all([
+      // Données utilisateur (sans le mot de passe)
+      prisma.user.findUnique({
+        where: { id: user.id },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          phone: true,
+          acceptMarketing: true,
+          role: true,
+          plan: true,
+          language: true,
+          usedToday: true,
+          usedMonth: true,
+          usedTotal: true,
+          createdAt: true,
+          updatedAt: true
+        }
+      }),
+      // Historique des analyses
+      prisma.analysis.findMany({
+        where: { userId: user.id },
+        select: {
+          id: true,
+          type: true,
+          fileName: true,
+          aiScore: true,
+          isAi: true,
+          confidence: true,
+          details: true,
+          createdAt: true
+        },
+        orderBy: { createdAt: 'desc' }
+      }),
+      // Conversations du chatbot
+      prisma.chatConversation.findMany({
+        where: { userId: user.id },
+        include: {
+          messages: {
+            select: {
+              id: true,
+              role: true,
+              content: true,
+              createdAt: true
+            },
+            orderBy: { createdAt: 'asc' }
+          }
+        },
+        orderBy: { createdAt: 'desc' }
+      }),
+      // Abonnement newsletter
+      prisma.newsletterSubscriber.findUnique({
+        where: { email: user.email },
+        select: {
+          email: true,
+          name: true,
+          language: true,
+          interests: true,
+          isActive: true,
+          confirmedAt: true,
+          createdAt: true
+        }
+      })
+    ]);
+
+    const exportData = {
+      exportInfo: {
+        generatedAt: new Date().toISOString(),
+        format: 'application/json',
+        version: '1.0',
+        requestedBy: user.email,
+        legalBasis: 'RGPD Article 20 - Droit à la portabilité des données'
+      },
+      user: userData,
+      analyses: {
+        count: analyses.length,
+        items: analyses
+      },
+      chatHistory: {
+        conversationsCount: chatConversations.length,
+        conversations: chatConversations
+      },
+      newsletter: newsletterSubscription || { subscribed: false }
+    };
+
+    logger.info('Data export requested', { userId: user.id, email: user.email });
+
+    // Définir les headers pour le téléchargement
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="faketect-data-export-${user.id}-${new Date().toISOString().split('T')[0]}.json"`);
+
+    res.json(exportData);
+
+  } catch (error) {
+    logger.error('Data export error', error);
+    res.status(500).json({
+      error: 'Erreur lors de l\'export des données',
+      message: 'Contactez dpo@faketect.com si le problème persiste'
+    });
+  }
+});
+
+/**
  * DELETE /api/user/account
  * Supprimer le compte utilisateur et toutes ses données
  */

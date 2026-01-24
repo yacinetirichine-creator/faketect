@@ -3,8 +3,9 @@ const prisma = require('../config/db');
 const PLANS = require('../config/plans');
 const cache = require('../services/cache');
 
-// TTL du cache utilisateur (5 minutes)
-const USER_CACHE_TTL = 300;
+// TTL du cache utilisateur (1 heure - optimisé pour réduire les appels DB)
+// Le cache est invalidé manuellement lors des modifications de profil/plan
+const USER_CACHE_TTL = 3600;
 
 const auth = async (req, res, next) => {
   try {
