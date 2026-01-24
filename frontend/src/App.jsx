@@ -6,8 +6,10 @@ import MainLayout from './components/layout/MainLayout';
 import DashboardLayout from './components/layout/DashboardLayout';
 import { Loader2 } from 'lucide-react';
 import ErrorBoundary from './components/ErrorBoundary';
+import CookieConsent from './components/CookieConsent';
+import Chatbot from './components/Chatbot';
 
-// Lazy loading des composants pour réduire le bundle initial
+// Lazy loading des pages pour réduire le bundle initial
 const Landing = lazy(() => import('./components/pages/Landing'));
 const Pricing = lazy(() => import('./components/pages/Pricing'));
 const Login = lazy(() => import('./components/pages/Login'));
@@ -23,8 +25,6 @@ const PrivacyPolicy = lazy(() => import('./components/pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./components/pages/TermsOfService'));
 const LegalPage = lazy(() => import('./components/pages/LegalPage'));
 const CookiesPage = lazy(() => import('./components/pages/CookiesPage'));
-const CookieConsent = lazy(() => import('./components/CookieConsent'));
-const Chatbot = lazy(() => import('./components/Chatbot'));
 
 // Composant de chargement réutilisable
 const PageLoader = () => (
@@ -62,7 +62,6 @@ export default function App() {
   return (
     <ErrorBoundary>
       <Suspense fallback={<PageLoader />}>
-        <CookieConsent />
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Landing />} />
@@ -88,9 +87,9 @@ export default function App() {
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-        <CookieConsent />
-        <Chatbot />
       </Suspense>
+      <CookieConsent />
+      <Chatbot />
     </ErrorBoundary>
   );
 }
