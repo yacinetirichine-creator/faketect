@@ -1,7 +1,6 @@
 {
   "name": "faketect-backend",
   "version": "1.0.0",
-  "type": "module",
   "scripts": {
     "start": "node src/cluster.js",
     "start:single": "node src/index.js",
