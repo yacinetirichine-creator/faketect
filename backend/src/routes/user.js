@@ -4,6 +4,7 @@ const { auth } = require('../middleware/auth');
 const PLANS = require('../config/plans');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const logger = require('../config/logger');
+const { getStripeProducts } = require('../config/stripe-products');
 
 const router = express.Router();
 
@@ -80,15 +81,18 @@ router.post('/change-plan', auth, async (req, res) => {
       }
     }
 
-    // Si upgrade/downgrade entre PRO et BUSINESS avec Stripe
-    if (user.stripeSubscriptionId && (newPlan === 'PRO' || newPlan === 'BUSINESS')) {
+    // Plans payants
+    const paidPlans = ['STARTER', 'PRO', 'BUSINESS', 'ENTERPRISE'];
+
+    // Si upgrade/downgrade entre plans payants avec Stripe
+    if (user.stripeSubscriptionId && paidPlans.includes(newPlan)) {
       try {
         // Récupérer l'abonnement actuel
         const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId);
-        
-        // Récupérer le nouveau price ID
-        const products = require('../config/stripe-products');
-        const newPriceId = products[newPlan]?.priceId;
+
+        // Récupérer le nouveau price ID (utiliser mensuel par défaut)
+        const stripeProducts = getStripeProducts();
+        const newPriceId = stripeProducts[newPlan]?.monthlyPriceId;
 
         if (!newPriceId) {
           return res.status(400).json({ error: 'Configuration Stripe manquante pour ce plan' });
@@ -108,10 +112,10 @@ router.post('/change-plan', auth, async (req, res) => {
           data: { plan: newPlan }
         });
 
-        logger.info('User changed plan via Stripe', { 
-          userId: user.id, 
-          oldPlan: user.plan, 
-          newPlan 
+        logger.info('User changed plan via Stripe', {
+          userId: user.id,
+          oldPlan: user.plan,
+          newPlan
         });
 
         return res.json({
@@ -125,8 +129,8 @@ router.post('/change-plan', auth, async (req, res) => {
       }
     }
 
-    // Si passage de FREE à PRO/BUSINESS, rediriger vers Stripe Checkout
-    if (user.plan === 'FREE' && (newPlan === 'PRO' || newPlan === 'BUSINESS')) {
+    // Si passage de FREE à un plan payant, rediriger vers Stripe Checkout
+    if (user.plan === 'FREE' && paidPlans.includes(newPlan)) {
       return res.json({
         success: false,
         requiresPayment: true,

@@ -3,10 +3,10 @@ const path = require('path');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const PLANS = {
-  STANDARD: { name: 'Standard', monthlyPrice: 9.99, yearlyPrice: 99, credits: 100 },
-  PROFESSIONAL: { name: 'Professional', monthlyPrice: 29.99, yearlyPrice: 299, credits: 500 },
-  BUSINESS: { name: 'Business', monthlyPrice: 89, yearlyPrice: 890, credits: 2000 },
-  ENTERPRISE: { name: 'Enterprise', monthlyPrice: 249, yearlyPrice: 2490, credits: -1 }
+  STARTER: { name: 'Starter', monthlyPrice: 12, yearlyPrice: 100, credits: 100 },
+  PRO: { name: 'Pro', monthlyPrice: 34, yearlyPrice: 285, credits: 500 },
+  BUSINESS: { name: 'Business', monthlyPrice: 89, yearlyPrice: 750, credits: 2000 },
+  ENTERPRISE: { name: 'Enterprise', monthlyPrice: 249, yearlyPrice: 2090, credits: -1 }
 };
 
 let stripeProducts = null;
