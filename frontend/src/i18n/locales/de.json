@@ -63,11 +63,11 @@
   "certificate": { "download": "Zertifikat herunterladen", "downloadError": "Zertifikat konnte nicht erstellt werden", "basedOnExplainability": "Zertifikat basiert auf Score, Vertrauen und den folgenden Signalen.", "title": "Analyse-Zertifikat", "subtitle": "Erstellt von FakeTect", "fields": { "analysisId": "Analyse-ID", "user": "Benutzer", "date": "Datum", "file": "Datei", "fileHash": "Datei-Fingerabdruck (SHA-256)", "score": "KI-Score", "verdict": "Urteil", "confidence": "Vertrauen", "provider": "Provider", "framesAnalyzed": "Analysierte Frames", "consensus": "Konsens", "sources": "Quellen", "topSignals": "Wichtigste Signale", "fingerprint": "Zertifikats-Fingerabdruck", "scoreShort": "Score", "confidenceShort": "Vertr." }, "generatedAt": "Erstellt am {{date}}", "verificationHint": "Verifizierung: Analyse-ID in der App abgleichen" },
   "verdicts": { "ai_generated": "KI", "likely_ai": "Wahrscheinlich KI", "possibly_ai": "Vielleicht KI", "possibly_real": "Vielleicht echt", "likely_real": "Wahrscheinlich echt" },
   "admin": { "title": "Admin", "metrics": "Metriken", "users": "Benutzer", "totalUsers": "Gesamt", "newToday": "Neu heute", "totalAnalyses": "Analysen", "mrr": "MRR", "usersByPlan": "Benutzer nach Plan", "analysesToday": "Analysen heute", "analysesPerformed": "Analysen durchgeführt", "noAnalyses": "Keine Analysen", "confirmDeleteUser": "Diesen Benutzer löschen?", "planUpdated": "Plan aktualisiert", "usersTable": { "email": "E-Mail", "name": "Name", "plan": "Plan", "role": "Rolle", "createdAt": "Erstellt", "actions": "Aktionen" }, "analysesTable": { "date": "Datum", "user": "Benutzer", "file": "Datei", "type": "Typ", "score": "Score", "verdict": "Urteil", "provider": "Provider" } },
-  "common": { "loading": "Laden...", "save": "Speichern", "cancel": "Abbrechen", "delete": "Löschen", "deleted": "Gelöscht", "confirmDelete": "Löschen?", "searchPlaceholder": "Suchen...", "error": "Fehler", "loadError": "Ladefehler", "errorGeneric": "Fehler", "saved": "Gespeichert", "id": "ID" },
+  "common": { "loading": "Laden...", "save": "Speichern", "cancel": "Abbrechen", "delete": "Löschen", "deleted": "Gelöscht", "confirmDelete": "Löschen?", "searchPlaceholder": "Suchen...", "error": "Fehler", "loadError": "Ladefehler", "errorGeneric": "Fehler", "saved": "Gespeichert", "id": "ID", "optional": "optional" },
   "errorBoundary": { "title": "Anzeigefehler", "description": "Ein JavaScript-Fehler verhindert, dass diese Seite angezeigt wird.", "reload": "Neu laden", "retry": "Erneut versuchen" },
   "historyPage": { "url": "URL", "table": { "file": "Datei", "type": "Typ", "score": "Score", "date": "Datum", "actions": "Aktionen" } },
   "settings": { "sections": { "admin": "Admin", "profile": "Profil", "language": "Sprache", "subscription": "Abo" }, "admin": { "accessTitle": "Admin-Zugriff", "accessDesc": "Admin-Dashboard öffnen und Benutzer verwalten", "open": "Öffnen" }, "freeQuotaHint": "10 kostenlose Tests (30 Tage gültig)", "activeSubscription": "Aktives Abo", "subscription": { "plan": "Plan {{plan}}", "manage": "Abo verwalten", "upgrade": "Upgrade", "change": "Ändern" } },
-  "footer": { "description": "Fortschrittliche KI-Erkennung für Ihre Inhalte.", "product": "Produkt", "company": "Unternehmen", "links": { "pricing": "Preise", "features": "Funktionen", "api": "API", "about": "Über uns", "blog": "Blog", "contact": "Kontakt" }, "rights": "© 2025 FakeTect. Alle Rechte vorbehalten." },
+  "footer": { "description": "Fortschrittliche KI-Erkennung für Ihre Inhalte.", "product": "Produkt", "company": "Unternehmen", "legal": "Rechtliches", "links": { "pricing": "Preise", "features": "Funktionen", "api": "API", "about": "Über uns", "blog": "Blog", "contact": "Kontakt", "terms": "AGB", "sales": "Verkaufsbedingungen" }, "rights": "© 2025 FakeTect. Alle Rechte vorbehalten." },
   "newsletter": {
     "title": "Newsletter",
     "subtitle": "Erhalten Sie die neuesten Updates und Anwendungsfälle",
@@ -117,6 +117,73 @@
       "case_study": "Anwendungsfall",
       "monthly_stats": "Monatliche Statistiken",
       "promotional": "Promotion"
+    }
+  },
+  "tutorial": {
+    "welcome": {
+      "title": "Willkommen bei FakeTect!",
+      "desc": "Erkennen Sie in Sekunden, ob ein Bild oder Video von KI generiert wurde. So funktioniert es."
+    },
+    "upload": {
+      "title": "Schritt 1: Upload",
+      "desc": "Ziehen Sie Dateien per Drag & Drop oder klicken Sie zum Hochladen. Bilder (JPG, PNG, WEBP) oder Videos (MP4, MOV) bis 100 MB.",
+      "tip": "Tipp: Lange Videos werden nur in den ersten 60 Sekunden analysiert, um Kosten zu optimieren."
+    },
+    "analyze": {
+      "title": "Schritt 2: Analyse",
+      "desc": "Unsere KI analysiert Ihre Datei in Sekunden. Wir nutzen mehrere Modelle für maximale Genauigkeit.",
+      "tip": "Mehrere Quellen: Sightengine, Illuminarty und OpenAI für zuverlässige Ergebnisse."
+    },
+    "result": {
+      "title": "Schritt 3: Ergebnis",
+      "desc": "Erhalten Sie einen Konfidenz-Score und ein klares Urteil: ECHT, KI oder UNSICHER. Laden Sie ein PDF-Zertifikat zur Authentizitätsprüfung herunter.",
+      "tip": "Das PDF-Zertifikat enthält einen QR-Code und ist ideal für offizielle Dokumente."
+    },
+    "ready": {
+      "title": "Sie sind bereit!",
+      "desc": "KOSTENLOSER Plan: 10 Analysen in 30 Tagen. Upgraden Sie für mehr Analysen und erweiterte Funktionen."
+    },
+    "previous": "Zurück",
+    "next": "Weiter",
+    "start": "Starten",
+    "skip": "Tutorial überspringen"
+  },
+  "cookies": {
+    "banner": {
+      "title": "Cookie-Verwaltung",
+      "description": "Wir verwenden Cookies, um Ihre Erfahrung zu verbessern, den Datenverkehr zu analysieren und Inhalte zu personalisieren. Unbedingt notwendige Cookies sind immer aktiviert. Sie können Ihre Präferenzen unten verwalten.",
+      "learnMore": "Mehr über unsere Cookie-Richtlinie erfahren →",
+      "customize": "Anpassen",
+      "rejectAll": "Alle ablehnen",
+      "acceptAll": "Alle akzeptieren"
+    },
+    "settings": {
+      "title": "Cookie-Einstellungen",
+      "necessary": {
+        "title": "🔒 Unbedingt notwendige Cookies",
+        "description": "Unverzichtbar für den Betrieb der Website (Authentifizierung, Sicherheit, Warenkorb).",
+        "alwaysEnabled": "Immer aktiviert"
+      },
+      "preferences": {
+        "title": "⚙️ Präferenz-Cookies",
+        "description": "Speichern Ihre Präferenzen (Sprache, Anzeigedesign, Einstellungen)."
+      },
+      "analytics": {
+        "title": "📊 Analyse-Cookies",
+        "description": "Helfen uns zu verstehen, wie Besucher die Website nutzen (Google Analytics mit anonymisierter IP)."
+      },
+      "functional": {
+        "title": "⭐ Funktionale Cookies",
+        "description": "Ermöglichen erweiterte und personalisierte Funktionen (Verlauf, Anzeigeeinstellungen)."
+      },
+      "validityInfo": "Gültigkeit der Einwilligung: 13 Monate (DSGVO-konform)",
+      "modifyInfo": "Sie können Ihre Präferenzen jederzeit über den Link \"Cookies verwalten\" im Footer ändern.",
+      "savePreferences": "Meine Präferenzen speichern"
+    }
+  },
+  "legal": {
+    "privacy": {
+      "title": "Datenschutzerklärung"
     }
   },
   "demo": {

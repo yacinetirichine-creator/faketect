@@ -55,7 +55,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="label">{t('auth.phone')} <span className="text-gray-500 text-xs">({t('common.optional', 'optionnel')})</span></label>
+              <label className="label">{t('auth.phone')} <span className="text-gray-500 text-xs">({t('common.optional')})</span></label>
               <div className="relative">
                 <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
                 <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className="input pl-10" placeholder={t('auth.placeholders.phone')} autoComplete="tel" />

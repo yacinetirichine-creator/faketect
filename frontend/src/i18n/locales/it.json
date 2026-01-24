@@ -63,11 +63,11 @@
   "certificate": { "download": "Scarica certificato", "downloadError": "Impossibile generare il certificato", "basedOnExplainability": "Certificato basato su score, fiducia e segnali sotto.", "title": "Certificato di analisi", "subtitle": "Generato da FakeTect", "fields": { "analysisId": "ID analisi", "user": "Utente", "date": "Data", "file": "File", "fileHash": "Impronta del file (SHA-256)", "score": "Punteggio IA", "verdict": "Verdetto", "confidence": "Fiducia", "provider": "Provider", "framesAnalyzed": "Frame analizzati", "consensus": "Consenso", "sources": "Fonti", "topSignals": "Segnali principali", "fingerprint": "Impronta del certificato", "scoreShort": "Score", "confidenceShort": "Conf." }, "generatedAt": "Generato il {{date}}", "verificationHint": "Verifica: confronta l’ID analisi nell’app" },
   "verdicts": { "ai_generated": "IA", "likely_ai": "Probabilmente IA", "possibly_ai": "Forse IA", "possibly_real": "Forse reale", "likely_real": "Probabilmente reale" },
   "admin": { "title": "Admin", "metrics": "Metriche", "users": "Utenti", "totalUsers": "Totale", "newToday": "Nuovi oggi", "totalAnalyses": "Analisi", "mrr": "MRR", "usersByPlan": "Utenti per piano", "analysesToday": "Analisi oggi", "analysesPerformed": "analisi effettuate", "noAnalyses": "Nessuna analisi", "confirmDeleteUser": "Eliminare questo utente?", "planUpdated": "Piano aggiornato", "usersTable": { "email": "Email", "name": "Nome", "plan": "Piano", "role": "Ruolo", "createdAt": "Creato", "actions": "Azioni" }, "analysesTable": { "date": "Data", "user": "Utente", "file": "File", "type": "Tipo", "score": "Punteggio", "verdict": "Verdetto", "provider": "Provider" } },
-  "common": { "loading": "Caricamento...", "save": "Salva", "cancel": "Annulla", "delete": "Elimina", "deleted": "Eliminato", "confirmDelete": "Eliminare?", "searchPlaceholder": "Cerca...", "error": "Errore", "loadError": "Errore di caricamento", "errorGeneric": "Errore", "saved": "Salvato", "id": "ID" },
+  "common": { "loading": "Caricamento...", "save": "Salva", "cancel": "Annulla", "delete": "Elimina", "deleted": "Eliminato", "confirmDelete": "Eliminare?", "searchPlaceholder": "Cerca...", "error": "Errore", "loadError": "Errore di caricamento", "errorGeneric": "Errore", "saved": "Salvato", "id": "ID", "optional": "opzionale" },
   "errorBoundary": { "title": "Errore di visualizzazione", "description": "Un errore JavaScript impedisce la visualizzazione di questa pagina.", "reload": "Ricarica", "retry": "Riprova" },
   "historyPage": { "url": "URL", "table": { "file": "File", "type": "Tipo", "score": "Punteggio", "date": "Data", "actions": "Azioni" } },
   "settings": { "sections": { "admin": "Admin", "profile": "Profilo", "language": "Lingua", "subscription": "Abbonamento" }, "admin": { "accessTitle": "Accesso admin", "accessDesc": "Apri la dashboard admin e gestisci gli utenti", "open": "Apri" }, "freeQuotaHint": "10 test gratuiti (valido 30 giorni)", "activeSubscription": "Abbonamento attivo", "subscription": { "plan": "Piano {{plan}}", "manage": "Gestisci abbonamento", "upgrade": "Upgrade", "change": "Cambia" } },
-  "footer": { "description": "Rilevamento IA avanzato per i tuoi contenuti.", "product": "Prodotto", "company": "Azienda", "links": { "pricing": "Prezzi", "features": "Funzionalità", "api": "API", "about": "Chi siamo", "blog": "Blog", "contact": "Contatto" }, "rights": "© 2025 FakeTect. Tutti i diritti riservati." },
+  "footer": { "description": "Rilevamento IA avanzato per i tuoi contenuti.", "product": "Prodotto", "company": "Azienda", "legal": "Legale", "links": { "pricing": "Prezzi", "features": "Funzionalità", "api": "API", "about": "Chi siamo", "blog": "Blog", "contact": "Contatto", "terms": "Termini d'uso", "sales": "Termini di vendita" }, "rights": "© 2025 FakeTect. Tutti i diritti riservati." },
   "newsletter": {
     "title": "Newsletter",
     "subtitle": "Ricevi gli ultimi aggiornamenti e casi d'uso",
@@ -117,6 +117,73 @@
       "case_study": "Caso d'uso",
       "monthly_stats": "Statistiche mensili",
       "promotional": "Promozione"
+    }
+  },
+  "tutorial": {
+    "welcome": {
+      "title": "Benvenuto su FakeTect!",
+      "desc": "Rileva in pochi secondi se un'immagine o un video è stato generato dall'IA. Ecco come funziona."
+    },
+    "upload": {
+      "title": "Passo 1: Carica",
+      "desc": "Trascina e rilascia o clicca per caricare il tuo file. Immagini (JPG, PNG, WEBP) o video (MP4, MOV) fino a 100 MB.",
+      "tip": "Suggerimento: I video lunghi vengono analizzati solo nei primi 60 secondi per ottimizzare i costi."
+    },
+    "analyze": {
+      "title": "Passo 2: Analisi",
+      "desc": "La nostra IA analizza il tuo file in pochi secondi. Utilizziamo più modelli per la massima precisione.",
+      "tip": "Fonti multiple: Sightengine, Illuminarty e OpenAI per risultati affidabili."
+    },
+    "result": {
+      "title": "Passo 3: Risultato",
+      "desc": "Ottieni un punteggio di fiducia e un verdetto chiaro: REALE, IA o INCERTO. Scarica un certificato PDF per provare l'autenticità.",
+      "tip": "Il certificato PDF include un codice QR ed è ideale per i documenti ufficiali."
+    },
+    "ready": {
+      "title": "Sei pronto!",
+      "desc": "Piano GRATUITO: 10 analisi in 30 giorni. Passa a un piano a pagamento per più analisi e funzionalità avanzate."
+    },
+    "previous": "Precedente",
+    "next": "Avanti",
+    "start": "Inizia",
+    "skip": "Salta tutorial"
+  },
+  "cookies": {
+    "banner": {
+      "title": "Gestione cookie",
+      "description": "Utilizziamo i cookie per migliorare la tua esperienza, analizzare il traffico e personalizzare i contenuti. I cookie strettamente necessari sono sempre attivi. Puoi gestire le tue preferenze qui sotto.",
+      "learnMore": "Scopri di più sulla nostra Politica sui Cookie →",
+      "customize": "Personalizza",
+      "rejectAll": "Rifiuta tutto",
+      "acceptAll": "Accetta tutto"
+    },
+    "settings": {
+      "title": "Preferenze Cookie",
+      "necessary": {
+        "title": "🔒 Cookie strettamente necessari",
+        "description": "Indispensabili per il funzionamento del sito (autenticazione, sicurezza, carrello).",
+        "alwaysEnabled": "Sempre attivo"
+      },
+      "preferences": {
+        "title": "⚙️ Cookie di preferenze",
+        "description": "Memorizzano le tue preferenze (lingua, tema di visualizzazione, impostazioni)."
+      },
+      "analytics": {
+        "title": "📊 Cookie analitici",
+        "description": "Ci aiutano a capire come i visitatori usano il sito (Google Analytics con IP anonimizzato)."
+      },
+      "functional": {
+        "title": "⭐ Cookie funzionali",
+        "description": "Abilitano funzionalità avanzate e personalizzate (cronologia, preferenze di visualizzazione)."
+      },
+      "validityInfo": "Validità del consenso: 13 mesi (conforme al GDPR)",
+      "modifyInfo": "Puoi modificare le tue preferenze in qualsiasi momento tramite il link \"Gestisci cookie\" nel footer.",
+      "savePreferences": "Salva le mie preferenze"
+    }
+  },
+  "legal": {
+    "privacy": {
+      "title": "Informativa sulla privacy"
     }
   },
   "demo": {

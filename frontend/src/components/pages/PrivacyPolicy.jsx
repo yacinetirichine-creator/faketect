@@ -11,7 +11,7 @@ const PrivacyPolicy = () => {
         <div className="text-center mb-12">
           <Shield className="w-16 h-16 text-blue-600 mx-auto mb-4" />
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            {t('legal.privacy.title', 'Politique de Confidentialité')}
+            {t('legal.privacy.title')}
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
             Dernière mise à jour : 28 décembre 2024

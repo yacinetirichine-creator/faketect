@@ -33,7 +33,7 @@ export default function NewsletterSubscribe() {
 
     } catch (err) {
       console.error('Newsletter error:', err);
-      setError(err.response?.data?.error || t('newsletter.error', 'Erreur lors de l\'inscription'));
+      setError(err.response?.data?.error || t('newsletter.error'));
     } finally {
       setIsLoading(false);
     }
@@ -172,7 +172,7 @@ export default function NewsletterSubscribe() {
             {isLoading ? (
               <>
                 <Loader2 className="animate-spin" size={16} />
-                {t('common.loading', 'Chargement...')}
+                {t('common.loading')}
               </>
             ) : (
               txt.button

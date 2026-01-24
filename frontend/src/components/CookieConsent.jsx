@@ -83,17 +83,16 @@ const CookieConsent = () => {
               <Cookie className="w-12 h-12 text-blue-600 flex-shrink-0" />
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  {t('cookies.banner.title', 'Gestion des Cookies')}
+                  {t('cookies.banner.title')}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Nous utilisons des cookies pour améliorer votre expérience, analyser le trafic et personnaliser le contenu. 
-                  Les cookies strictement nécessaires sont toujours activés. Vous pouvez gérer vos préférences ci-dessous.
+                  {t('cookies.banner.description')}
                 </p>
-                <a 
-                  href="/legal/cookies" 
+                <a
+                  href="/legal/cookies"
                   className="text-sm text-blue-600 hover:underline inline-block mt-2"
                 >
-                  En savoir plus sur notre Politique de Cookies →
+                  {t('cookies.banner.learnMore')}
                 </a>
               </div>
             </div>
@@ -105,20 +104,20 @@ const CookieConsent = () => {
                 className="px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
               >
                 <Settings className="w-4 h-4 mr-2" />
-                Personnaliser
+                {t('cookies.banner.customize')}
               </button>
               <button
                 onClick={handleRejectAll}
                 className="px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
-                Refuser tout
+                {t('cookies.banner.rejectAll')}
               </button>
               <button
                 onClick={handleAcceptAll}
                 className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
               >
                 <Check className="w-4 h-4 mr-2" />
-                Accepter tout
+                {t('cookies.banner.acceptAll')}
               </button>
             </div>
           </div>
@@ -132,7 +131,7 @@ const CookieConsent = () => {
             {/* Header */}
             <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Préférences de Cookies
+                {t('cookies.settings.title')}
               </h2>
               <button
                 onClick={() => setShowSettings(false)}
@@ -149,15 +148,15 @@ const CookieConsent = () => {
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">
-                      🔒 Cookies strictement nécessaires
+                      {t('cookies.settings.necessary.title')}
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Indispensables au fonctionnement du site (authentification, sécurité, panier).
+                      {t('cookies.settings.necessary.description')}
                     </p>
                   </div>
                   <div className="ml-4">
                     <div className="bg-gray-200 dark:bg-gray-600 rounded-full px-3 py-1 text-xs font-semibold">
-                      Toujours activé
+                      {t('cookies.settings.necessary.alwaysEnabled')}
                     </div>
                   </div>
                 </div>
@@ -171,10 +170,10 @@ const CookieConsent = () => {
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">
-                      ⚙️ Cookies de préférences
+                      {t('cookies.settings.preferences.title')}
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Mémorisent vos préférences (langue, thème d'affichage, paramètres).
+                      {t('cookies.settings.preferences.description')}
                     </p>
                   </div>
                   <div className="ml-4">
@@ -199,10 +198,10 @@ const CookieConsent = () => {
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">
-                      📊 Cookies analytiques
+                      {t('cookies.settings.analytics.title')}
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Nous aident à comprendre comment les visiteurs utilisent le site (Google Analytics avec IP anonymisée).
+                      {t('cookies.settings.analytics.description')}
                     </p>
                   </div>
                   <div className="ml-4">
@@ -227,10 +226,10 @@ const CookieConsent = () => {
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">
-                      ⭐ Cookies fonctionnels
+                      {t('cookies.settings.functional.title')}
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Permettent des fonctionnalités avancées et personnalisées (historique, préférences d'affichage).
+                      {t('cookies.settings.functional.description')}
                     </p>
                   </div>
                   <div className="ml-4">
@@ -253,10 +252,10 @@ const CookieConsent = () => {
               {/* Informations complémentaires */}
               <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
                 <p className="text-sm text-gray-700 dark:text-gray-300">
-                  <strong>Durée de validité du consentement :</strong> 13 mois (conforme CNIL)
+                  <strong>{t('cookies.settings.validityInfo')}</strong>
                 </p>
                 <p className="text-sm text-gray-700 dark:text-gray-300 mt-2">
-                  Vous pouvez modifier vos préférences à tout moment via le lien "Gérer les cookies" dans le footer.
+                  {t('cookies.settings.modifyInfo')}
                 </p>
               </div>
             </div>
@@ -267,13 +266,13 @@ const CookieConsent = () => {
                 onClick={handleRejectAll}
                 className="px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
-                Refuser tout
+                {t('cookies.banner.rejectAll')}
               </button>
               <button
                 onClick={handleSavePreferences}
                 className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Enregistrer mes préférences
+                {t('cookies.settings.savePreferences')}
               </button>
             </div>
           </div>
