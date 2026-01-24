@@ -158,7 +158,7 @@ export default function Dashboard() {
             onClick={() => setShowTutorial(true)}
             className="px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm text-white/60 hover:text-white transition-colors"
           >
-            📚 {t('dashboard.tutorial', 'Tutoriel')}
+            📚 {t('dashboard.tutorial')}
           </button>
           <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-400 flex items-center gap-2">
             <Zap size={16} className="text-yellow-400" />
@@ -243,66 +243,65 @@ export default function Dashboard() {
                       {/* Grande jauge visuelle */}
                       <div className="mb-8">
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-lg font-semibold text-white">Résultat</span>
+                          <span className="text-lg font-semibold text-white">{t('dashboard.resultLabel')}</span>
                           <span className={`text-4xl font-black ${interpretation.textColor}`}>
-                            {interpretation.realPercentage.toFixed(0)}% {interpretation.level === 'real' ? 'RÉEL' : interpretation.level === 'fake' ? 'IA' : 'INCERTAIN'}
+                            {interpretation.realPercentage.toFixed(0)}% {interpretation.level === 'real' ? t('dashboard.realLabel') : interpretation.level === 'fake' ? t('dashboard.aiLabel') : t('dashboard.uncertainLabel')}
                           </span>
                         </div>
                         <div className="relative h-8 bg-white/10 rounded-full overflow-hidden shadow-inner">
-                          <div 
+                          <div
                             className={`absolute top-0 left-0 h-full ${interpretation.barColor} rounded-full transition-all duration-1000 shadow-lg`}
                             style={{ width: `${interpretation.realPercentage}%` }}
                           />
                           <div className="absolute inset-0 flex items-center justify-center">
                             <span className="text-sm font-bold text-white drop-shadow-lg">
-                              {interpretation.realPercentage > 50 ? '← Plus réel' : 'Plus IA →'}
+                              {interpretation.realPercentage > 50 ? t('dashboard.moreReal') : t('dashboard.moreAi')}
                             </span>
                           </div>
                         </div>
                         <div className="flex justify-between mt-2 text-xs text-white/50">
-                          <span>100% Réel</span>
-                          <span>50%</span>
-                          <span>100% IA</span>
+                          <span>{t('dashboard.scale100Real')}</span>
+                          <span>{t('dashboard.scale50')}</span>
+                          <span>{t('dashboard.scale100Ai')}</span>
                         </div>
                       </div>
 
                       {/* Détails techniques (optionnel, repliable) */}
                       <details className="mt-6">
                         <summary className="cursor-pointer text-sm text-white/60 hover:text-white/80 mb-3">
-                          📊 Voir les détails techniques
+                          {t('dashboard.technicalDetails')}
                         </summary>
-                        
+
                         {/* Info vidéo partielle si applicable */}
                         {result.videoMetadata?.isPartialAnalysis && (
                           <div className="mb-4 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 text-sm">
                             <div className="flex items-center gap-2 text-blue-400 mb-1">
                               <Clock size={16} />
-                              <span className="font-semibold">Analyse partielle de vidéo</span>
+                              <span className="font-semibold">{t('dashboard.partialVideoAnalysis')}</span>
                             </div>
                             <p className="text-white/70 text-xs">
-                              Votre vidéo dure {result.videoMetadata.totalDuration}s. Pour optimiser les coûts, 
-                              nous avons analysé les {result.videoMetadata.analyzedDuration} premières secondes.
+                              {t('dashboard.partialVideoDesc', { total: result.videoMetadata.totalDuration, analyzed: result.videoMetadata.analyzedDuration })}
                             </p>
                           </div>
                         )}
-                        
+
                         <div className="grid grid-cols-2 gap-4 mb-4">
                           <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                            <div className="text-xs text-gray-400 mb-1">Score IA brut</div>
+                            <div className="text-xs text-gray-400 mb-1">{t('dashboard.rawAiScore')}</div>
                             <div className="text-xl font-bold text-white">{Number(result.aiScore ?? 0).toFixed(1)}%</div>
                           </div>
                           <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                            <div className="text-xs text-gray-400 mb-1">Temps de traitement</div>
+                            <div className="text-xs text-gray-400 mb-1">{t('dashboard.processingTime')}</div>
                             <div className="text-xl font-bold text-white">1.2s</div>
                             <div className="flex items-center gap-1 text-xs text-green-400 mt-1">
-                              <Zap size={10} /> Ultra rapide
+                              <Zap size={10} /> {t('dashboard.ultraFast')}
                             </div>
                           </div>
                         </div>
 
                         {confidenceValue !== null && (
                           <div className="mb-4">
-                            <div className="text-xs text-gray-400 mb-2">Confiance: {confidenceValue.toFixed(0)}%</div>
+                            <div className="text-xs text-gray-400 mb-2">{t('dashboard.confidence')}: {confidenceValue.toFixed(0)}%</div>
                             <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden">
                               <div className="bg-primary h-full rounded-full" style={{ width: `${confidenceValue}%` }} />
                             </div>
@@ -310,15 +309,15 @@ export default function Dashboard() {
                         )}
 
                         <div className="text-xs text-gray-400 space-y-1">
-                          <p><span className="text-gray-500">ID:</span> {result.id}</p>
-                          {providerLabel && <p><span className="text-gray-500">Fournisseur:</span> {providerLabel}</p>}
-                          {consensusLabel && <p><span className="text-gray-500">Consensus:</span> {consensusLabel}</p>}
-                          {framesAnalyzed !== null && <p><span className="text-gray-500">Frames analysées:</span> {Math.round(framesAnalyzed)}</p>}
+                          <p><span className="text-gray-500">{t('common.id')}:</span> {result.id}</p>
+                          {providerLabel && <p><span className="text-gray-500">{t('dashboard.provider')}:</span> {providerLabel}</p>}
+                          {consensusLabel && <p><span className="text-gray-500">{t('dashboard.consensus')}:</span> {consensusLabel}</p>}
+                          {framesAnalyzed !== null && <p><span className="text-gray-500">{t('dashboard.framesAnalyzed')}:</span> {Math.round(framesAnalyzed)}</p>}
                         </div>
 
                         {signals.length > 0 && (
                           <div className="mt-3 text-xs">
-                            <div className="text-gray-500 mb-1">Signaux détectés:</div>
+                            <div className="text-gray-500 mb-1">{t('dashboard.signalsDetected')}:</div>
                             <ul className="list-disc pl-4 space-y-1 text-gray-400">
                               {signals.map((s, idx) => <li key={idx}>{s}</li>)}
                             </ul>
@@ -328,16 +327,16 @@ export default function Dashboard() {
 
                       {/* Bouton certificat */}
                       <div className="mt-6 text-center">
-                        <button 
-                          type="button" 
-                          className="btn-primary px-6 py-3 inline-flex items-center gap-2" 
-                          onClick={onDownloadCertificate} 
+                        <button
+                          type="button"
+                          className="btn-primary px-6 py-3 inline-flex items-center gap-2"
+                          onClick={onDownloadCertificate}
                           disabled={downloadingCert}
                         >
                           {downloadingCert ? <Loader2 className="animate-spin" size={18} /> : <Download size={18} />}
-                          Télécharger le certificat
+                          {t('dashboard.downloadCertificate')}
                         </button>
-                        <p className="text-xs text-white/40 mt-2">Certificat PDF avec preuve d'analyse</p>
+                        <p className="text-xs text-white/40 mt-2">{t('dashboard.certificateProof')}</p>
                       </div>
                     </div>
                   );

@@ -4,7 +4,62 @@
   "features": { "title": "Funktionen", "subtitle": "Alles zur Erkennung von KI-Inhalten" },
   "pricing": { "title": "Einfache Preise", "subtitle": "Sparen Sie 30% jährlich", "monthly": "Monatlich", "yearly": "Jährlich", "perMonth": "/Monat", "perYear": "/Jahr", "popular": "Beliebt", "choose": "Wählen", "current": "Aktuell", "free": "Kostenlos", "save": "Sparen", "checkoutError": "Fehler beim Erstellen des Checkouts", "analysesPerMonth": "Analysen/Monat", "analysesPerDay": "Analysen/Tag", "unlimited": "Unbegrenzt" },
   "auth": { "loginTitle": "Willkommen zurück!", "loginSub": "Melden Sie sich bei Ihrem Konto an", "registerTitle": "Konto erstellen", "registerSub": "Starten Sie mit 3 kostenlosen Analysen/Tag", "email": "E-Mail", "password": "Passwort", "confirm": "Bestätigen", "name": "Vollständiger Name", "phone": "Telefon", "phoneHint": "Optional - um Updates über unsere neuen Produkte zu erhalten", "marketingConsent": "Ich stimme zu, Marketing-Mitteilungen per WhatsApp zu erhalten, um unsere zukünftigen Produkte zu entdecken", "privacyPolicy": "Datenschutzerklärung", "loginBtn": "Anmelden", "registerBtn": "Konto erstellen", "login": "Anmelden", "register": "Registrieren", "noAccount": "Kein Konto?", "hasAccount": "Bereits ein Konto?", "loginLink": "Anmelden", "registerLink": "Registrieren", "loginSuccess": "Anmeldung erfolgreich!", "registerSuccess": "Konto erstellt!", "placeholders": { "name": "John Doe", "email": "email@example.com", "phone": "+49 151 12345678" } },
-  "dashboard": { "welcome": "Willkommen", "overview": "Übersicht", "history": "Verlauf", "settings": "Einstellungen", "total": "Gesamt", "aiDetected": "KI erkannt", "real": "Echt", "remaining": "Verbleibend", "quick": "Schnellanalyse", "dropzone": "Ziehen oder klicken", "formats": "JPG, PNG, WebP, PDF", "analyzing": "Analysiere...", "result": "Ergebnis", "score": "KI-Score", "confidence": "Vertrauen", "verdict": "Urteil", "subtitle": "Fortgeschrittene KI-Erkennung in Reichweite", "newAnalysis": "Neue Analyse", "drag": "Ziehen Sie Ihre Datei hierher", "drop": "Lassen Sie Ihre Datei jetzt los", "recent": "Neueste Analysen", "noHistory": "Noch keine Analyse", "analysisCompleted": "Analyse abgeschlossen!", "uploadHint": "JPG, PNG, WebP, PDF, MP4/MOV/AVI (max. 100MB)", "processingTime": "Verarbeitungszeit", "ultraFast": "Ultraschnell", "fileFallback": "Datei", "explainabilityTitle": "Erklärbarkeit", "explainabilitySubtitle": "Die folgenden Elemente werden zur Zertifikatserstellung genutzt.", "explainabilityUnavailable": "Erklärbarkeitsdaten sind für diese Analyse nicht verfügbar.", "provider": "Provider", "consensus": "Konsens", "sources": "Quellen", "framesAnalyzed": "Analysierte Frames", "topSignals": "Wichtigste Signale", "scoreShort": "Score", "confidenceShort": "Vertr." },
+  "dashboard": {
+    "welcome": "Willkommen",
+    "overview": "Übersicht",
+    "history": "Verlauf",
+    "settings": "Einstellungen",
+    "total": "Gesamt",
+    "aiDetected": "KI erkannt",
+    "real": "Echt",
+    "remaining": "Verbleibend",
+    "quick": "Schnellanalyse",
+    "dropzone": "Ziehen oder klicken",
+    "formats": "JPG, PNG, WebP, PDF",
+    "analyzing": "Analysiere...",
+    "result": "Ergebnis",
+    "score": "KI-Score",
+    "confidence": "Vertrauen",
+    "verdict": "Urteil",
+    "subtitle": "Fortgeschrittene KI-Erkennung in Reichweite",
+    "newAnalysis": "Neue Analyse",
+    "drag": "Ziehen Sie Ihre Datei hierher",
+    "drop": "Lassen Sie Ihre Datei jetzt los",
+    "recent": "Neueste Analysen",
+    "noHistory": "Noch keine Analyse",
+    "analysisCompleted": "Analyse abgeschlossen!",
+    "uploadHint": "JPG, PNG, WebP, PDF, MP4/MOV/AVI (max. 100MB)",
+    "processingTime": "Verarbeitungszeit",
+    "ultraFast": "Ultraschnell",
+    "fileFallback": "Datei",
+    "explainabilityTitle": "Erklärbarkeit",
+    "explainabilitySubtitle": "Die folgenden Elemente werden zur Zertifikatserstellung genutzt.",
+    "explainabilityUnavailable": "Erklärbarkeitsdaten sind für diese Analyse nicht verfügbar.",
+    "provider": "Provider",
+    "consensus": "Konsens",
+    "sources": "Quellen",
+    "framesAnalyzed": "Analysierte Frames",
+    "topSignals": "Wichtigste Signale",
+    "scoreShort": "Score",
+    "confidenceShort": "Vertr.",
+    "tutorial": "Tutorial",
+    "resultLabel": "Ergebnis",
+    "realLabel": "ECHT",
+    "aiLabel": "KI",
+    "uncertainLabel": "UNSICHER",
+    "moreReal": "← Mehr echt",
+    "moreAi": "Mehr KI →",
+    "scale100Real": "100% Echt",
+    "scale50": "50%",
+    "scale100Ai": "100% KI",
+    "technicalDetails": "📊 Technische Details anzeigen",
+    "partialVideoAnalysis": "Teilweise Video-Analyse",
+    "partialVideoDesc": "Ihr Video dauert {{total}}s. Zur Kostenoptimierung haben wir die ersten {{analyzed}} Sekunden analysiert.",
+    "rawAiScore": "Roher KI-Score",
+    "signalsDetected": "Erkannte Signale",
+    "downloadCertificate": "Zertifikat herunterladen",
+    "certificateProof": "PDF-Zertifikat mit Analysebeleg"
+  },
   "certificate": { "download": "Zertifikat herunterladen", "downloadError": "Zertifikat konnte nicht erstellt werden", "basedOnExplainability": "Zertifikat basiert auf Score, Vertrauen und den folgenden Signalen.", "title": "Analyse-Zertifikat", "subtitle": "Erstellt von FakeTect", "fields": { "analysisId": "Analyse-ID", "user": "Benutzer", "date": "Datum", "file": "Datei", "fileHash": "Datei-Fingerabdruck (SHA-256)", "score": "KI-Score", "verdict": "Urteil", "confidence": "Vertrauen", "provider": "Provider", "framesAnalyzed": "Analysierte Frames", "consensus": "Konsens", "sources": "Quellen", "topSignals": "Wichtigste Signale", "fingerprint": "Zertifikats-Fingerabdruck", "scoreShort": "Score", "confidenceShort": "Vertr." }, "generatedAt": "Erstellt am {{date}}", "verificationHint": "Verifizierung: Analyse-ID in der App abgleichen" },
   "verdicts": { "ai_generated": "KI", "likely_ai": "Wahrscheinlich KI", "possibly_ai": "Vielleicht KI", "possibly_real": "Vielleicht echt", "likely_real": "Wahrscheinlich echt" },
   "admin": { "title": "Admin", "metrics": "Metriken", "users": "Benutzer", "totalUsers": "Gesamt", "newToday": "Neu heute", "totalAnalyses": "Analysen", "mrr": "MRR", "usersByPlan": "Benutzer nach Plan", "analysesToday": "Analysen heute", "analysesPerformed": "Analysen durchgeführt", "noAnalyses": "Keine Analysen", "confirmDeleteUser": "Diesen Benutzer löschen?", "planUpdated": "Plan aktualisiert", "usersTable": { "email": "E-Mail", "name": "Name", "plan": "Plan", "role": "Rolle", "createdAt": "Erstellt", "actions": "Aktionen" }, "analysesTable": { "date": "Datum", "user": "Benutzer", "file": "Datei", "type": "Typ", "score": "Score", "verdict": "Urteil", "provider": "Provider" } },
@@ -64,6 +119,48 @@
       "promotional": "Promotion"
     }
   },
+  "demo": {
+    "badge": "Live-Beispiele",
+    "title": "Sehen Sie FakeTect in Aktion",
+    "subtitle": "Entdecken Sie, wie unsere KI generierte Inhalte erkennt. Klicken Sie auf ein Beispiel für detaillierte Ergebnisse.",
+    "image": "Bild",
+    "video": "Video",
+    "score": "KI-Score",
+    "confidence": "Vertrauen",
+    "tryNow": "Jetzt testen",
+    "cta": "Bereit zum Testen mit Ihren eigenen Dateien?",
+    "getStarted": "Kostenlos starten",
+    "example1": {
+      "title": "Echtes Foto",
+      "result": "ECHTES Bild",
+      "desc": "Mit Smartphone aufgenommenes Foto, keine KI-Generierungszeichen erkannt."
+    },
+    "example2": {
+      "title": "KI-Porträt",
+      "result": "KI-generiert",
+      "desc": "Mit Midjourney erstelltes Porträt. KI-Artefakte in Augen und Haaren erkannt."
+    },
+    "example3": {
+      "title": "Authentisches Video",
+      "result": "ECHTES Video",
+      "desc": "Mit Kamera aufgenommenes Video. Natürliche Bewegung und zeitliche Kohärenz."
+    },
+    "example4": {
+      "title": "Deepfake",
+      "result": "Deepfake erkannt",
+      "desc": "KI-generiertes Video. Inkonsistenzen in Gesichtsausdrücken erkannt."
+    },
+    "example5": {
+      "title": "Gemischter Inhalt",
+      "result": "UNSICHER",
+      "desc": "KI-retuschiertes Foto. Mischung aus echtem und generiertem Inhalt."
+    },
+    "example6": {
+      "title": "KI-Landschaft",
+      "result": "KI-generiert",
+      "desc": "Mit DALL-E erstellte Landschaft. Unmögliche Strukturen und künstliche Texturen."
+    }
+  },
   "landing": {
     "badge": "v2.0 verfügbar",
     "hero": {
@@ -98,6 +195,23 @@
       "api": { "title": "Entwickler-API", "desc": "Nahtlose Integration in Ihren Stack" },
       "metadata": { "title": "Metadaten-Forensik", "desc": "Tiefgehende EXIF- und Metadaten-Inspektion" },
       "security": { "title": "Enterprise-Sicherheit", "desc": "Bankenstarkes Verschlüsselung und Datenschutz" }
+    },
+    "footer": {
+      "description": "Fortgeschrittene KI-Erkennung zum Schutz der Authentizität Ihrer Inhalte.",
+      "product": "Produkt",
+      "pricing": "Preise",
+      "features": "Funktionen",
+      "getStarted": "Loslegen",
+      "support": "Support",
+      "security": "Sicherheit",
+      "legal": "Rechtliches",
+      "legalNotice": "Impressum",
+      "privacy": "Datenschutz",
+      "cookies": "Cookies",
+      "manageCookies": "Cookies verwalten",
+      "rights": "Alle Rechte vorbehalten",
+      "gdpr": "DSGVO-konform",
+      "stripe": "Sichere Stripe-Zahlungen"
     }
   }
 }

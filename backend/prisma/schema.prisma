@@ -28,6 +28,11 @@ model User {
   analyses             Analysis[]
   chatConversations    ChatConversation[]
   adminMessages        ChatMessage[]      @relation("AdminMessages")
+
+  // Indexes pour optimiser les requêtes fréquentes
+  @@index([plan])
+  @@index([createdAt])
+  @@index([role])
 }
 
 model Analysis {
@@ -42,6 +47,12 @@ model Analysis {
   details    String?
   createdAt  DateTime @default(now())
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Indexes pour optimiser les requêtes fréquentes
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([isAi])
+  @@index([fileUrl])
+  @@index([createdAt])
 }
 
 model ChatConversation {
