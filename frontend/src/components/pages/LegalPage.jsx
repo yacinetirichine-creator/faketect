@@ -51,10 +51,10 @@ const LegalPage = ({ type }) => {
             <h2 className="text-xl font-bold mb-4">JARVIS</h2>
             <div className="space-y-2 text-sm">
               <p><strong>Forme juridique :</strong> Société par actions simplifiée (SAS)</p>
-              <p><strong>Capital social :</strong> 100 EUR</p>
-              <p><strong>Siège social :</strong> 128 Rue la Boétie, 75008 PARIS</p>
+              <p><strong>Capital social :</strong> 1 000 EUR</p>
+              <p><strong>Siège social :</strong> 64 Avenue Marinville, 94100 Saint-Maur-des-Fossés</p>
               <p><strong>SIREN :</strong> 928 499 166</p>
-              <p><strong>RCS :</strong> Paris</p>
+              <p><strong>RCS :</strong> Créteil</p>
               <p><strong>Email :</strong> <a href="mailto:contact@faketect.com" className={`text-${current.color}-600 hover:underline`}>contact@faketect.com</a></p>
             </div>
           </div>
@@ -286,7 +286,7 @@ const LegalPage = ({ type }) => {
               </a>
             </p>
             <p>
-              <strong>Courrier :</strong> JARVIS, 128 Rue la Boétie, 75008 PARIS
+              <strong>Courrier :</strong> JARVIS, 64 Avenue Marinville, 94100 Saint-Maur-des-Fossés
             </p>
           </div>
         </section>

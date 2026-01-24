@@ -165,9 +165,9 @@ export default function MainLayout() {
               </p>
               <NewsletterSubscribe />
               <p className="text-xs text-gray-500 mt-4">
-                JARVIS - SAS au capital de 100 EUR<br />
-                SIREN : 928 499 166 - RCS Paris<br />
-                128 Rue la Boétie, 75008 PARIS
+                JARVIS - SAS au capital de 1 000 EUR<br />
+                SIREN : 928 499 166 - RCS Créteil<br />
+                64 Avenue Marinville, 94100 Saint-Maur-des-Fossés
               </p>
             </div>
             <div>
