@@ -21,8 +21,8 @@ export default function DashboardLayout({ isAdmin = false }) {
     { to: '/dashboard', icon: LayoutDashboard, label: t('nav.dashboard') },
     { to: '/admin', icon: BarChart3, label: t('admin.metrics') },
     { to: '/admin/users', icon: Users, label: t('admin.users') },
-    { to: '/admin/chat', icon: MessageCircle, label: 'Chat Support' },
-    { to: '/admin/newsletter', icon: Mail, label: 'Newsletter' }
+    { to: '/admin/chat', icon: MessageCircle, label: t('admin.chatSupport') },
+    { to: '/admin/newsletter', icon: Mail, label: t('admin.newsletter') }
   ];
   const links = isAdmin ? adminLinks : userLinks;
 

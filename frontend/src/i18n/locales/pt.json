@@ -62,11 +62,69 @@
   },
   "certificate": { "download": "Baixar certificado", "downloadError": "Não foi possível gerar o certificado", "basedOnExplainability": "Certificado baseado em score, confiança e sinais abaixo.", "title": "Certificado de análise", "subtitle": "Gerado por FakeTect", "fields": { "analysisId": "ID da análise", "user": "Usuário", "date": "Data", "file": "Arquivo", "fileHash": "Impressão digital do arquivo (SHA-256)", "score": "Pontuação IA", "verdict": "Veredito", "confidence": "Confiança", "provider": "Provedor", "framesAnalyzed": "Frames analisados", "consensus": "Consenso", "sources": "Fontes", "topSignals": "Sinais principais", "fingerprint": "Impressão digital do certificado", "scoreShort": "Score", "confidenceShort": "Conf." }, "generatedAt": "Gerado em {{date}}", "verificationHint": "Verificação: compare o ID da análise no app" },
   "verdicts": { "ai_generated": "IA", "likely_ai": "Provavelmente IA", "possibly_ai": "Talvez IA", "possibly_real": "Talvez real", "likely_real": "Provavelmente real" },
-  "admin": { "title": "Admin", "metrics": "Métricas", "users": "Usuários", "totalUsers": "Total", "newToday": "Novos hoje", "totalAnalyses": "Análises", "mrr": "MRR", "usersByPlan": "Usuários por plano", "analysesToday": "Análises hoje", "analysesPerformed": "análises realizadas", "noAnalyses": "Nenhuma análise", "confirmDeleteUser": "Excluir este usuário?", "planUpdated": "Plano atualizado", "usersTable": { "email": "Email", "name": "Nome", "plan": "Plano", "role": "Função", "createdAt": "Criado", "actions": "Ações" }, "analysesTable": { "date": "Data", "user": "Usuário", "file": "Arquivo", "type": "Tipo", "score": "Pontuação", "verdict": "Veredito", "provider": "Provedor" } },
+  "admin": {
+    "title": "Admin",
+    "metrics": "Métricas",
+    "users": "Usuários",
+    "totalUsers": "Total",
+    "newToday": "Novos hoje",
+    "totalAnalyses": "Análises",
+    "mrr": "MRR",
+    "usersByPlan": "Usuários por plano",
+    "analysesToday": "Análises hoje",
+    "analysesPerformed": "análises realizadas",
+    "noAnalyses": "Nenhuma análise",
+    "confirmDeleteUser": "Excluir este usuário?",
+    "planUpdated": "Plano atualizado",
+    "chatSupport": "Chat Suporte",
+    "newsletter": "Newsletter",
+    "usersTable": { "email": "Email", "name": "Nome", "plan": "Plano", "role": "Função", "createdAt": "Criado", "actions": "Ações" },
+    "analysesTable": { "date": "Data", "user": "Usuário", "file": "Arquivo", "type": "Tipo", "score": "Pontuação", "verdict": "Veredito", "provider": "Provedor" }
+  },
   "common": { "loading": "Carregando...", "save": "Salvar", "cancel": "Cancelar", "delete": "Excluir", "deleted": "Excluído", "confirmDelete": "Excluir?", "searchPlaceholder": "Pesquisar...", "error": "Erro", "loadError": "Erro ao carregar", "errorGeneric": "Erro", "saved": "Salvo", "id": "ID", "optional": "opcional" },
   "errorBoundary": { "title": "Erro de exibição", "description": "Um erro de JavaScript impede que esta página seja exibida.", "reload": "Recarregar", "retry": "Tentar novamente" },
   "historyPage": { "url": "URL", "table": { "file": "Arquivo", "type": "Tipo", "score": "Pontuação", "date": "Data", "actions": "Ações" } },
-  "settings": { "sections": { "admin": "Admin", "profile": "Perfil", "language": "Idioma", "subscription": "Assinatura" }, "admin": { "accessTitle": "Acesso admin", "accessDesc": "Abra o painel admin e gerencie usuários", "open": "Abrir" }, "freeQuotaHint": "10 testes gratuitos (válido por 30 dias)", "activeSubscription": "Assinatura ativa", "subscription": { "plan": "Plano {{plan}}", "manage": "Gerenciar assinatura", "upgrade": "Upgrade", "change": "Alterar" } },
+  "settings": {
+    "sections": { "admin": "Admin", "profile": "Perfil", "language": "Idioma", "subscription": "Assinatura" },
+    "admin": { "accessTitle": "Acesso admin", "accessDesc": "Abra o painel admin e gerencie usuários", "open": "Abrir" },
+    "freeQuotaHint": "10 testes gratuitos (válido por 30 dias)",
+    "activeSubscription": "Assinatura ativa",
+    "subscription": { "plan": "Plano {{plan}}", "manage": "Gerenciar assinatura", "upgrade": "Upgrade", "change": "Alterar", "changePlan": "Mudar de plano" },
+    "dangerZone": {
+      "title": "Zona de perigo",
+      "deleteAccount": "Excluir minha conta",
+      "deleteWarning": "Esta ação é irreversível. Todos os seus dados serão excluídos.",
+      "deleteButton": "Excluir"
+    },
+    "deleteModal": {
+      "title": "Confirmar exclusão",
+      "question": "Tem certeza absoluta de que deseja excluir sua conta?",
+      "actionWill": "Esta ação irá:",
+      "deleteAnalyses": "Excluir todas as suas análises",
+      "cancelSubscription": "Cancelar sua assinatura (se ativa)",
+      "deleteData": "Apagar todos os seus dados pessoais",
+      "irreversible": "Esta ação é IRREVERSÍVEL",
+      "typeEmail": "Digite seu email",
+      "toConfirm": "para confirmar",
+      "deleting": "Excluindo...",
+      "deleteForever": "Excluir permanentemente",
+      "incorrectEmail": "Email de confirmação incorreto",
+      "accountDeleted": "Conta excluída com sucesso",
+      "deleteError": "Erro ao excluir"
+    },
+    "planModal": {
+      "title": "Mudar de plano",
+      "planChangeError": "Erro ao mudar de plano"
+    },
+    "plans": {
+      "pro": "Plano PRO",
+      "proDesc": "50 análises/dia • €9,99/mês",
+      "business": "Plano BUSINESS",
+      "businessDesc": "Análises ilimitadas • €29,99/mês",
+      "free": "Plano FREE",
+      "freeDesc": "3 análises/dia • Grátis • Cancela assinatura"
+    }
+  },
   "footer": { "description": "Detecção avançada por IA para seu conteúdo.", "product": "Produto", "company": "Empresa", "legal": "Legal", "links": { "pricing": "Preços", "features": "Recursos", "api": "API", "about": "Sobre", "blog": "Blog", "contact": "Contato", "terms": "Termos de uso", "sales": "Termos de venda" }, "rights": "© 2025 FakeTect. Todos os direitos reservados." },
   "newsletter": {
     "title": "Newsletter",

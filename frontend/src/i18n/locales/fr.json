@@ -62,11 +62,69 @@
   },
   "certificate": { "download": "Télécharger le certificat", "downloadError": "Impossible de générer le certificat", "basedOnExplainability": "Certificat basé sur le score, la confiance et les signaux ci-dessous.", "title": "Certificat d'analyse", "subtitle": "Généré par FakeTect", "fields": { "analysisId": "ID d'analyse", "user": "Utilisateur", "date": "Date", "file": "Fichier", "fileHash": "Empreinte du fichier (SHA-256)", "score": "Score IA", "verdict": "Verdict", "confidence": "Confiance", "provider": "Fournisseur", "framesAnalyzed": "Frames analysées", "consensus": "Consensus", "sources": "Sources", "topSignals": "Signaux principaux", "fingerprint": "Empreinte du certificat", "scoreShort": "Score", "confidenceShort": "Conf." }, "generatedAt": "Généré le {{date}}", "verificationHint": "Vérification : comparez l’ID d’analyse dans l’application" },
   "verdicts": { "ai_generated": "IA", "likely_ai": "Prob. IA", "possibly_ai": "Peut-être IA", "possibly_real": "Peut-être réel", "likely_real": "Prob. réel" },
-  "admin": { "title": "Admin", "metrics": "Métriques", "users": "Utilisateurs", "totalUsers": "Total", "newToday": "Nouveaux", "totalAnalyses": "Analyses", "mrr": "MRR", "usersByPlan": "Utilisateurs par plan", "analysesToday": "Analyses aujourd'hui", "analysesPerformed": "analyses effectuées", "noAnalyses": "Aucune analyse", "confirmDeleteUser": "Supprimer cet utilisateur ?", "planUpdated": "Plan modifié", "usersTable": { "email": "Email", "name": "Nom", "plan": "Plan", "role": "Rôle", "createdAt": "Inscrit", "actions": "Actions" }, "analysesTable": { "date": "Date", "user": "Utilisateur", "file": "Fichier", "type": "Type", "score": "Score", "verdict": "Verdict", "provider": "Provider" } },
+  "admin": {
+    "title": "Admin",
+    "metrics": "Métriques",
+    "users": "Utilisateurs",
+    "totalUsers": "Total",
+    "newToday": "Nouveaux",
+    "totalAnalyses": "Analyses",
+    "mrr": "MRR",
+    "usersByPlan": "Utilisateurs par plan",
+    "analysesToday": "Analyses aujourd'hui",
+    "analysesPerformed": "analyses effectuées",
+    "noAnalyses": "Aucune analyse",
+    "confirmDeleteUser": "Supprimer cet utilisateur ?",
+    "planUpdated": "Plan modifié",
+    "chatSupport": "Chat Support",
+    "newsletter": "Newsletter",
+    "usersTable": { "email": "Email", "name": "Nom", "plan": "Plan", "role": "Rôle", "createdAt": "Inscrit", "actions": "Actions" },
+    "analysesTable": { "date": "Date", "user": "Utilisateur", "file": "Fichier", "type": "Type", "score": "Score", "verdict": "Verdict", "provider": "Provider" }
+  },
   "common": { "loading": "Chargement...", "save": "Enregistrer", "cancel": "Annuler", "delete": "Supprimer", "deleted": "Supprimé", "confirmDelete": "Supprimer ?", "searchPlaceholder": "Rechercher...", "error": "Erreur", "loadError": "Erreur de chargement", "errorGeneric": "Erreur", "saved": "Enregistré", "id": "ID", "optional": "optionnel" },
   "errorBoundary": { "title": "Erreur d’affichage", "description": "Une erreur JavaScript empêche cette page de s’afficher.", "reload": "Recharger", "retry": "Réessayer" },
   "historyPage": { "url": "URL", "table": { "file": "Fichier", "type": "Type", "score": "Score", "date": "Date", "actions": "Actions" } },
-  "settings": { "sections": { "admin": "Admin", "profile": "Profil", "language": "Langue", "subscription": "Abonnement" }, "admin": { "accessTitle": "Accès administrateur", "accessDesc": "Ouvrir le dashboard admin et gérer les utilisateurs", "open": "Ouvrir" }, "freeQuotaHint": "10 tests gratuits offerts (valable 30 jours)", "activeSubscription": "Abonnement actif", "subscription": { "plan": "Plan {{plan}}", "manage": "Gérer l'abonnement", "upgrade": "Upgrade", "change": "Changer" } },
+  "settings": {
+    "sections": { "admin": "Admin", "profile": "Profil", "language": "Langue", "subscription": "Abonnement" },
+    "admin": { "accessTitle": "Accès administrateur", "accessDesc": "Ouvrir le dashboard admin et gérer les utilisateurs", "open": "Ouvrir" },
+    "freeQuotaHint": "10 tests gratuits offerts (valable 30 jours)",
+    "activeSubscription": "Abonnement actif",
+    "subscription": { "plan": "Plan {{plan}}", "manage": "Gérer l'abonnement", "upgrade": "Upgrade", "change": "Changer", "changePlan": "Changer de plan" },
+    "dangerZone": {
+      "title": "Zone de danger",
+      "deleteAccount": "Supprimer mon compte",
+      "deleteWarning": "Cette action est irréversible. Toutes vos données seront supprimées.",
+      "deleteButton": "Supprimer"
+    },
+    "deleteModal": {
+      "title": "Confirmer la suppression",
+      "question": "Êtes-vous absolument sûr de vouloir supprimer votre compte ?",
+      "actionWill": "Cette action va :",
+      "deleteAnalyses": "Supprimer toutes vos analyses",
+      "cancelSubscription": "Annuler votre abonnement (si actif)",
+      "deleteData": "Effacer toutes vos données personnelles",
+      "irreversible": "Cette action est IRRÉVERSIBLE",
+      "typeEmail": "Tapez votre email",
+      "toConfirm": "pour confirmer",
+      "deleting": "Suppression...",
+      "deleteForever": "Supprimer définitivement",
+      "incorrectEmail": "Email de confirmation incorrect",
+      "accountDeleted": "Compte supprimé avec succès",
+      "deleteError": "Erreur lors de la suppression"
+    },
+    "planModal": {
+      "title": "Changer de plan",
+      "planChangeError": "Erreur lors du changement de plan"
+    },
+    "plans": {
+      "pro": "Plan PRO",
+      "proDesc": "50 analyses/jour • 9.99€/mois",
+      "business": "Plan BUSINESS",
+      "businessDesc": "Analyses illimitées • 29.99€/mois",
+      "free": "Plan FREE",
+      "freeDesc": "3 analyses/jour • Gratuit • Annule l'abonnement"
+    }
+  },
   "footer": { "description": "Détection IA avancée pour vos contenus.", "product": "Produit", "company": "Entreprise", "legal": "Mentions légales", "links": { "pricing": "Tarifs", "features": "Fonctionnalités", "api": "API", "about": "À propos", "blog": "Blog", "contact": "Contact", "terms": "CGU", "sales": "CGV" }, "rights": "© 2025 FakeTect. Tous droits réservés." },
   "newsletter": {
     "title": "Newsletter",

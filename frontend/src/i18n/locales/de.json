@@ -62,11 +62,69 @@
   },
   "certificate": { "download": "Zertifikat herunterladen", "downloadError": "Zertifikat konnte nicht erstellt werden", "basedOnExplainability": "Zertifikat basiert auf Score, Vertrauen und den folgenden Signalen.", "title": "Analyse-Zertifikat", "subtitle": "Erstellt von FakeTect", "fields": { "analysisId": "Analyse-ID", "user": "Benutzer", "date": "Datum", "file": "Datei", "fileHash": "Datei-Fingerabdruck (SHA-256)", "score": "KI-Score", "verdict": "Urteil", "confidence": "Vertrauen", "provider": "Provider", "framesAnalyzed": "Analysierte Frames", "consensus": "Konsens", "sources": "Quellen", "topSignals": "Wichtigste Signale", "fingerprint": "Zertifikats-Fingerabdruck", "scoreShort": "Score", "confidenceShort": "Vertr." }, "generatedAt": "Erstellt am {{date}}", "verificationHint": "Verifizierung: Analyse-ID in der App abgleichen" },
   "verdicts": { "ai_generated": "KI", "likely_ai": "Wahrscheinlich KI", "possibly_ai": "Vielleicht KI", "possibly_real": "Vielleicht echt", "likely_real": "Wahrscheinlich echt" },
-  "admin": { "title": "Admin", "metrics": "Metriken", "users": "Benutzer", "totalUsers": "Gesamt", "newToday": "Neu heute", "totalAnalyses": "Analysen", "mrr": "MRR", "usersByPlan": "Benutzer nach Plan", "analysesToday": "Analysen heute", "analysesPerformed": "Analysen durchgeführt", "noAnalyses": "Keine Analysen", "confirmDeleteUser": "Diesen Benutzer löschen?", "planUpdated": "Plan aktualisiert", "usersTable": { "email": "E-Mail", "name": "Name", "plan": "Plan", "role": "Rolle", "createdAt": "Erstellt", "actions": "Aktionen" }, "analysesTable": { "date": "Datum", "user": "Benutzer", "file": "Datei", "type": "Typ", "score": "Score", "verdict": "Urteil", "provider": "Provider" } },
+  "admin": {
+    "title": "Admin",
+    "metrics": "Metriken",
+    "users": "Benutzer",
+    "totalUsers": "Gesamt",
+    "newToday": "Neu heute",
+    "totalAnalyses": "Analysen",
+    "mrr": "MRR",
+    "usersByPlan": "Benutzer nach Plan",
+    "analysesToday": "Analysen heute",
+    "analysesPerformed": "Analysen durchgeführt",
+    "noAnalyses": "Keine Analysen",
+    "confirmDeleteUser": "Diesen Benutzer löschen?",
+    "planUpdated": "Plan aktualisiert",
+    "chatSupport": "Chat Support",
+    "newsletter": "Newsletter",
+    "usersTable": { "email": "E-Mail", "name": "Name", "plan": "Plan", "role": "Rolle", "createdAt": "Erstellt", "actions": "Aktionen" },
+    "analysesTable": { "date": "Datum", "user": "Benutzer", "file": "Datei", "type": "Typ", "score": "Score", "verdict": "Urteil", "provider": "Provider" }
+  },
   "common": { "loading": "Laden...", "save": "Speichern", "cancel": "Abbrechen", "delete": "Löschen", "deleted": "Gelöscht", "confirmDelete": "Löschen?", "searchPlaceholder": "Suchen...", "error": "Fehler", "loadError": "Ladefehler", "errorGeneric": "Fehler", "saved": "Gespeichert", "id": "ID", "optional": "optional" },
   "errorBoundary": { "title": "Anzeigefehler", "description": "Ein JavaScript-Fehler verhindert, dass diese Seite angezeigt wird.", "reload": "Neu laden", "retry": "Erneut versuchen" },
   "historyPage": { "url": "URL", "table": { "file": "Datei", "type": "Typ", "score": "Score", "date": "Datum", "actions": "Aktionen" } },
-  "settings": { "sections": { "admin": "Admin", "profile": "Profil", "language": "Sprache", "subscription": "Abo" }, "admin": { "accessTitle": "Admin-Zugriff", "accessDesc": "Admin-Dashboard öffnen und Benutzer verwalten", "open": "Öffnen" }, "freeQuotaHint": "10 kostenlose Tests (30 Tage gültig)", "activeSubscription": "Aktives Abo", "subscription": { "plan": "Plan {{plan}}", "manage": "Abo verwalten", "upgrade": "Upgrade", "change": "Ändern" } },
+  "settings": {
+    "sections": { "admin": "Admin", "profile": "Profil", "language": "Sprache", "subscription": "Abo" },
+    "admin": { "accessTitle": "Admin-Zugriff", "accessDesc": "Admin-Dashboard öffnen und Benutzer verwalten", "open": "Öffnen" },
+    "freeQuotaHint": "10 kostenlose Tests (30 Tage gültig)",
+    "activeSubscription": "Aktives Abo",
+    "subscription": { "plan": "Plan {{plan}}", "manage": "Abo verwalten", "upgrade": "Upgrade", "change": "Ändern", "changePlan": "Plan wechseln" },
+    "dangerZone": {
+      "title": "Gefahrenzone",
+      "deleteAccount": "Mein Konto löschen",
+      "deleteWarning": "Diese Aktion ist unwiderruflich. Alle Ihre Daten werden gelöscht.",
+      "deleteButton": "Löschen"
+    },
+    "deleteModal": {
+      "title": "Löschung bestätigen",
+      "question": "Sind Sie absolut sicher, dass Sie Ihr Konto löschen möchten?",
+      "actionWill": "Diese Aktion wird:",
+      "deleteAnalyses": "Alle Ihre Analysen löschen",
+      "cancelSubscription": "Ihr Abo kündigen (falls aktiv)",
+      "deleteData": "Alle Ihre persönlichen Daten löschen",
+      "irreversible": "Diese Aktion ist UNWIDERRUFLICH",
+      "typeEmail": "Geben Sie Ihre E-Mail ein",
+      "toConfirm": "zur Bestätigung",
+      "deleting": "Wird gelöscht...",
+      "deleteForever": "Dauerhaft löschen",
+      "incorrectEmail": "Falsche Bestätigungs-E-Mail",
+      "accountDeleted": "Konto erfolgreich gelöscht",
+      "deleteError": "Fehler beim Löschen"
+    },
+    "planModal": {
+      "title": "Plan wechseln",
+      "planChangeError": "Fehler beim Planwechsel"
+    },
+    "plans": {
+      "pro": "PRO Plan",
+      "proDesc": "50 Analysen/Tag • 9,99€/Monat",
+      "business": "BUSINESS Plan",
+      "businessDesc": "Unbegrenzte Analysen • 29,99€/Monat",
+      "free": "FREE Plan",
+      "freeDesc": "3 Analysen/Tag • Kostenlos • Abo wird gekündigt"
+    }
+  },
   "footer": { "description": "Fortschrittliche KI-Erkennung für Ihre Inhalte.", "product": "Produkt", "company": "Unternehmen", "legal": "Rechtliches", "links": { "pricing": "Preise", "features": "Funktionen", "api": "API", "about": "Über uns", "blog": "Blog", "contact": "Kontakt", "terms": "AGB", "sales": "Verkaufsbedingungen" }, "rights": "© 2025 FakeTect. Alle Rechte vorbehalten." },
   "newsletter": {
     "title": "Newsletter",
