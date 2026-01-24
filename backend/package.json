@@ -13,7 +13,7 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
     "db:studio": "prisma studio",
-    "prepare": "cd .. && husky install backend/.husky"
+    "prepare": "[ \"$CI\" = true ] || [ \"$RENDER\" = true ] || (cd .. && husky install backend/.husky || exit 0)"
   },
   "dependencies": {
     "@prisma/client": "^5.7.0",
