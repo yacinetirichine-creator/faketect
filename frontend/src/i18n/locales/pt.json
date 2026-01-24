@@ -182,8 +182,262 @@
     }
   },
   "legal": {
+    "documentLabel": "Documento legal",
+    "lastUpdate": "Última atualização",
+    "company": {
+      "name": "JARVIS",
+      "form": "Sociedade por ações simplificada (SAS)",
+      "capital": "Capital social: 1.000 EUR",
+      "address": "64 Avenue Marinville, 94100 Saint-Maur-des-Fossés, França",
+      "siren": "928 499 166",
+      "rcs": "RCS Créteil",
+      "email": "contact@faketect.com",
+      "dpo": "dpo@faketect.com"
+    },
+    "terms": {
+      "title": "Termos de Serviço",
+      "shortTitle": "TdS",
+      "sections": {
+        "presentation": {
+          "title": "1. Apresentação do serviço",
+          "content": "FakeTect (doravante \"o Serviço\") é uma plataforma SaaS para detecção de conteúdo gerado por IA, publicada pela JARVIS.",
+          "hosting": "Hospedagem: Render (backend) e Vercel (frontend)"
+        },
+        "acceptance": {
+          "title": "2. Aceitação dos termos",
+          "content": "O uso do Serviço implica a aceitação total destes Termos de Serviço (TdS).",
+          "confirm": "Ao criar uma conta ou usar o Serviço, você confirma que leu, entendeu e aceitou estes TdS e nossa Política de Privacidade."
+        },
+        "services": {
+          "title": "3. Descrição do serviço",
+          "intro": "FakeTect oferece:",
+          "imageAnalysis": "Análise de imagens: Detecção de IA em formatos JPEG, PNG, WEBP, GIF",
+          "videoAnalysis": "Análise de vídeos: Detecção em MP4, MOV, AVI (primeiros 60 segundos)",
+          "certificates": "Certificados PDF: Atestado de autenticidade para download",
+          "history": "Histórico: Armazenamento de suas análises conforme seu plano",
+          "api": "API REST: Acesso programático (planos PRO e superiores)"
+        },
+        "account": {
+          "title": "4. Registro e conta de usuário",
+          "eligibility": "4.1. Elegibilidade: O Serviço é reservado para adultos (18 anos ou mais) ou menores com autorização dos pais.",
+          "accountInfo": "4.2. Conta: Você se compromete a fornecer informações precisas durante o registro e mantê-las atualizadas.",
+          "security": "4.3. Segurança: Você é responsável por manter a confidencialidade de suas credenciais. Qualquer atividade sob sua conta é considerada sua.",
+          "deletion": "4.4. Exclusão: Você pode solicitar a exclusão da conta a qualquer momento através das configurações ou por e-mail."
+        },
+        "pricing": {
+          "title": "5. Preços e pagamento",
+          "freePlan": "5.1. Plano gratuito: 10 análises em 30 dias, sem compromisso.",
+          "paidPlans": "5.2. Planos pagos: Faturamento mensal ou anual via Stripe. Os preços incluem impostos.",
+          "renewal": "5.3. Renovação: As assinaturas são renovadas automaticamente. Você pode cancelar a qualquer momento.",
+          "refund": "5.4. Reembolso: Conforme o direito de arrependimento, reembolso possível dentro de 14 dias após a assinatura."
+        },
+        "usage": {
+          "title": "6. Uso aceitável",
+          "intro": "É proibido usar o Serviço para:",
+          "illegal": "Qualquer atividade ilegal ou fraudulenta",
+          "harm": "Prejudicar outros ou sua reputação",
+          "reverse": "Tentar fazer engenharia reversa ou copiar nossos algoritmos",
+          "overload": "Sobrecarregar intencionalmente nossos servidores",
+          "resell": "Revender acesso ao Serviço sem autorização"
+        },
+        "ip": {
+          "title": "7. Propriedade intelectual",
+          "ownership": "7.1. Nossos direitos: FakeTect, logo, algoritmos e interface são protegidos por direitos autorais e marcas registradas.",
+          "userContent": "7.2. Seu conteúdo: Você mantém todos os direitos sobre os arquivos que envia. Nós os usamos apenas para fornecer o Serviço.",
+          "license": "7.3. Licença limitada: Você tem uma licença não exclusiva e intransferível para usar o Serviço."
+        },
+        "liability": {
+          "title": "8. Responsabilidade",
+          "accuracy": "8.1. Precisão: Nossas análises são baseadas em probabilidades estatísticas. Não garantimos detecção de 100%.",
+          "availability": "8.2. Disponibilidade: Nos esforçamos para garantir máxima disponibilidade, mas não podemos garantir serviço ininterrupto.",
+          "damages": "8.3. Danos: Nossa responsabilidade é limitada ao valor da sua assinatura dos últimos 12 meses."
+        },
+        "termination": {
+          "title": "9. Rescisão",
+          "byUser": "9.1. Pelo usuário: Você pode rescindir a qualquer momento através das configurações da sua conta.",
+          "byUs": "9.2. Por nós: Podemos suspender ou encerrar seu acesso por violações dos TdS, inadimplência ou atividade suspeita.",
+          "effects": "9.3. Efeitos: A rescisão resulta na exclusão de seus dados conforme nossa política de retenção."
+        },
+        "law": {
+          "title": "10. Lei aplicável",
+          "jurisdiction": "Estes TdS são regidos pela lei francesa. Qualquer disputa será submetida aos tribunais competentes de Créteil, França."
+        },
+        "contact": {
+          "title": "11. Contato",
+          "content": "Para qualquer dúvida sobre estes TdS, entre em contato conosco."
+        }
+      }
+    },
     "privacy": {
-      "title": "Política de Privacidade"
+      "title": "Política de Privacidade",
+      "shortTitle": "Privacidade",
+      "intro": "Esta política explica como coletamos, usamos e protegemos seus dados pessoais em conformidade com o GDPR/LGPD.",
+      "sections": {
+        "legalInfo": {
+          "title": "Informações Legais",
+          "content": "Controlador de dados: JARVIS SAS"
+        },
+        "dataCollected": {
+          "title": "Dados Pessoais Coletados",
+          "identification": {
+            "title": "Dados de identificação",
+            "items": ["Nome completo", "Endereço de e-mail", "Senha (criptografada com bcrypt)", "Idioma preferido", "Status da assinatura"]
+          },
+          "payment": {
+            "title": "Dados de pagamento",
+            "items": ["Informações de faturamento", "Histórico de transações", "ID do cliente Stripe"],
+            "note": "Os dados bancários nunca são armazenados em nossos servidores. São processados diretamente pelo Stripe (certificado PCI-DSS Nível 1)."
+          },
+          "usage": {
+            "title": "Dados de uso",
+            "items": ["Arquivos enviados para análise", "Resultados das análises", "Histórico de detecções", "Certificados de autenticidade gerados"]
+          },
+          "technical": {
+            "title": "Dados técnicos",
+            "items": ["Endereço IP (anonimizado)", "Tipo de navegador", "Sistema operacional", "Páginas visitadas e duração"]
+          }
+        },
+        "purposes": {
+          "title": "Finalidades do Tratamento",
+          "items": [
+            "Fornecer serviço de detecção de IA",
+            "Gerenciar sua conta de usuário",
+            "Processar pagamentos e faturamento",
+            "Melhorar nossos algoritmos",
+            "Comunicações de serviço",
+            "Conformidade legal e segurança"
+          ]
+        },
+        "legalBasis": {
+          "title": "Base Legal",
+          "contract": "Execução do contrato: Para fornecer nossos serviços",
+          "consent": "Consentimento: Para comunicações de marketing",
+          "legitimate": "Interesse legítimo: Para melhorar nossos serviços",
+          "legal": "Obrigação legal: Para conformidade fiscal e regulatória"
+        },
+        "retention": {
+          "title": "Período de Retenção",
+          "account": "Dados da conta: Duração da assinatura + 3 anos",
+          "analyses": "Análises: Conforme seu plano (30 dias gratuito, 1 ano pago)",
+          "payment": "Dados de pagamento: 10 anos (requisito legal)",
+          "logs": "Logs técnicos: 1 ano"
+        },
+        "rights": {
+          "title": "Seus Direitos GDPR/LGPD",
+          "intro": "De acordo com o GDPR/LGPD, você tem os seguintes direitos:",
+          "access": "Direito de acesso: Obter uma cópia dos seus dados",
+          "rectification": "Direito de retificação: Corrigir seus dados",
+          "erasure": "Direito à exclusão: Excluir seus dados",
+          "portability": "Direito à portabilidade: Recuperar seus dados",
+          "opposition": "Direito de oposição: Recusar certos tratamentos",
+          "restriction": "Direito à limitação: Limitar o tratamento",
+          "howTo": "Para exercer esses direitos, entre em contato com nosso DPO."
+        },
+        "security": {
+          "title": "Segurança",
+          "measures": "Implementamos medidas de segurança apropriadas:",
+          "items": ["Criptografia TLS 1.3 em trânsito", "Criptografia AES-256 em repouso", "Autenticação JWT segura", "Auditorias de segurança regulares", "Hospedagem certificada ISO 27001"]
+        },
+        "transfers": {
+          "title": "Transferências de Dados",
+          "content": "Seus dados podem ser transferidos para processadores localizados fora da UE, com garantias apropriadas (cláusulas contratuais padrão)."
+        },
+        "cookies": {
+          "title": "Cookies",
+          "content": "Para mais informações sobre nosso uso de cookies, consulte nossa Política de Cookies."
+        }
+      }
+    },
+    "cookiesPage": {
+      "title": "Política de Cookies",
+      "shortTitle": "Cookies",
+      "whatIs": {
+        "title": "O que é um cookie?",
+        "content": "Um cookie é um pequeno arquivo de texto colocado no seu dispositivo ao visitar um site. Permite reconhecer seu navegador, lembrar suas preferências e analisar o uso do site."
+      },
+      "types": {
+        "title": "Tipos de cookies utilizados",
+        "necessary": {
+          "title": "Cookies estritamente necessários",
+          "description": "Essenciais para o funcionamento do site. Não podem ser desativados.",
+          "alwaysEnabled": "Sempre ativados",
+          "cookies": {
+            "authToken": { "name": "auth_token", "purpose": "Autenticação", "duration": "Sessão" },
+            "refreshToken": { "name": "refresh_token", "purpose": "Manter login", "duration": "7 dias" },
+            "csrfToken": { "name": "csrf_token", "purpose": "Proteção CSRF", "duration": "Sessão" },
+            "cookieConsent": { "name": "cookie_consent", "purpose": "Escolhas de cookies", "duration": "13 meses" }
+          }
+        },
+        "preferences": {
+          "title": "Cookies de preferências",
+          "description": "Lembram suas escolhas (idioma, tema, configurações de exibição).",
+          "cookies": {
+            "language": { "name": "i18next", "purpose": "Idioma preferido", "duration": "1 ano" },
+            "theme": { "name": "theme", "purpose": "Tema de exibição", "duration": "1 ano" }
+          }
+        },
+        "analytics": {
+          "title": "Cookies analíticos",
+          "description": "Nos ajudam a entender como os visitantes usam o site.",
+          "cookies": {
+            "ga": { "name": "_ga", "purpose": "Google Analytics", "duration": "2 anos" },
+            "gid": { "name": "_gid", "purpose": "Distinção de visitantes", "duration": "24 horas" }
+          },
+          "note": "Google Analytics está configurado com anonimização de IP (conforme GDPR/LGPD)."
+        },
+        "functional": {
+          "title": "Cookies funcionais",
+          "description": "Habilitam recursos avançados e personalizados.",
+          "cookies": {
+            "tutorial": { "name": "tutorial_seen", "purpose": "Tutorial visto", "duration": "Permanente" },
+            "history": { "name": "recent_analyses", "purpose": "Histórico local", "duration": "30 dias" }
+          }
+        }
+      },
+      "manage": {
+        "title": "Gerenciar suas preferências",
+        "content": "Você pode alterar suas preferências de cookies a qualquer momento através do botão \"Gerenciar cookies\" no rodapé.",
+        "browser": "Você também pode configurar seu navegador para bloquear cookies, mas algumas funcionalidades do site podem não funcionar mais."
+      },
+      "validity": {
+        "title": "Período de validade",
+        "content": "Seu consentimento é válido por 13 meses de acordo com as recomendações do GDPR/LGPD."
+      },
+      "table": {
+        "cookie": "Cookie",
+        "purpose": "Finalidade",
+        "duration": "Duração"
+      }
+    },
+    "mentions": {
+      "title": "Aviso Legal",
+      "shortTitle": "Legal",
+      "sections": {
+        "editor": {
+          "title": "Editor do site",
+          "content": "O site faketect.com é publicado pela JARVIS, SAS com capital social de 1.000 EUR."
+        },
+        "director": {
+          "title": "Diretor de publicação",
+          "content": "O diretor de publicação é o representante legal da JARVIS."
+        },
+        "hosting": {
+          "title": "Hospedagem",
+          "frontend": "Frontend: Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA",
+          "backend": "Backend: Render Services, Inc., San Francisco, CA, USA",
+          "database": "Banco de dados: Neon, Inc. (PostgreSQL cloud)"
+        },
+        "ip": {
+          "title": "Propriedade intelectual",
+          "content": "Todo o conteúdo do site (textos, imagens, logos, algoritmos) é protegido por direitos autorais. Qualquer reprodução é proibida sem autorização prévia."
+        },
+        "credits": {
+          "title": "Créditos",
+          "design": "Design: Equipe FakeTect",
+          "icons": "Ícones: Lucide Icons (Licença ISC)",
+          "fonts": "Fontes: Inter, Space Grotesk (Google Fonts)"
+        }
+      }
     }
   },
   "demo": {

@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { Shield, Scale, Lock, Eye, Database, UserX, Mail, FileText } from 'lucide-react';
+import { Shield, Scale, Lock, Eye, Database, UserX, Mail, FileText, Check, UserCheck, CreditCard, AlertCircle, Copyright, ShieldAlert, Landmark } from 'lucide-react';
 
 /**
  * Page Conditions Générales d'Utilisation (CGU)
- * Conformité RGPD et légale française
+ * Conformité RGPD et légale française - Multilingue
  */
 export default function TermsOfService() {
   const { t } = useTranslation();
@@ -15,13 +15,13 @@ export default function TermsOfService() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold mb-4">
             <Scale size={16} />
-            Document légal
+            {t('legal.documentLabel')}
           </div>
           <h1 className="text-4xl font-black text-white mb-4">
-            Conditions Générales d'Utilisation
+            {t('legal.terms.title')}
           </h1>
           <p className="text-white/60">
-            Dernière mise à jour : 28 décembre 2025
+            {t('legal.lastUpdate')}: 28 {t('legal.terms.sections.presentation.content.dateMonth')} 2025
           </p>
         </div>
 
@@ -31,18 +31,17 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <FileText size={24} className="text-primary" />
-              1. Présentation du service
+              {t('legal.terms.sections.presentation.title')}
             </h2>
             <div className="space-y-3 text-white/80 leading-relaxed">
               <p>
-                <strong className="text-white">FakeTect</strong> (ci-après "le Service") est une plateforme SaaS de détection 
-                de contenus générés par intelligence artificielle, éditée par <strong className="text-white">JARVIS</strong>.
+                <strong className="text-white">FakeTect</strong> {t('legal.terms.sections.presentation.content.description')}
               </p>
               <p>
-                <strong>Éditeur :</strong> JARVIS<br />
-                <strong>Adresse :</strong> France<br />
-                <strong>Email :</strong> contact@faketect.com<br />
-                <strong>Hébergement :</strong> Render (backend) et Vercel (frontend)
+                <strong>{t('legal.terms.sections.presentation.content.editor')}:</strong> {t('legal.company.name')}<br />
+                <strong>{t('legal.terms.sections.presentation.content.address')}:</strong> {t('legal.company.address')}<br />
+                <strong>{t('legal.terms.sections.presentation.content.email')}:</strong> {t('legal.company.email')}<br />
+                <strong>{t('legal.terms.sections.presentation.content.hosting')}:</strong> {t('legal.company.hosting')}
               </p>
             </div>
           </section>
@@ -51,15 +50,15 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <Check size={24} className="text-green-400" />
-              2. Acceptation des CGU
+              {t('legal.terms.sections.acceptance.title')}
             </h2>
             <div className="space-y-3 text-white/80 leading-relaxed">
+              <p>{t('legal.terms.sections.acceptance.content.paragraph1')}</p>
               <p>
-                L'utilisation du Service implique l'acceptation pleine et entière des présentes Conditions Générales d'Utilisation (CGU).
-              </p>
-              <p>
-                En créant un compte ou en utilisant le Service, vous confirmez avoir lu, compris et accepté ces CGU ainsi que 
-                notre <a href="/legal/privacy" className="text-primary hover:underline">Politique de Confidentialité</a>.
+                {t('legal.terms.sections.acceptance.content.paragraph2')}{' '}
+                <a href="/legal/privacy" className="text-primary hover:underline">
+                  {t('legal.privacy.title')}
+                </a>.
               </p>
             </div>
           </section>
@@ -68,16 +67,16 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <Shield size={24} className="text-blue-400" />
-              3. Description des services
+              {t('legal.terms.sections.services.title')}
             </h2>
             <div className="space-y-3 text-white/80 leading-relaxed">
-              <p>FakeTect propose :</p>
+              <p>{t('legal.terms.sections.services.content.intro')}</p>
               <ul className="list-disc pl-6 space-y-2">
-                <li><strong>Analyse d'images</strong> : Détection IA sur formats JPEG, PNG, WEBP, GIF</li>
-                <li><strong>Analyse de vidéos</strong> : Détection sur MP4, MOV, AVI (60 premières secondes)</li>
-                <li><strong>Certificats PDF</strong> : Attestation d'authenticité téléchargeable</li>
-                <li><strong>Historique</strong> : Conservation de vos analyses selon votre plan</li>
-                <li><strong>API REST</strong> : Accès programmatique (plans PRO et supérieurs)</li>
+                <li><strong>{t('legal.terms.sections.services.content.imageAnalysis')}</strong></li>
+                <li><strong>{t('legal.terms.sections.services.content.videoAnalysis')}</strong></li>
+                <li><strong>{t('legal.terms.sections.services.content.certificates')}</strong></li>
+                <li><strong>{t('legal.terms.sections.services.content.history')}</strong></li>
+                <li><strong>{t('legal.terms.sections.services.content.api')}</strong></li>
               </ul>
             </div>
           </section>
@@ -86,25 +85,13 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <UserCheck size={24} className="text-purple-400" />
-              4. Inscription et compte utilisateur
+              {t('legal.terms.sections.account.title')}
             </h2>
             <div className="space-y-3 text-white/80 leading-relaxed">
-              <p>
-                <strong>4.1. Éligibilité :</strong> Le Service est réservé aux personnes majeures (18 ans et plus) ou 
-                aux mineurs avec autorisation parentale.
-              </p>
-              <p>
-                <strong>4.2. Compte :</strong> Vous vous engagez à fournir des informations exactes lors de l'inscription 
-                et à les maintenir à jour.
-              </p>
-              <p>
-                <strong>4.3. Sécurité :</strong> Vous êtes responsable de la confidentialité de vos identifiants. 
-                Toute utilisation de votre compte est présumée être effectuée par vous.
-              </p>
-              <p>
-                <strong>4.4. Suppression :</strong> Vous pouvez supprimer votre compte à tout moment depuis vos paramètres. 
-                Les données seront supprimées sous 30 jours conformément au RGPD.
-              </p>
+              <p><strong>{t('legal.terms.sections.account.content.eligibility')}</strong></p>
+              <p><strong>{t('legal.terms.sections.account.content.accountInfo')}</strong></p>
+              <p><strong>{t('legal.terms.sections.account.content.security')}</strong></p>
+              <p><strong>{t('legal.terms.sections.account.content.deletion')}</strong></p>
             </div>
           </section>
 
@@ -112,32 +99,20 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <CreditCard size={24} className="text-yellow-400" />
-              5. Plans et tarification
+              {t('legal.terms.sections.pricing.title')}
             </h2>
             <div className="space-y-3 text-white/80 leading-relaxed">
-              <p>
-                <strong>5.1. Plan GRATUIT :</strong> 10 analyses sur 30 jours, historique 7 jours, images uniquement.
-              </p>
-              <p>
-                <strong>5.2. Plans payants :</strong>
-              </p>
+              <p><strong>{t('legal.terms.sections.pricing.content.freePlan')}</strong></p>
+              <p><strong>{t('legal.terms.sections.pricing.content.paidPlans')}</strong></p>
               <ul className="list-disc pl-6 space-y-1">
-                <li>STARTER : 12€/mois - 100 analyses/mois</li>
-                <li>PRO : 34€/mois - 500 analyses/mois + API</li>
-                <li>BUSINESS : 89€/mois - 2000 analyses/mois + support prioritaire</li>
-                <li>ENTERPRISE : 249€/mois - illimité + SLA</li>
+                <li>{t('legal.terms.sections.pricing.content.starter')}</li>
+                <li>{t('legal.terms.sections.pricing.content.pro')}</li>
+                <li>{t('legal.terms.sections.pricing.content.business')}</li>
+                <li>{t('legal.terms.sections.pricing.content.enterprise')}</li>
               </ul>
-              <p>
-                <strong>5.3. Paiement :</strong> Les paiements sont traités par Stripe. Les prix sont TTC (TVA française 20%).
-              </p>
-              <p>
-                <strong>5.4. Renouvellement :</strong> Les abonnements sont renouvelés automatiquement chaque mois 
-                sauf résiliation avant la date d'échéance.
-              </p>
-              <p>
-                <strong>5.5. Remboursement :</strong> Conformément au droit de rétractation, vous disposez de 14 jours 
-                pour demander un remboursement intégral (hors utilisation du service).
-              </p>
+              <p><strong>{t('legal.terms.sections.pricing.content.payment')}</strong></p>
+              <p><strong>{t('legal.terms.sections.pricing.content.renewal')}</strong></p>
+              <p><strong>{t('legal.terms.sections.pricing.content.refund')}</strong></p>
             </div>
           </section>
 
@@ -145,20 +120,20 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <AlertCircle size={24} className="text-red-400" />
-              6. Utilisation acceptable
+              {t('legal.terms.sections.usage.title')}
             </h2>
             <div className="space-y-3 text-white/80 leading-relaxed">
-              <p>Vous vous engagez à NE PAS :</p>
+              <p>{t('legal.terms.sections.usage.content.intro')}</p>
               <ul className="list-disc pl-6 space-y-2">
-                <li>Uploader du contenu illégal, diffamatoire, pornographique ou violent</li>
-                <li>Contourner les limitations de quota ou d'API</li>
-                <li>Utiliser le Service pour harceler, spammer ou nuire à autrui</li>
-                <li>Tenter de pirater, reverse-engineer ou compromettre le Service</li>
-                <li>Revendre l'accès au Service sans autorisation écrite</li>
-                <li>Utiliser le Service pour des activités illégales ou frauduleuses</li>
+                <li>{t('legal.terms.sections.usage.content.prohibited1')}</li>
+                <li>{t('legal.terms.sections.usage.content.prohibited2')}</li>
+                <li>{t('legal.terms.sections.usage.content.prohibited3')}</li>
+                <li>{t('legal.terms.sections.usage.content.prohibited4')}</li>
+                <li>{t('legal.terms.sections.usage.content.prohibited5')}</li>
+                <li>{t('legal.terms.sections.usage.content.prohibited6')}</li>
               </ul>
               <p className="text-yellow-400 font-semibold">
-                ⚠️ Toute violation entraînera la suspension immédiate du compte sans remboursement.
+                ⚠️ {t('legal.terms.sections.usage.content.warning')}
               </p>
             </div>
           </section>
@@ -167,21 +142,12 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <Copyright size={24} className="text-cyan-400" />
-              7. Propriété intellectuelle
+              {t('legal.terms.sections.intellectual.title')}
             </h2>
             <div className="space-y-3 text-white/80 leading-relaxed">
-              <p>
-                <strong>7.1. Nos droits :</strong> FakeTect, son logo, sa technologie et son interface sont protégés 
-                par les droits d'auteur et marques. Toute reproduction est interdite.
-              </p>
-              <p>
-                <strong>7.2. Vos contenus :</strong> Vous conservez la propriété de vos fichiers uploadés. 
-                Vous nous accordez une licence limitée pour les analyser.
-              </p>
-              <p>
-                <strong>7.3. Suppression :</strong> Vos fichiers sont automatiquement supprimés après analyse 
-                (sauf cache temporaire de 7 jours pour optimisation).
-              </p>
+              <p><strong>{t('legal.terms.sections.intellectual.content.ourRights')}</strong></p>
+              <p><strong>{t('legal.terms.sections.intellectual.content.yourContent')}</strong></p>
+              <p><strong>{t('legal.terms.sections.intellectual.content.deletion')}</strong></p>
             </div>
           </section>
 
@@ -189,23 +155,14 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <ShieldAlert size={24} className="text-orange-400" />
-              8. Limitation de responsabilité
+              {t('legal.terms.sections.liability.title')}
             </h2>
             <div className="space-y-3 text-white/80 leading-relaxed">
-              <p>
-                <strong>8.1. Précision :</strong> Notre Service fournit une estimation probabiliste. 
-                Les résultats ne sont PAS garantis à 100% et ne constituent pas une preuve légale absolue.
-              </p>
-              <p>
-                <strong>8.2. Disponibilité :</strong> Nous nous efforçons d'assurer une disponibilité maximale, 
-                mais ne garantissons pas un service ininterrompu (maintenance, pannes, etc.).
-              </p>
-              <p>
-                <strong>8.3. Dommages :</strong> Nous ne sommes pas responsables des dommages indirects 
-                (perte de données, manque à gagner) résultant de l'utilisation du Service.
-              </p>
+              <p><strong>{t('legal.terms.sections.liability.content.accuracy')}</strong></p>
+              <p><strong>{t('legal.terms.sections.liability.content.availability')}</strong></p>
+              <p><strong>{t('legal.terms.sections.liability.content.damages')}</strong></p>
               <p className="text-white font-semibold">
-                Le Service est fourni "tel quel" sans garantie d'exactitude absolue.
+                {t('legal.terms.sections.liability.content.asIs')}
               </p>
             </div>
           </section>
@@ -214,21 +171,12 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <UserX size={24} className="text-red-400" />
-              9. Résiliation
+              {t('legal.terms.sections.termination.title')}
             </h2>
             <div className="space-y-3 text-white/80 leading-relaxed">
-              <p>
-                <strong>9.1. Par vous :</strong> Vous pouvez résilier votre abonnement à tout moment. 
-                L'accès reste actif jusqu'à la fin de la période payée.
-              </p>
-              <p>
-                <strong>9.2. Par nous :</strong> Nous pouvons suspendre ou résilier votre compte en cas de violation des CGU, 
-                d'impayés ou d'activité suspecte.
-              </p>
-              <p>
-                <strong>9.3. Effet :</strong> Après résiliation, vos données sont conservées 30 jours puis supprimées 
-                définitivement (sauf obligation légale).
-              </p>
+              <p><strong>{t('legal.terms.sections.termination.content.byYou')}</strong></p>
+              <p><strong>{t('legal.terms.sections.termination.content.byUs')}</strong></p>
+              <p><strong>{t('legal.terms.sections.termination.content.effect')}</strong></p>
             </div>
           </section>
 
@@ -236,19 +184,16 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <Landmark size={24} className="text-blue-400" />
-              10. Loi applicable et juridiction
+              {t('legal.terms.sections.law.title')}
             </h2>
             <div className="space-y-3 text-white/80 leading-relaxed">
+              <p>{t('legal.terms.sections.law.content.governing')}</p>
+              <p>{t('legal.terms.sections.law.content.disputes')}</p>
               <p>
-                Les présentes CGU sont régies par le <strong className="text-white">droit français</strong>.
-              </p>
-              <p>
-                En cas de litige, une solution amiable sera recherchée en priorité. À défaut, 
-                les tribunaux français seront compétents.
-              </p>
-              <p>
-                Conformément au RGPD, vous disposez de droits sur vos données personnelles 
-                (voir notre <a href="/legal/privacy" className="text-primary hover:underline">Politique de Confidentialité</a>).
+                {t('legal.terms.sections.law.content.gdpr')}{' '}
+                <a href="/legal/privacy" className="text-primary hover:underline">
+                  {t('legal.privacy.title')}
+                </a>.
               </p>
             </div>
           </section>
@@ -257,14 +202,14 @@ export default function TermsOfService() {
           <section className="border-t border-white/10 pt-8">
             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <Mail size={24} className="text-green-400" />
-              Contact
+              {t('legal.terms.sections.contact.title')}
             </h2>
             <div className="space-y-3 text-white/80 leading-relaxed">
-              <p>Pour toute question concernant ces CGU :</p>
+              <p>{t('legal.terms.sections.contact.content.intro')}</p>
               <ul className="space-y-1">
-                <li><strong>Email :</strong> <a href="mailto:contact@faketect.com" className="text-primary hover:underline">contact@faketect.com</a></li>
-                <li><strong>Support :</strong> Disponible dans votre espace client</li>
-                <li><strong>DPO (RGPD) :</strong> dpo@faketect.com</li>
+                <li><strong>Email:</strong> <a href="mailto:contact@faketect.com" className="text-primary hover:underline">contact@faketect.com</a></li>
+                <li><strong>Support:</strong> {t('legal.terms.sections.contact.content.support')}</li>
+                <li><strong>DPO (RGPD):</strong> dpo@faketect.com</li>
               </ul>
             </div>
           </section>
@@ -273,21 +218,18 @@ export default function TermsOfService() {
         {/* Footer navigation */}
         <div className="mt-8 flex justify-center gap-4 text-sm">
           <a href="/legal/privacy" className="text-primary hover:underline">
-            Politique de Confidentialité
+            {t('legal.privacy.title')}
           </a>
           <span className="text-white/20">•</span>
           <a href="/legal/cookies" className="text-primary hover:underline">
-            Politique de Cookies
+            {t('legal.cookiesPage.title')}
           </a>
           <span className="text-white/20">•</span>
           <a href="/" className="text-white/60 hover:text-white">
-            Retour à l'accueil
+            {t('legal.terms.sections.contact.content.backHome')}
           </a>
         </div>
       </div>
     </div>
   );
 }
-
-// Imports manquants pour les icônes
-import { Check, UserCheck, CreditCard, AlertCircle, Copyright, ShieldAlert, Landmark } from 'lucide-react';
