@@ -1,54 +1,46 @@
-import { memo } from 'react';
-import { Search, ShieldCheck } from 'lucide-react';
+import { memo, useState } from 'react';
 
-const Logo = memo(({ size = 'md', animated = true, className = '', showIcon = true }) => {
-  const sizes = {
-    sm: { text: 'text-xl', icon: 16, spacing: 'gap-1.5' },
-    md: { text: 'text-2xl', icon: 20, spacing: 'gap-2' },
-    lg: { text: 'text-3xl', icon: 26, spacing: 'gap-2.5' },
-    xl: { text: 'text-4xl', icon: 32, spacing: 'gap-3' }
+const Logo = memo(({ size = 'md', className = '', variant = 'image' }) => {
+  const [imageError, setImageError] = useState(false);
+
+  // Tailles pour le logo image
+  const imageSizes = {
+    sm: 'h-8',
+    md: 'h-10',
+    lg: 'h-12',
+    xl: 'h-16',
+    '2xl': 'h-20'
   };
 
-  const { text, icon, spacing } = sizes[size] || sizes.md;
+  const imageHeight = imageSizes[size] || imageSizes.md;
 
-  return (
-    <div className={`flex items-center ${spacing} ${className}`}>
-      {showIcon && (
-        <div className="relative">
-          {/* Magnifying glass with glow */}
-          <div className={`relative ${animated ? 'animate-pulse' : ''}`}>
-            <Search
-              size={icon}
-              className="text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]"
-              strokeWidth={2.5}
-            />
-            {/* Scan beam effect */}
-            {animated && (
-              <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-scan opacity-80" />
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Text Logo */}
-      <div className={`font-bold tracking-wide ${text} flex items-center`}>
-        {/* FAKE part with gradient */}
-        <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400 bg-clip-text text-transparent font-extrabold">
-          FAKE
-        </span>
-        {/* TECT part */}
-        <span className="text-white font-extrabold">
-          TECT
-        </span>
-        {/* Checkmark */}
-        <ShieldCheck
-          size={icon * 0.9}
-          className={`ml-0.5 text-emerald-400 drop-shadow-[0_0_6px_rgba(52,211,153,0.5)] ${animated ? 'animate-bounce-subtle' : ''}`}
-          strokeWidth={2.5}
+  // Si mode image et l'image existe
+  if (variant === 'image' && !imageError) {
+    return (
+      <div className={`flex items-center ${className}`}>
+        <img
+          src="/images/logo.png"
+          alt="FakeTect - Détection de deepfakes IA"
+          className={`${imageHeight} w-auto object-contain`}
+          onError={() => setImageError(true)}
         />
       </div>
+    );
+  }
+
+  // Fallback: Logo texte simple
+  return (
+    <div className={`flex items-center gap-2 ${className}`}>
+      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" className="w-5 h-5">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
+      </div>
+      <span className="text-xl font-bold">
+        <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400 bg-clip-text text-transparent">FAKE</span>
+        <span className="text-white">TECT</span>
+      </span>
     </div>
   );
 });

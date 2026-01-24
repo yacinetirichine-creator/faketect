@@ -38,7 +38,7 @@ export default function MainLayout() {
       <nav className="sticky top-0 z-50 bg-background/90 backdrop-blur-xl border-b border-white/5 shadow-lg shadow-black/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
           <Link to="/" className="flex items-center group hover:opacity-90 transition-opacity">
-            <Logo size="sm" animated={false} showIcon={true} />
+            <Logo size="sm" />
           </Link>
 
           {/* Desktop Menu */}
@@ -150,7 +150,7 @@ export default function MainLayout() {
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
             <div className="col-span-1 md:col-span-2">
               <div className="mb-4">
-                <Logo size="sm" animated={false} />
+                <Logo size="sm" />
               </div>
               <p className="text-gray-400 max-w-sm mb-6">
                 {t('footer.description')}
