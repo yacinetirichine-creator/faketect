@@ -15,12 +15,17 @@ export default function Register() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [acceptMarketing, setAcceptMarketing] = useState(false);
+  const [aiProcessingConsent, setAiProcessingConsent] = useState(false);
   const [show, setShow] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!aiProcessingConsent) {
+      toast.error(t('auth.aiConsentRequired'));
+      return;
+    }
     const lang = (i18n.resolvedLanguage || i18n.language || 'fr').split('-')[0];
-    const res = await register(email, password, name, lang, phone, acceptMarketing);
+    const res = await register(email, password, name, lang, phone, acceptMarketing, aiProcessingConsent);
     if (res.success) { toast.success(t('auth.registerSuccess')); navigate('/dashboard'); }
     else toast.error(res.error);
   };
@@ -75,10 +80,24 @@ export default function Register() {
             </div>
 
             <div className="flex items-start gap-2">
-              <input 
-                type="checkbox" 
-                id="marketing" 
-                checked={acceptMarketing} 
+              <input
+                type="checkbox"
+                id="aiConsent"
+                checked={aiProcessingConsent}
+                onChange={(e) => setAiProcessingConsent(e.target.checked)}
+                className="mt-1 w-4 h-4 text-primary bg-surface border-white/20 rounded focus:ring-primary focus:ring-2"
+                required
+              />
+              <label htmlFor="aiConsent" className="text-xs text-gray-400 leading-relaxed">
+                <span className="text-red-400">*</span> {t('auth.aiProcessingConsent')} <Link to="/legal/privacy" className="text-primary hover:underline">{t('auth.privacyPolicy')}</Link>
+              </label>
+            </div>
+
+            <div className="flex items-start gap-2">
+              <input
+                type="checkbox"
+                id="marketing"
+                checked={acceptMarketing}
                 onChange={(e) => setAcceptMarketing(e.target.checked)}
                 className="mt-1 w-4 h-4 text-primary bg-surface border-white/20 rounded focus:ring-primary focus:ring-2"
               />

@@ -14,6 +14,7 @@ const path = require('path');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const compression = require('compression');
+const cookieParser = require('cookie-parser');
 const logger = require('./config/logger');
 const { 
   globalLimiter, 
@@ -50,6 +51,9 @@ app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173', cred
 
 // Body parsing
 app.use(express.json({ limit: '50mb' }));
+
+// Cookie parsing (RGPD: pour consentement cookies côté serveur)
+app.use(cookieParser());
 
 // Static files
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
@@ -109,6 +113,7 @@ app.use('/api/plans', require('./routes/plans'));
 app.use('/api/stripe', require('./routes/stripe'));
 app.use('/api/chatbot', require('./routes/chatbot'));
 app.use('/api/newsletter', require('./routes/newsletter'));
+app.use('/api/consent', require('./routes/consent')); // RGPD: Consentement cookies côté serveur
 
 // Error handling amélioré
 app.use((err, req, res, next) => {

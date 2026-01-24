@@ -14,6 +14,7 @@ model User {
   name                 String?
   phone                String?
   acceptMarketing      Boolean            @default(false)
+  aiProcessingConsent  Boolean            @default(false)  // RGPD: Consentement explicite pour traitement IA
   role                 String             @default("USER")
   plan                 String             @default("FREE")
   language             String             @default("fr")
@@ -28,6 +29,8 @@ model User {
   analyses             Analysis[]
   chatConversations    ChatConversation[]
   adminMessages        ChatMessage[]      @relation("AdminMessages")
+  cookieConsent        CookieConsent?
+  adminAuditLogs       AdminAuditLog[]    @relation("AdminActions")
 
   // Indexes pour optimiser les requêtes fréquentes
   @@index([plan])
@@ -125,4 +128,42 @@ model playing_with_neon {
   id    Int    @id @default(autoincrement())
   name  String
   value Float? @db.Real
+}
+
+// RGPD: Stockage côté serveur du consentement cookies (remplace localStorage)
+model CookieConsent {
+  id          String   @id @default(uuid())
+  userId      String?  @unique
+  sessionId   String?  // Pour visiteurs non connectés
+  necessary   Boolean  @default(true)
+  preferences Boolean  @default(false)
+  analytics   Boolean  @default(false)
+  functional  Boolean  @default(false)
+  ipAddress   String?  // Pour preuve de consentement
+  userAgent   String?  // Pour preuve de consentement
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([createdAt])
+}
+
+// RGPD: Journal d'audit des actions admin (Art. 5 - Responsabilité)
+model AdminAuditLog {
+  id          String   @id @default(uuid())
+  adminId     String
+  action      String   // VIEW_USER, UPDATE_USER, DELETE_USER, VIEW_ANALYSES, etc.
+  targetType  String   // USER, ANALYSIS, CONVERSATION, etc.
+  targetId    String?
+  details     String?  // JSON des détails de l'action
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+  admin       User     @relation("AdminActions", fields: [adminId], references: [id])
+
+  @@index([adminId])
+  @@index([action])
+  @@index([targetType, targetId])
+  @@index([createdAt(sort: Desc)])
 }

@@ -1,32 +1,113 @@
-import { useState, useCallback, memo } from 'react';
+import { useState, useCallback, memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Cookie, Settings, X, Check } from 'lucide-react';
+import api from '../services/api';
+
+// Générer un sessionId unique pour les visiteurs non-connectés
+const getOrCreateSessionId = () => {
+  let sessionId = localStorage.getItem('faketect_session_id');
+  if (!sessionId) {
+    sessionId = 'sess_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
+    localStorage.setItem('faketect_session_id', sessionId);
+  }
+  return sessionId;
+};
 
 const CookieConsent = memo(() => {
   const { t } = useTranslation();
-  const [showBanner, setShowBanner] = useState(() => {
-    return !localStorage.getItem('cookie_consent');
-  });
+  const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [preferences, setPreferences] = useState({
-    necessary: true, // Toujours activé
+    necessary: true,
     preferences: false,
     analytics: false,
     functional: false,
   });
 
-  const handleAcceptAll = useCallback(() => {
+  // Vérifier le consentement au chargement (serveur + localStorage fallback)
+  useEffect(() => {
+    const checkConsent = async () => {
+      try {
+        const sessionId = getOrCreateSessionId();
+        const { data } = await api.get(`/consent/cookies?sessionId=${sessionId}`);
+
+        if (data.hasConsent) {
+          setPreferences({
+            necessary: true,
+            preferences: data.consent.preferences,
+            analytics: data.consent.analytics,
+            functional: data.consent.functional,
+          });
+          setShowBanner(false);
+
+          // Mettre à jour Google Analytics selon le consentement serveur
+          if (window.gtag) {
+            window.gtag('consent', 'update', {
+              analytics_storage: data.consent.analytics ? 'granted' : 'denied',
+            });
+          }
+        } else {
+          // Pas de consentement serveur, vérifier localStorage (migration)
+          const localConsent = localStorage.getItem('cookie_consent');
+          if (localConsent) {
+            const parsed = JSON.parse(localConsent);
+            // Migrer vers le serveur
+            await saveConsentToServer(parsed);
+            setShowBanner(false);
+          } else {
+            setShowBanner(true);
+          }
+        }
+      } catch (error) {
+        // En cas d'erreur réseau, utiliser localStorage comme fallback
+        const localConsent = localStorage.getItem('cookie_consent');
+        if (localConsent) {
+          setShowBanner(false);
+        } else {
+          setShowBanner(true);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkConsent();
+  }, []);
+
+  // Sauvegarder le consentement sur le serveur
+  const saveConsentToServer = async (consent) => {
+    try {
+      const sessionId = getOrCreateSessionId();
+      await api.post('/consent/cookies', {
+        ...consent,
+        sessionId,
+      });
+      // Backup local pour offline
+      localStorage.setItem('cookie_consent', JSON.stringify({
+        ...consent,
+        timestamp: new Date().toISOString(),
+      }));
+    } catch (error) {
+      // Fallback localStorage si erreur serveur
+      localStorage.setItem('cookie_consent', JSON.stringify({
+        ...consent,
+        timestamp: new Date().toISOString(),
+      }));
+    }
+  };
+
+  const handleAcceptAll = useCallback(async () => {
     const consent = {
       necessary: true,
       preferences: true,
       analytics: true,
       functional: true,
-      timestamp: new Date().toISOString(),
     };
-    localStorage.setItem('cookie_consent', JSON.stringify(consent));
+
+    await saveConsentToServer(consent);
     setShowBanner(false);
 
-    // Activer Google Analytics si accepté
     if (window.gtag) {
       window.gtag('consent', 'update', {
         analytics_storage: 'granted',
@@ -34,19 +115,18 @@ const CookieConsent = memo(() => {
     }
   }, []);
 
-  const handleRejectAll = useCallback(() => {
+  const handleRejectAll = useCallback(async () => {
     const consent = {
       necessary: true,
       preferences: false,
       analytics: false,
       functional: false,
-      timestamp: new Date().toISOString(),
     };
-    localStorage.setItem('cookie_consent', JSON.stringify(consent));
+
+    await saveConsentToServer(consent);
     setShowBanner(false);
     setShowSettings(false);
 
-    // Désactiver Google Analytics
     if (window.gtag) {
       window.gtag('consent', 'update', {
         analytics_storage: 'denied',
@@ -54,16 +134,11 @@ const CookieConsent = memo(() => {
     }
   }, []);
 
-  const handleSavePreferences = useCallback(() => {
-    const consent = {
-      ...preferences,
-      timestamp: new Date().toISOString(),
-    };
-    localStorage.setItem('cookie_consent', JSON.stringify(consent));
+  const handleSavePreferences = useCallback(async () => {
+    await saveConsentToServer(preferences);
     setShowBanner(false);
     setShowSettings(false);
 
-    // Mettre à jour Google Analytics selon les préférences
     if (window.gtag) {
       window.gtag('consent', 'update', {
         analytics_storage: preferences.analytics ? 'granted' : 'denied',
@@ -74,7 +149,8 @@ const CookieConsent = memo(() => {
   const openSettings = useCallback(() => setShowSettings(true), []);
   const closeSettings = useCallback(() => setShowSettings(false), []);
 
-  if (!showBanner) return null;
+  // Ne pas afficher pendant le chargement ou si consentement déjà donné
+  if (isLoading || !showBanner) return null;
 
   return (
     <>
@@ -165,7 +241,7 @@ const CookieConsent = memo(() => {
                   </div>
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                  Cookies : auth_token, session_id, csrf_token, cookie_consent
+                  Cookies : auth_token, session_id, csrf_token, consent_id
                 </div>
               </div>
 
